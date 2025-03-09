@@ -1,7 +1,7 @@
 From 8ea0037f4b88c83013cc2636e48ccbac24c9ec87 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Thu, 6 Mar 2025 17:35:50 +0800
-Subject: [PATCH 01/12] Add Claw 8
+Subject: [PATCH 01/13] Add Claw 8
 
 ---
  msi-ec.c | 68 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -100,7 +100,7 @@ index 4d55ebb..52a1c57 100644
 From 2d5c2c8a9e2764992d625f5a826718f42930c7dd Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Thu, 6 Mar 2025 17:36:14 +0800
-Subject: [PATCH 02/12] Implement Fan Thermal Curve
+Subject: [PATCH 02/13] Implement Fan Thermal Curve
 
 ---
  ec_memory_configuration.h |  28 +++
@@ -604,7 +604,7 @@ index 52a1c57..3c0a25a 100644
 From b2f133cfc1ce8e3b6d047ed4c18510dc9b30389c Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Fri, 7 Mar 2025 00:14:32 +0800
-Subject: [PATCH 03/12] Add hwmon support for fan speed and temperature
+Subject: [PATCH 03/13] Add hwmon support for fan speed and temperature
  monitoring
 
 ---
@@ -826,7 +826,7 @@ index 3c0a25a..b43bae6 100644
 From 68e68e2ace5f47f8f6463f010ca50ee4a68cd5d4 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Fri, 7 Mar 2025 00:33:14 +0800
-Subject: [PATCH 04/12] Add fan label support to hwmon interface
+Subject: [PATCH 04/13] Add fan label support to hwmon interface
 
 ---
  msi-ec.c | 31 +++++++++++++++++++++++++++++--
@@ -902,7 +902,7 @@ index b43bae6..21c2b37 100644
 From 386da7f3e2cc291cbd1b7440cf0023df2573719a Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Fri, 7 Mar 2025 03:17:25 +0800
-Subject: [PATCH 05/12] hwmon: Implement fan PWM control functionality
+Subject: [PATCH 05/13] hwmon: Implement fan PWM control functionality
 
 ---
  msi-ec.c | 234 +++++++++++++++++++++++++++++++++++++++++++++++++++++--
@@ -1237,7 +1237,7 @@ index 21c2b37..924a3e1 100644
 From 096517b323e6925a97a5a43602631bfec27e9e3f Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Fri, 7 Mar 2025 12:58:47 +0800
-Subject: [PATCH 06/12] hwmon: Implement fan PWM curve control functionality
+Subject: [PATCH 06/13] hwmon: Implement fan PWM curve control functionality
 
 ---
  Makefile                  |   2 +-
@@ -1776,7 +1776,7 @@ index 924a3e1..fc8143f 100644
 From 5b289080b9715bf237328b735be4fdbb32593e9e Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Fri, 7 Mar 2025 15:56:26 +0800
-Subject: [PATCH 07/12] Fix: Module unload issues and hwmon naming
+Subject: [PATCH 07/13] Fix: Module unload issues and hwmon naming
 
 ---
  ec_memory_configuration.h |  1 +
@@ -1905,7 +1905,7 @@ index fc8143f..a90edd7 100644
 From 495135904b67ade64ebe0db8fc24bb9210bc7546 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Fri, 7 Mar 2025 16:36:01 +0800
-Subject: [PATCH 08/12] Add: PWM value scaling between hwmon and EC
+Subject: [PATCH 08/13] Add: PWM value scaling between hwmon and EC
 
 Scale PWM values between hwmon standard (0-255) and EC device (0-100) ranges when reading and writing fan curve points.
 ---
@@ -2025,7 +2025,7 @@ index a90edd7..e55f11f 100644
 From cc12a53247df20a64c106d7f59f9e8724599fddc Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Fri, 7 Mar 2025 17:45:52 +0800
-Subject: [PATCH 09/12] Refactor: Use lazy-sync for fan curve hwmon attributes
+Subject: [PATCH 09/13] Refactor: Use lazy-sync for fan curve hwmon attributes
 
 Refactored the hwmon implementation of fan curve attributes to:
 1. Utilize existing curve buffer mechanism instead of direct EC access
@@ -2300,7 +2300,7 @@ index e55f11f..57d6846 100644
 From 8412d17a9104d71b7172e7d4665bbe6b69e424e9 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Sat, 8 Mar 2025 18:03:55 +0800
-Subject: [PATCH 10/12] Add max_speed to fan_curve
+Subject: [PATCH 10/13] Add max_speed to fan_curve
 
 ---
  ec_memory_configuration.h |   2 +
@@ -2529,7 +2529,7 @@ index 57d6846..2f67c0c 100644
 From 24c37c0ab5deb6af07cb29bec3a4f5c29ff03522 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Sun, 9 Mar 2025 21:55:42 +0800
-Subject: [PATCH 11/12] hwmon: Add virtual fan mode state for independent fan
+Subject: [PATCH 11/13] hwmon: Add virtual fan mode state for independent fan
  control
 
 Implements virtual pwm_enable state to allow individual fan control through hwmon interface while respecting the global fan mode constraint of EC hardware.
@@ -2645,7 +2645,7 @@ index 2f67c0c..7ff799e 100644
 From 14c6d18ac5533b78c5f041a3ec8537246db19384 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Thu, 6 Mar 2025 17:36:44 +0800
-Subject: [PATCH 12/12] Add fan_curve for claw8
+Subject: [PATCH 12/13] Add fan_curve for claw8
 
 ---
  msi-ec.c | 14 ++++++++++++++
@@ -2680,6 +2680,183 @@ index 7ff799e..e2b7d74 100644
  	},
  	.leds = {
  		.micmute_led_address = MSI_EC_ADDR_UNSUPP,
+-- 
+2.48.1
+
+
+From c9b4e0f5ed36c92ada30c47cf5032345e647bfbe Mon Sep 17 00:00:00 2001
+From: honjow <honjow311@gmail.com>
+Date: Mon, 10 Mar 2025 04:52:33 +0800
+Subject: [PATCH 13/13] pwm_enable: set full mode to 0
+
+---
+ msi-ec.c | 74 ++++++++++++++++++++++++++++++++------------------------
+ 1 file changed, 42 insertions(+), 32 deletions(-)
+
+diff --git a/msi-ec.c b/msi-ec.c
+index e2b7d74..288912c 100644
+--- a/msi-ec.c
++++ b/msi-ec.c
+@@ -4743,6 +4743,14 @@ static int __init load_configuration(void)
+ // Hwmon functions (curve)
+ // ============================================================ //
+ 
++enum {
++	PWM_ENABLE_FULL = 0,
++	PWM_ENABLE_MANUAL,
++	PWM_ENABLE_AUTO,
++	PWM_ENABLE_SILENT,
++	PWM_ENABLE_BASIC,
++};
++
+ static int virtual_hwmon_pwm_enable[2] = {-1, -1};
+ 
+ // Array to hold dynamically created attributes
+@@ -5117,6 +5125,7 @@ static void remove_fan_curve_attrs(struct device *dev)
+ // ============================================================ //
+ // Hwmon functions (other)
+ // ============================================================ //
++
+ // Check if a specific fan mode is available in the configuration
+ static bool fan_mode_is_available(const char *mode)
+ {
+@@ -5219,50 +5228,51 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+ 				virtual_hwmon_pwm_enable[channel] = val;
+ 
+                 switch (val) {
+-                case 1: // Manual mode - Advanced
++                case PWM_ENABLE_FULL: // Full speed mode - Cooler Boost
++                    if (conf.cooler_boost.address != MSI_EC_ADDR_UNSUPP)
++                        result = set_cooler_boost(true);
++                    else
++                        return -EINVAL;
++					virtual_hwmon_pwm_enable[0] = PWM_ENABLE_FULL;
++					virtual_hwmon_pwm_enable[1] = PWM_ENABLE_FULL;
++                    break;
++                case PWM_ENABLE_MANUAL: // Manual mode - Advanced
+                     result = set_cooler_boost(false);
+                     if (fan_mode_is_available(FM_ADVANCED_NAME))
+                         result = set_fan_mode(FM_ADVANCED_NAME);
+                     else
+                         return -EINVAL;
+-					virtual_hwmon_pwm_enable[1] = 1;
+-					virtual_hwmon_pwm_enable[0] = 1;
++					virtual_hwmon_pwm_enable[1] = PWM_ENABLE_MANUAL;
++					virtual_hwmon_pwm_enable[0] = PWM_ENABLE_MANUAL;
+                     break;
+-                case 2: // Automatic mode - Auto
++                case PWM_ENABLE_AUTO: // Automatic mode - Auto
+                     result = set_cooler_boost(false);
+ 					// If both channels are set to automatic mode, apply the change
+-					if (virtual_hwmon_pwm_enable[1] == 2 && virtual_hwmon_pwm_enable[0] ==2) {
++					if (virtual_hwmon_pwm_enable[1] == PWM_ENABLE_AUTO && 
++					    virtual_hwmon_pwm_enable[0] == PWM_ENABLE_AUTO) {
+ 						if (fan_mode_is_available(FM_AUTO_NAME))
+ 						    result = set_fan_mode(FM_AUTO_NAME);
+ 						else
+ 						    return -EINVAL;
+ 					}
+                     break;
+-                case 3: // Full speed mode - Cooler Boost
+-                    if (conf.cooler_boost.address != MSI_EC_ADDR_UNSUPP)
+-                        result = set_cooler_boost(true);
+-                    else
+-                        return -EINVAL;
+-					virtual_hwmon_pwm_enable[0] = 3;
+-					virtual_hwmon_pwm_enable[1] = 3;
+-                    break;
+-                case 4: // Silent mode
++                case PWM_ENABLE_SILENT: // Silent mode
+                     result = set_cooler_boost(false);
+                     if (fan_mode_is_available(FM_SILENT_NAME))
+                         result = set_fan_mode(FM_SILENT_NAME);
+                     else
+                         return -EINVAL;
+-					virtual_hwmon_pwm_enable[0] = 4;
+-					virtual_hwmon_pwm_enable[1] = 4;
++					virtual_hwmon_pwm_enable[0] = PWM_ENABLE_SILENT;
++					virtual_hwmon_pwm_enable[1] = PWM_ENABLE_SILENT;
+                     break;
+-                case 5: // Basic mode
++                case PWM_ENABLE_BASIC: // Basic mode
+                     result = set_cooler_boost(false);
+                     if (fan_mode_is_available(FM_BASIC_NAME))
+                         result = set_fan_mode(FM_BASIC_NAME);
+                     else
+                         return -EINVAL;
+-					virtual_hwmon_pwm_enable[0] = 5;
+-					virtual_hwmon_pwm_enable[1] = 5;
++					virtual_hwmon_pwm_enable[0] = PWM_ENABLE_BASIC;
++					virtual_hwmon_pwm_enable[1] = PWM_ENABLE_BASIC;
+                     break;
+                 default:
+                     return -EINVAL;
+@@ -5391,9 +5401,9 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+ 						return result;
+ 				}
+     		    if (cooler_boost_enabled) {
+-					*val = 3; // Full speed mode
+-					virtual_hwmon_pwm_enable[1] = 3;
+-					virtual_hwmon_pwm_enable[0] = 3;
++					*val = PWM_ENABLE_FULL; // Full speed mode
++					virtual_hwmon_pwm_enable[1] = PWM_ENABLE_FULL;
++					virtual_hwmon_pwm_enable[0] = PWM_ENABLE_FULL;
+ 					return 0;
+ 				} else {
+ 					result = fan_mode_get(&mode_name);
+@@ -5401,15 +5411,15 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+ 						return result;
+ 					
+ 					if (strcmp(mode_name, FM_ADVANCED_NAME) == 0)
+-						*val = 1; // Manual mode
++						*val = PWM_ENABLE_MANUAL; // Manual mode
+ 					else if (strcmp(mode_name, FM_AUTO_NAME) == 0)
+-						*val = 2; // Automatic mode
++						*val = PWM_ENABLE_AUTO; // Automatic mode
+ 					else if (strcmp(mode_name, FM_SILENT_NAME) == 0)
+-						*val = 4; // Silent mode
++						*val = PWM_ENABLE_SILENT; // Silent mode
+ 					else if (strcmp(mode_name, FM_BASIC_NAME) == 0)
+-						*val = 5; // Basic mode
++						*val = PWM_ENABLE_BASIC; // Basic mode
+ 					else
+-						*val = 0; // Unknown mode
++						*val = -1; // Unknown mode
+ 					virtual_hwmon_pwm_enable[1] = *val;
+ 					virtual_hwmon_pwm_enable[0] = *val;
+ 					return 0;
+@@ -5427,7 +5437,7 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+ static ssize_t pwm_enable_available_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+     int len = 0;
+-    const char *mode_names[6] = {NULL}; // Index corresponds to mode value, 0 is not used
++    const char *mode_names[5] = {NULL}; // Index corresponds to mode value, 0 is not used
+     
+     // First collect all mode names
+     for (int i = 0; conf.fan_mode.modes[i].name; i++) {
+@@ -5436,18 +5446,18 @@ static ssize_t pwm_enable_available_show(struct device *dev, struct device_attri
+         else if (strcmp(conf.fan_mode.modes[i].name, FM_AUTO_NAME) == 0)
+             mode_names[2] = conf.fan_mode.modes[i].name;  // Auto mode
+         else if (strcmp(conf.fan_mode.modes[i].name, FM_SILENT_NAME) == 0)
+-            mode_names[4] = conf.fan_mode.modes[i].name;  // Silent mode
++            mode_names[3] = conf.fan_mode.modes[i].name;  // Silent mode
+         else if (strcmp(conf.fan_mode.modes[i].name, FM_BASIC_NAME) == 0)
+-            mode_names[5] = conf.fan_mode.modes[i].name;  // Basic mode
++            mode_names[4] = conf.fan_mode.modes[i].name;  // Basic mode
+     }
+     
+     // Add Cooler Boost (if supported)
+     if (conf.cooler_boost.address != MSI_EC_ADDR_UNSUPP) {
+-        mode_names[3] = "full";
++        mode_names[0] = "full";
+     }
+     
+     // Output in order
+-    for (int i = 1; i <= 5; i++) {
++    for (int i = 0; i <= 4; i++) {
+         if (mode_names[i]) {
+             len += scnprintf(buf + len, PAGE_SIZE - len, 
+                           "%d: %s\n", i, mode_names[i]);
 -- 
 2.48.1
 

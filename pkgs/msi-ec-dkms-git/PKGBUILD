@@ -18,7 +18,7 @@ source=(
     )
 sha256sums=('SKIP'
             'f2846d9e9b3734dbdeb41dafde34ec5b5fd2353732cb30cf2606ba89083e1875'
-            '5ac6d17110394f241f1890c0474980074a192ef7f35b43a0934d23c699b09d6a')
+            'SKIP')
 
 pkgver() {
     cd ${_pkgbase}
