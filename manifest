@@ -203,8 +203,8 @@ export PACKAGES="\
 export PACKAGE_OVERRIDES="\
 	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.5-skf-4/linux-chimeraos-6.13.5.skf-4-x86_64.pkg.tar.zst \
 	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.5-skf-4/linux-chimeraos-headers-6.13.5.skf-4-x86_64.pkg.tar.zst \
-	https://github.com/honjow/mesa-git-packages/releases/download/b6b8193/lib32-mesa-git-25.1.0_devel.202552.b6b8193534b.ae1e20f-1-x86_64.pkg.tar.zst \
-	https://github.com/honjow/mesa-git-packages/releases/download/b6b8193/mesa-git-25.1.0_devel.202552.b6b8193534b.ae1e20f-1-x86_64.pkg.tar.zst \
+	https://github.com/honjow/mesa-git-packages/releases/download/76883e0/lib32-mesa-git-25.1.0_devel.202911.76883e0b3ce.869876d-1-x86_64.pkg.tar.zst \
+	https://github.com/honjow/mesa-git-packages/releases/download/76883e0/mesa-git-25.1.0_devel.202911.76883e0b3ce.869876d-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
 "
