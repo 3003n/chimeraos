@@ -1,29 +1,40 @@
-# Maintainer: Ilya Zlobintsev <ilya.zl@protonmail.com>
+# Maintainer: Leonidas Spyropoulos <artafinde@archlinux.org>
+# Contributor: Ilya Zlobintsev <ilya.zl@protonmail.com>
+
 pkgname=('lact-libadwaita')
 pkgbase=lact
-pkgver=0.5.6
+pkgver=0.7.1
 pkgrel=1
-pkgdesc="AMDGPU Controller application"
-arch=('x86_64' 'aarch64')
+pkgdesc="Linux GPU Configuration Tool"
+arch=('x86_64')
 url="https://github.com/ilya-zlobintsev/LACT"
 license=('MIT')
-depends=('hwdata' 'gtk4')
-makedepends=('blueprint-compiler' 'cargo' 'clang' 'libadwaita' 'git')
+depends=(
+  hwdata
+  gcc-libs
+  glibc
+  gtk4
+)
+makedepends=(
+  blueprint-compiler
+  cargo
+  clang
+  libadwaita
+  git
+)
 install="$pkgbase.install"
 source=("git+https://github.com/ilya-zlobintsev/LACT.git#tag=v$pkgver")
-# Since the source is a git repository tag and not an archive, there's no single file with a checksum to check
-sha256sums=('9440a4d94f95d0a62124d635855817ea95fc8a5d2a70f2e52cb166364e1e630f')
+sha256sums=('dbd0c2056829732025fec5df9b95900ce1b49e2f69f944ffc95fd7380279c3e9')
+b2sums=('e5f58a594c75c0f78a9fa5938af525c209d36e224b13910e122cab57a2ecd60d16e5228105c98ebf8305c99d32bfd0e291e3f8e9d2f6a4c47198081a6404ba18')
 
 prepare() {
   cd "LACT"
-  export CARGO_HOME="$srcdir/cargo-home"
   export RUSTUP_TOOLCHAIN=stable
-  cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
 }
 
 build() {
   cd "LACT"
-  export CARGO_HOME="$srcdir/cargo-home"
   export RUSTUP_TOOLCHAIN=stable
   export CARGO_TARGET_DIR=target
 
@@ -37,9 +48,8 @@ build() {
 
 check() {
   cd "LACT"
-  export CARGO_HOME="$srcdir/cargo-home"
   export RUSTUP_TOOLCHAIN=stable
-  cargo test --frozen --no-default-features -p lact
+  cargo test --frozen --no-default-features --
 }
 
 package_lact() {

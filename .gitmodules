@@ -49,9 +49,6 @@
 [submodule "aur-pkgs/zenergy-dkms-git"]
 	path = aur-pkgs/zenergy-dkms-git
 	url = https://aur.archlinux.org/zenergy-dkms-git.git
-[submodule "aur-pkgs/anydesk-bin"]
-	path = aur-pkgs/anydesk-bin
-	url = https://aur.archlinux.org/anydesk-bin.git
 [submodule "aur-pkgs/frzr-sk"]
 	path = aur-pkgs/frzr-sk
 	url = https://aur.archlinux.org/frzr-sk.git
@@ -139,9 +136,9 @@
 [submodule "aur-pkgs/v4l-utils-git"]
 	path = aur-pkgs/v4l-utils-git
 	url = https://aur.archlinux.org/v4l-utils-git.git
-[submodule "aur-pkgs/mangohud-git"]
-	path = aur-pkgs/mangohud-git
-	url = https://aur.archlinux.org/mangohud-git.git
 [submodule "aur-pkgs/steam-powerbuttond-git"]
 	path = aur-pkgs/steam-powerbuttond-git
 	url = https://aur.archlinux.org/steam-powerbuttond-git.git
+[submodule "aur-pkgs/hid-msi-claw-dkms-git"]
+	path = aur-pkgs/hid-msi-claw-dkms-git
+	url = https://aur.archlinux.org/hid-msi-claw-dkms-git.git

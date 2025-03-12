@@ -1,0 +1,53 @@
+From dd5e64613b61dd6959e11f0cb6cad4dfe629952d Mon Sep 17 00:00:00 2001
+From: honjow <honjow311@gmail.com>
+Date: Wed, 5 Mar 2025 20:50:35 +0800
+Subject: [PATCH 1/2] feat: display battery charging power
+
+- Display actual power value during battery charging
+- Add +/- prefix to power value to indicate charging/discharging status
+---
+ src/battery.cpp      | 2 +-
+ src/hud_elements.cpp | 8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/src/battery.cpp b/src/battery.cpp
+index e5d311b..f4ff2d9 100644
+--- a/src/battery.cpp
++++ b/src/battery.cpp
+@@ -104,7 +104,7 @@ float BatteryStats::getPower() {
+             state[i]=current_status;
+         }
+ 
+-        if (state[i] == "Charging" ||  state[i] == "Unknown" || state[i] == "Full") {
++        if (state[i] != "Charging" && state[i] != "Discharging") {
+             return 0;
+         }
+ 
+diff --git a/src/hud_elements.cpp b/src/hud_elements.cpp
+index e820908..90790fc 100644
+--- a/src/hud_elements.cpp
++++ b/src/hud_elements.cpp
+@@ -1038,13 +1038,19 @@ void HudElements::battery(){
+             if (Battery_Stats.current_watt != 0) {
+                 if (HUDElements.params->enabled[OVERLAY_PARAM_ENABLED_battery_watt]){
+                     ImguiNextColumnOrNewRow();
++                    std::string prefix = "";
++                    if (Battery_Stats.current_status == "Charging") {
++                        prefix = "+"; //
++                    } else if (Battery_Stats.current_status == "Discharging") {
++                        prefix = "-"; //
++                    }
+                     if (HUDElements.params->enabled[OVERLAY_PARAM_ENABLED_hud_compact] && Battery_Stats.current_watt >= 10.0f)
+                         right_aligned_text(HUDElements.colors.text, HUDElements.ralign_width, "%.0f", Battery_Stats.current_watt);
+                     else
+                         right_aligned_text(HUDElements.colors.text, HUDElements.ralign_width, "%.1f", Battery_Stats.current_watt);
+                     ImGui::SameLine(0,1.0f);
+                     ImGui::PushFont(HUDElements.sw_stats->font1);
+-                    HUDElements.TextColored(HUDElements.colors.text, "W");
++                    HUDElements.TextColored(HUDElements.colors.text, "%sW", prefix.c_str());
+                     ImGui::PopFont();
+                 }
+                 if (HUDElements.params->enabled[OVERLAY_PARAM_ENABLED_battery_time]) {
+-- 
+2.48.1
+
