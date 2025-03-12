@@ -3,7 +3,7 @@
 _pkgbase=msi-ec
 pkgname=msi-ec-dkms-git
 pkgver=r415.f169e6a
-pkgrel=1
+pkgrel=4
 pkgdesc="Driver for MSI laptop EC (DKMS)"
 arch=('x86_64')
 license=('GPL2')
@@ -14,12 +14,11 @@ conflicts=("${_pkgbase}")
 source=(
     "git+https://github.com/BeardOverflow/msi-ec.git"
     "dkms.conf"
-    "0001-Add-Claw-8.patch"
+    "0001-Add-hwmon.patch"
     )
 sha256sums=('SKIP'
             'f2846d9e9b3734dbdeb41dafde34ec5b5fd2353732cb30cf2606ba89083e1875'
-            'f8a0afe098fe7856afd2a37d8eebe37e38361b35c3e8b87a524e7a16eb47acbb'
-            )
+            'SKIP')
 
 pkgver() {
     cd ${_pkgbase}
