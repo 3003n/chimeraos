@@ -3,6 +3,7 @@
 *.tar.zst
 *.tar.gz
 *.img
+*.cab
 .cache/*
 output/*
 rootfs/etc/makepkg.conf

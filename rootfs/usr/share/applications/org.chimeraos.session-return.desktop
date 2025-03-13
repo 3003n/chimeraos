@@ -8,3 +8,4 @@ Icon=/usr/share/icons/chimeraos/scalable/actions/return-to-game-mode.svg
 Terminal=false
 Type=Application
 StartupNotify=false
+Categories=Game;System;
