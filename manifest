@@ -411,4 +411,7 @@ postinstallhook() {
 	setcap 'CAP_SYS_NICE=eip' /usr/bin/gamescope
 
 	setcap cap_perfmon=+ep /usr/bin/mangohud
+
+	# Disable SPDIF/IEC958 audio output
+	sudo sed -e '/\[Mapping iec958/,+5 s/^/#/' -i '/usr/share/alsa-card-profile/mixer/profile-sets/default.conf'
 }
