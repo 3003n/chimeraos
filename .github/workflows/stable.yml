@@ -135,4 +135,4 @@ jobs:
     name: Build ChimeraOS STABLE image
     uses: ./.github/workflows/build-system-image.yml
     with:
-      postfix: "[PLASMA-PRE]"
+      postfix: "[PLASMA_NVIDIA-PRE]"
