@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export VERSION="48-4"
+export VERSION="48-5"
 export SYSTEM_DESC="ChimeraOS"
 export SYSTEM_NAME="chimeraos"
 export USERNAME="gamer"
@@ -212,8 +212,8 @@ export PACKAGES="\
 "
 
 export PACKAGE_OVERRIDES="\
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-3/linux-chimeraos-6.13.7.sko-3-x86_64.pkg.tar.zst \
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-3/linux-chimeraos-headers-6.13.7.sko-3-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-4/linux-chimeraos-6.13.7.sko-4-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-4/linux-chimeraos-headers-6.13.7.sko-4-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-opencl-clover-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-opencl-rusticl-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
@@ -235,6 +235,7 @@ export PACKAGE_OVERRIDES="\
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/vulkan-virtio-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
+	https://ns.switchsystem.eu.org/d/vfs/guest/stos/pkgs/gamescope-sk-3.16.2.sk1-1-x86_64.pkg.tar.zst \
 "
 
 # Each entry is the clone url (https://aur.archlinux.org/{AUR_PACKAGE}.git)
@@ -283,7 +284,6 @@ export AUR_PACKAGES="\
 	rtl8821au-dkms-git \
 	ryzenadj-git \
 	sk-boot-to-windows \
-	sk-chos-tool \
 	steam_notif_daemon \
 	steam-powerbuttond-git \
 	tsukimi-bin \
@@ -430,4 +430,7 @@ postinstallhook() {
 	setcap 'CAP_SYS_NICE=eip' /usr/bin/gamescope
 
 	setcap cap_perfmon=+ep /usr/bin/mangohud
+
+	# Disable SPDIF/IEC958 audio output
+	sudo sed -e '/\[Mapping iec958/,+5 s/^/#/' -i '/usr/share/alsa-card-profile/mixer/profile-sets/default.conf'
 }

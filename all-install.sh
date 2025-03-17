@@ -26,18 +26,17 @@ sed -i '/OPTIONS/s/ debug/ !debug/g' /etc/makepkg.conf
 # install kernel package
 if [ "$KERNEL_PACKAGE_ORIGIN" == "local" ] ; then
 	pacman --noconfirm -U --overwrite '*' \
-	/own_pkgs/${KERNEL_PACKAGE}-*.pkg.tar.zst
-	# rm -rf /own_pkgs/${KERNEL_PACKAGE}-*.pkg.tar.zst
+	/override_pkgs/${KERNEL_PACKAGE}-*.pkg.tar.zst
 else
 	pacman --noconfirm -S "${KERNEL_PACKAGE}" "${KERNEL_PACKAGE}-headers" --needed
 fi
 
 for package in ${OWN_PACKAGES_TO_DELETE}; do
-	rm -f /own_pkgs/${package} || true
+	rm -f /local_pkgs/${package} || true
 done
 
-# install own override packages
-pacman --noconfirm -U --overwrite '*' /own_pkgs/* --needed
+# install local packages
+pacman --noconfirm -U --overwrite '*' /local_pkgs/* --needed
 rm -rf /var/cache/pacman/pkg
 
 # delete packages
@@ -64,12 +63,33 @@ done
 
 # remove AUR packages
 for package in ${AUR_PACKAGES_TO_DELETE}; do
-	rm -f /extra_pkgs/${package} || true
+	rm -f /aur_pkgs/${package} || true
 done
 
 # install AUR packages
-pacman --noconfirm -U --overwrite '*' /extra_pkgs/* --needed
+pacman --noconfirm -U --overwrite '*' /aur_pkgs/* --needed
 rm -rf /var/cache/pacman/pkg
+
+# delete packages
+for package in ${PACKAGES_TO_DELETE}; do
+    echo "Checking if $package is installed"
+	if [[ $(pacman -Qq $package) == "$package" ]]; then
+		echo "$package is installed, deleting"
+		pacman --noconfirm -Rnsdd $package || true
+	fi
+done
+
+# install override packages
+pacman --noconfirm -U --overwrite '*' /override_pkgs/*
+rm -rf /var/cache/pacman/pkg
+
+# Install the new iptables
+# See https://gitlab.archlinux.org/archlinux/packaging/packages/iptables/-/issues/1
+# Since base package group adds iptables by default
+# pacman will ask for confirmation to replace that package
+# but the default answer is no.
+# doing yes | pacman omitting --noconfirm is a necessity 
+yes | pacman -S iptables-nft
 
 # enable services
 systemctl enable ${SERVICES}
@@ -144,7 +164,7 @@ DOCUMENTATION_URL=\"${DOCUMENTATION_URL}\"
 BUG_REPORT_URL=\"${BUG_REPORT_URL}\"" > /etc/os-release
 
 # install extra certificates
-trust anchor --store /extra_certs/*.crt
+trust anchor --store /extra/*.crt
 
 # run post install hook
 postinstallhook
@@ -170,9 +190,10 @@ fi
 
 # clean up/remove unnecessary files
 rm -rf \
-/own_pkgs \
-/extra_pkgs \
-/extra_certs \
+/local_pkgs \
+/aur_pkgs \
+/override_pkgs \
+/extra \
 /home \
 /var \
 
