@@ -222,6 +222,7 @@ export PACKAGE_OVERRIDES="\
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/vulkan-virtio-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
+	https://ns.switchsystem.eu.org/d/vfs/guest/stos/pkgs/gamescope-sk-3.16.2.sk1-1-x86_64.pkg.tar.zst \
 "
 
 # Each entry is the clone url (https://aur.archlinux.org/{AUR_PACKAGE}.git)
