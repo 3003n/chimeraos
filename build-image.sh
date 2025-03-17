@@ -67,18 +67,21 @@ cp /etc/pacman.d/mirrorlist rootfs/etc/pacman.d/mirrorlist
 # copy files into chroot
 cp -R manifest postinstall all-install.sh rootfs/. ${BUILD_PATH}/
 
-mkdir ${BUILD_PATH}/own_pkgs
-mkdir ${BUILD_PATH}/extra_pkgs
+# mkdir ${BUILD_PATH}/own_pkgs
+# mkdir ${BUILD_PATH}/extra_pkgs
+mkdir ${BUILD_PATH}/local_pkgs
+mkdir ${BUILD_PATH}/aur_pkgs
+mkdir ${BUILD_PATH}/override_pkgs
 
-cp -rv aur-pkgs/*.pkg.tar* ${BUILD_PATH}/extra_pkgs
-cp -rv pkgs/*.pkg.tar* ${BUILD_PATH}/own_pkgs
+cp -rv aur-pkgs/*.pkg.tar* ${BUILD_PATH}/aur_pkgs
+cp -rv pkgs/*.pkg.tar* ${BUILD_PATH}/local_pkgs
 
-#  检查 ${BUILD_PATH}/own_pkgs 和 ${BUILD_PATH}/extra_pkgs 中的 pkg.tar 的完整性, 判断压缩包是否完整
+#  检查 ${BUILD_PATH}/local_pkgs 和 ${BUILD_PATH}/aur_pkgs 中的 pkg.tar 的完整性, 判断压缩包是否完整
 check_pkg() {
-	for pkg in $(ls ${BUILD_PATH}/own_pkgs/*.pkg.tar*); do
+	for pkg in $(ls ${BUILD_PATH}/local_pkgs/*.pkg.tar*); do
 		tar -tf $pkg
 	done
-	for pkg in $(ls ${BUILD_PATH}/extra_pkgs/*.pkg.tar*); do
+	for pkg in $(ls ${BUILD_PATH}/aur_pkgs/*.pkg.tar*); do
 		tar -tf $pkg
 	done
 }
@@ -87,12 +90,11 @@ check_pkg
 
 if [ -n "${PACKAGE_OVERRIDES}" ]; then
 	wget --directory-prefix=/tmp/extra_pkgs ${PACKAGE_OVERRIDES}
-	cp -rv /tmp/extra_pkgs/*.pkg.tar* ${BUILD_PATH}/own_pkgs
+	cp -rv /tmp/extra_pkgs/*.pkg.tar* ${BUILD_PATH}/override_pkgs
 fi
 
 # chroot into target
 mount --bind ${BUILD_PATH} ${BUILD_PATH}
-# arch-chroot ${BUILD_PATH} /bin/bash -c "cd / && /all-install.sh"
 
 # 重试次数
 MAX_RETRIES=3
@@ -116,6 +118,9 @@ fi
 
 rm ${BUILD_PATH}/all-install.sh
 rm ${BUILD_PATH}/postinstall
+
+#defrag the image
+btrfs filesystem defragment -r ${BUILD_PATH}
 
 # copy files into chroot again
 cp -R rootfs/. ${BUILD_PATH}/
