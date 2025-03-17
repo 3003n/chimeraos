@@ -164,7 +164,7 @@ DOCUMENTATION_URL=\"${DOCUMENTATION_URL}\"
 BUG_REPORT_URL=\"${BUG_REPORT_URL}\"" > /etc/os-release
 
 # install extra certificates
-trust anchor --store /extra_certs/*.crt
+trust anchor --store /extra/*.crt
 
 # run post install hook
 postinstallhook
@@ -193,7 +193,7 @@ rm -rf \
 /local_pkgs \
 /aur_pkgs \
 /override_pkgs \
-/extra_certs \
+/extra \
 /home \
 /var \
 
