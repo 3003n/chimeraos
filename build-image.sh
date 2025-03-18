@@ -197,7 +197,7 @@ if [ ${file_size} -gt ${split_bytes} ]; then
 	rm ${IMG_FILENAME}
 fi
 
-cp ${BUILD_PATH}/build_info build_info.txt
+cp ${BUILD_PATH}/build_info build_info-${BUILD_BRANCH}.txt
 
 # clean up
 umount -l ${BUILD_PATH}
@@ -206,14 +206,14 @@ rm -rf ${MOUNT_PATH}
 rm -rf ${BUILD_IMG}
 
 if [ -z "${NO_COMPRESS}" ] || [ -n "${TEST_BUILD}" ]; then
-	sha256sum ${IMG_FILENAME_WITHOUT_EXT}* >sha256sum.txt
-	cat sha256sum.txt
+	sha256sum ${IMG_FILENAME_WITHOUT_EXT}* >sha256sum-${BUILD_BRANCH}.txt
+	cat sha256sum-${BUILD_BRANCH}.txt
 
 	# Move the image to the output directory, if one was specified.
 	if [ -n "${OUTPUT_DIR}" ]; then
 		mkdir -p "${OUTPUT_DIR}"
 		mv ${IMG_FILENAME_WITHOUT_EXT}* ${OUTPUT_DIR} || true
-		mv build_info.txt ${OUTPUT_DIR}
+		mv build_info-${BUILD_BRANCH}.txt ${OUTPUT_DIR}
 		mv sha256sum*.txt ${OUTPUT_DIR} || true
 	fi
 

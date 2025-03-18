@@ -60,5 +60,12 @@ jobs:
         run: |
           docker pull ${{ steps.meta.outputs.tags }}
           docker run -u root --rm --entrypoint=/workdir/build-image.sh -v $(pwd):/workdir -v $(pwd)/output:/output -v $GITHUB_OUTPUT:$GITHUB_OUTPUT -e "GITHUB_OUTPUT=$GITHUB_OUTPUT" -e "BUILD_BRANCH=${{ matrix.branch }}" --privileged=true ${{ steps.meta.outputs.tags }} $(echo ${GITHUB_SHA} | cut -c1-7)
-          echo -e "$(docker inspect --format='{{index .RepoDigests 0}}' ${{ steps.meta.outputs.tags }})" > output/container.txt
+          echo -e "$(docker inspect --format='{{index .RepoDigests 0}}' ${{ steps.meta.outputs.tags }})" > output/container-${{ matrix.branch }}.txt
       
+      - name: Upload image
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-${{ matrix.branch }}
+          path: output/${{ steps.build_image.outputs.image_filename_without_ext }}*img*,output/build_info*.txt,output/sha256sum*.txt,output/container*.txt
+          compression-level: 0
+          overwrite: true
