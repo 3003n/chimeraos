@@ -45,7 +45,6 @@ jobs:
             pattern: Packages*
             merge-multiple: true
             path: pkgs/
-      
       - name: Merge rootfs
         run: |
-          cp -a branch/${{ matrix.branch }}/rootfs/* rootfs/
+          cp -a branch/${{ matrix.branch }}rootfs/* rootfs/
