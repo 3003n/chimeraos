@@ -297,10 +297,13 @@ export PACKAGES_TO_DELETE="\
 	pulseaudio-alsa \
 	v4l-utils \
 "
-export OWN_PACKAGES_TO_DELETE=""
+export OWN_PACKAGES_TO_DELETE="\
+	gamescope-3.1*.pkg.tar.zst \
+"
 
 export AUR_PACKAGES_TO_DELETE="\
 	gamescope-session-git-r*.pkg.tar.zst \
+	gamescope-3.1*.pkg.tar.zst \
 "
 
 export SERVICES="\
