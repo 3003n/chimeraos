@@ -1,0 +1,11 @@
+#! /bin/bash
+
+export SUB_PACKAGES="\
+"
+
+export SUB_AUR_PACKAGES="\
+"
+
+sub_postinstallhook() {
+    :
+}
