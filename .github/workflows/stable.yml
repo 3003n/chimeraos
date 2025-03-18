@@ -46,7 +46,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-      # - run: git submodule update --recursive --remote aur-pkgs
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5

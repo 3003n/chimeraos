@@ -33,3 +33,13 @@ if [ ${RETRY_COUNT} -eq ${MAX_RETRIES} ]; then
     echo ">>>>>> Build failed after ${MAX_RETRIES} attempts. Stopping..."
     exit -1
 fi
+
+# 为 *.pkg.tar* 文件添加 前缀: [${1}]-
+find /workdir/pkgs -type f -name "*.pkg.tar*" | while read file; do
+    filename=$(basename "$file")
+    new_filename="[${1}]-$filename"
+    mv "$file" "/workdir/pkgs/$new_filename"
+    echo ">>>>>> Renamed: $filename -> $new_filename"
+done
+
+echo ">>>>>> Build completed successfully!"
