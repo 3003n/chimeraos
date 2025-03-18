@@ -132,6 +132,12 @@ export PACKAGES="\
 	noto-fonts-emoji \
 	nss-mdns \
 	ntfs-3g \
+	nvidia-dkms \
+	opencl-nvidia \
+	lib32-opencl-nvidia \
+	nvidia-utils \
+	lib32-nvidia-utils \
+	nvidia-prime \
 	openal \
 	openssh \
 	openrgb \
@@ -324,6 +330,7 @@ export SERVICES="\
 	inputplumber \
 	inputplumber-suspend \
 	lightdm \
+	nvidia-powerd \
 	overlay-backgrounds \
 	overlay-fonts \
 	overlay-root-home \
