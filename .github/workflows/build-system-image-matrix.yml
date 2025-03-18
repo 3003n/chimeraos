@@ -20,7 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: set-branches
-        run: echo "matrix=$(ls -d branch/*/ | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        # remove branch/ prefix
+        run: echo "matrix=$(ls -d branch/*/ | sed 's/branch\///' | sed 's/\///' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
         shell: bash
   
   build-system-image:
@@ -47,4 +48,4 @@ jobs:
             path: pkgs/
       - name: Merge rootfs
         run: |
-          cp -a branch/${{ matrix.branch }}rootfs/* rootfs/
+          cp -a branch/${{ matrix.branch }}/rootfs/* rootfs/
