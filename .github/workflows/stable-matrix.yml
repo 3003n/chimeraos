@@ -46,18 +46,18 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.list-pkgbuilds.outputs.aur-pkgs) }}
     steps:
-      # - uses: actions/checkout@v4
-      #   with:
-      #     submodules: recursive
-      # - name: Extract metadata (tags, labels) for Docker
-      #   id: meta
-      #   uses: docker/metadata-action@v5
-      #   with:
-      #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      # - name: Build packages
-      #   run: |
-      #     docker pull ${{ steps.meta.outputs.tags }}
-      #     docker run --rm -v $(pwd):/workdir --entrypoint=/workdir/aur-pkgs/build-package.sh ${{ steps.meta.outputs.tags }} ${{ matrix.package }}
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Build packages
+        run: |
+          docker pull ${{ steps.meta.outputs.tags }}
+          docker run --rm -v $(pwd):/workdir --entrypoint=/workdir/aur-pkgs/build-package.sh ${{ steps.meta.outputs.tags }} ${{ matrix.package }}
       - name: Process package name
         id: process_package
         run: |
@@ -69,13 +69,13 @@ jobs:
       # - name: Generate checksums
       #   run: |
       #     docker run --rm -v $(pwd):/workdir --entrypoint=/bin/bash ${{ steps.meta.outputs.tags }} -c "cd /workdir/aur-pkgs && sha256sum *.pkg.tar* > sha256sums-${PACKAGE_NAME}.txt"
-      - name: Fake build
-        env:
-          PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
-        run: |
-          mkdir -p aur-pkgs
-          touch aur-pkgs/[${{ env.PACKAGE_NAME }}]-A.pkg.tar.zst
-          touch aur-pkgs/[${{ env.PACKAGE_NAME }}]-B.pkg.tar.zst
+      # - name: Fake build
+      #   env:
+      #     PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
+      #   run: |
+      #     mkdir -p aur-pkgs
+      #     touch aur-pkgs/[${{ env.PACKAGE_NAME }}]-A.pkg.tar.zst
+      #     touch aur-pkgs/[${{ env.PACKAGE_NAME }}]-B.pkg.tar.zst
 
       - name: Upload Package Archives
         uses: actions/upload-artifact@v4
@@ -99,7 +99,19 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.list-pkgbuilds.outputs.pkgs) }}
     steps:
-      # - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build packages
+        run: |
+          docker pull ${{ steps.meta.outputs.tags }}
+          docker run --rm -v $(pwd):/workdir --entrypoint=/workdir/pkgs/build-package.sh ${{ steps.meta.outputs.tags }} ${{ matrix.package }}
 
       - name: Process package name
         id: process_package
@@ -109,13 +121,13 @@ jobs:
           PACKAGE_NAME=${PACKAGE_NAME%/}
           echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV 
      
-      - name: Fake build
-        env:
-          PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
-        run: |
-          mkdir -p pkgs
-          touch pkgs/[${{ env.PACKAGE_NAME }}]-A.pkg.tar.zst
-          touch pkgs/[${{ env.PACKAGE_NAME }}]-B.pkg.tar.zst
+      # - name: Fake build
+      #   env:
+      #     PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
+      #   run: |
+      #     mkdir -p pkgs
+      #     touch pkgs/[${{ env.PACKAGE_NAME }}]-A.pkg.tar.zst
+      #     touch pkgs/[${{ env.PACKAGE_NAME }}]-B.pkg.tar.zst
 
       - name: Upload Package Archives
         uses: actions/upload-artifact@v4

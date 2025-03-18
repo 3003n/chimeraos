@@ -8,7 +8,7 @@ if [ $EUID -ne 0 ]; then
 	exit 1
 fi
 
-TEST_BUILD="1"
+TEST_BUILD=""
 NO_COMPRESS="1"
 
 BUILD_USER=${BUILD_USER:-}
