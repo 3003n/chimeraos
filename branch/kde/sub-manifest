@@ -7,6 +7,14 @@ export SUB_AUR_PACKAGES="\
 "
 
 export SUB_LOCAL_PACKAGES="\
+	ds-inhibit \
+	lact-libadwaita \
+	mangohud-git \
+	msi-ec-dkms-git \
+	rtl88x2bu-dkms \
+	steam-removable-media-git \
+	xonedo-dkms \
+	xonedo-firmware \
 "
 
 sub_postinstallhook() {
