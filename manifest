@@ -232,9 +232,6 @@ export AUR_PACKAGES="\
 	moonlight-qt \
 	nintendo-udev \
 	onedrive-abraunegg \
-	paru \
-	parui \
-	paruz \
 	pikaur \
 	protonup-qt \
 	python-pyclip \
