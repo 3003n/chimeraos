@@ -10,6 +10,7 @@ fi
 
 TEST_BUILD=""
 NO_COMPRESS=""
+LOCAL_BUILD=""
 
 BUILD_USER=${BUILD_USER:-}
 OUTPUT_DIR=${OUTPUT_DIR:-}
@@ -206,7 +207,7 @@ umount -l ${MOUNT_PATH}
 rm -rf ${MOUNT_PATH}
 rm -rf ${BUILD_IMG}
 
-if [ -z "${NO_COMPRESS}" ] || [ -n "${TEST_BUILD}" ]; then
+if [ -z "${LOCAL_BUILD}" ]; then
 	sha256sum ${IMG_FILENAME_WITHOUT_EXT}* >sha256sum-${BUILD_BRANCH}.txt
 	cat sha256sum-${BUILD_BRANCH}.txt
 
