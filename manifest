@@ -71,6 +71,7 @@ export PACKAGES="\
 	intel-undervolt \
 	imagemagick \
 	jq \
+	lact-libadwaita \
 	less \
 	lib32-curl \
 	lib32-fontconfig \
