@@ -35,3 +35,6 @@ export AUR_PACKAGES="\
 	gnome-shell-extension-hibernate-status-git \
 	gnome-shell-extension-screen-autorotate \
 "
+
+postinstallhook() {
+}
