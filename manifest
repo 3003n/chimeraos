@@ -101,6 +101,7 @@ export PACKAGES="\
 	lshw \
 	lzip \
 	mesa-demos \
+	mission-center \
 	modemmanager \
 	mpv \
 	nano \
@@ -228,7 +229,6 @@ export AUR_PACKAGES="\
 	legendary \
 	lib32-extest \
 	linux-firmware-valve \
-	mission-center \
 	moonlight-qt \
 	nintendo-udev \
 	onedrive-abraunegg \

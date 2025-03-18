@@ -112,9 +112,6 @@
 [submodule "aur-pkgs/gpd-fan-driver-dkms-git"]
 	path = aur-pkgs/gpd-fan-driver-dkms-git
 	url = https://aur.archlinux.org/gpd-fan-driver-dkms-git.git
-[submodule "aur-pkgs/mission-center"]
-	path = aur-pkgs/mission-center
-	url = https://aur.archlinux.org/mission-center.git
 [submodule "aur-pkgs/gnome-shell-extension-bluetooth-battery-meter-git"]
 	path = aur-pkgs/gnome-shell-extension-bluetooth-battery-meter-git
 	url = https://aur.archlinux.org/gnome-shell-extension-bluetooth-battery-meter-git.git
