@@ -48,4 +48,4 @@ jobs:
             path: pkgs/
       - name: Merge rootfs
         run: |
-          cp -a branch/${{ matrix.branch }}/rootfs/* rootfs/
+          env BUILD_BRANCH=${{ matrix.branch }} ./pre-build-image.sh
