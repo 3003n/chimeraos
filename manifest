@@ -32,13 +32,10 @@ export PACKAGES="\
 	cpupower \
 	ddcutil \
 	diffutils \
-	dconf-editor \
 	dkms \
 	distrobox \
 	dmidecode \
 	dosbox \
-	efibootmgr \
-	epiphany \
 	evtest \
 	efibootmgr \
 	expect \
@@ -56,22 +53,6 @@ export PACKAGES="\
 	fzf \
 	f2fs-tools \
 	git \
-	gnome-browser-connector \
-	gnome-console \
-	gnome-control-center \
-	gnome-disk-utility \
-	gnome-keyring \
-	gnome-session \
-	gnome-shell \
-	gnome-software \
-	gnome-system-monitor \
-	gnome-text-editor \
-	gnome-tweaks \
-	gnome-remote-desktop \
-	gnome-shell-extensions \
-	gnome-shell-extension-appindicator \
-	gnome-shell-extension-desktop-icons-ng \
-	gnome-menus \
 	gparted \
 	gst-plugin-pipewire \
 	gvfs-smb \
@@ -117,18 +98,15 @@ export PACKAGES="\
 	liquidctl \
 	logrotate \
 	lrzip \
-	loupe \
 	lshw \
 	lzip \
 	mesa-demos \
 	modemmanager \
 	mpv \
 	nano \
-	nautilus \
 	networkmanager \
 	nfs-utils \
 	nmon \
-	noto-fonts-cjk \
 	noto-fonts-emoji \
 	nss-mdns \
 	ntfs-3g \
@@ -148,7 +126,6 @@ export PACKAGES="\
 	python \
 	python-pyudev \
 	python-systemd \
-	papirus-icon-theme \
 	qtractor \
 	remmina \
 	ripgrep \
@@ -185,9 +162,7 @@ export PACKAGES="\
 	wlr-randr \
 	xdelta3 \
 	xdg-desktop-portal \
-	xdg-desktop-portal-gnome \
 	xdg-desktop-portal-wlr \
-	xdg-user-dirs-gtk \
 	xf86-video-amdgpu \
 	xorg-server \
 	xorg-server-xvfb \
@@ -241,12 +216,6 @@ export AUR_PACKAGES="\
 	gamescope-session-sk-git \
 	gamescope-session-steam-plus-git \
 	gamescope-sk \
-	gnome-shell-extension-bluetooth-battery-meter-git \
-	gnome-shell-extension-blur-my-shell \
-	gnome-shell-extension-dash-to-dock \
-	gnome-shell-extension-enhanced-osk-git \
-	gnome-shell-extension-hibernate-status-git \
-	gnome-shell-extension-screen-autorotate \
 	gpd-fan-driver-dkms-git \
 	gpdconfig-git \
 	hhd \
