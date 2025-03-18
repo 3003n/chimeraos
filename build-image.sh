@@ -8,8 +8,13 @@ if [ $EUID -ne 0 ]; then
 	exit 1
 fi
 
+TEST_BUILD="1"
+NO_COMPRESS="1"
+
 BUILD_USER=${BUILD_USER:-}
 OUTPUT_DIR=${OUTPUT_DIR:-}
+
+BUILD_BRANCH=${BUILD_BRANCH:-}
 
 source manifest
 source sub-manifest
@@ -22,6 +27,11 @@ fi
 if [ -z "${VERSION}" ]; then
 	echo "VERSION must be specified"
 	exit
+fi
+
+if [ -z "${BUILD_BRANCH}" ]; then
+  echo "BUILD_BRANCH must be specified"
+  exit 1
 fi
 
 DISPLAY_VERSION=${VERSION}
@@ -96,24 +106,29 @@ fi
 # chroot into target
 mount --bind ${BUILD_PATH} ${BUILD_PATH}
 
-# 重试次数
-MAX_RETRIES=3
-RETRY_COUNT=0
+if [ -z "${TEST_BUILD}" ]; then
 
-set +e
-while [ ${RETRY_COUNT} -lt ${MAX_RETRIES} ]; do
-	RETRY_COUNT=$((RETRY_COUNT + 1))
-	echo ">>>>>> All install  (${RETRY_COUNT}/${MAX_RETRIES})"
-	arch-chroot ${BUILD_PATH} /bin/bash -c "cd / && /all-install.sh"
-	if [ $? -ne 0 ]; then
-		continue
+	# 重试次数
+	MAX_RETRIES=3
+	RETRY_COUNT=0
+
+	set +e
+	while [ ${RETRY_COUNT} -lt ${MAX_RETRIES} ]; do
+		RETRY_COUNT=$((RETRY_COUNT + 1))
+		echo ">>>>>> All install  (${RETRY_COUNT}/${MAX_RETRIES})"
+		arch-chroot ${BUILD_PATH} /bin/bash -c "cd / && /all-install.sh"
+		if [ $? -ne 0 ]; then
+			continue
+		fi
+		break
+	done
+	set -e
+	if [ ${RETRY_COUNT} -eq ${MAX_RETRIES} ]; then
+		echo ">>>>>> All install failed after ${MAX_RETRIES} attempts. Stopping..."
+		exit -1
 	fi
-	break
-done
-set -e
-if [ ${RETRY_COUNT} -eq ${MAX_RETRIES} ]; then
-	echo ">>>>>> All install failed after ${MAX_RETRIES} attempts. Stopping..."
-	exit -1
+else
+	echo "Test build, skipping all install"
 fi
 
 rm ${BUILD_PATH}/all-install.sh
@@ -148,7 +163,7 @@ COMRESS_ON_THE_FLY=false
 
 btrfs subvolume snapshot -r ${BUILD_PATH} ${SNAP_PATH}
 
-IMG_FILENAME_WITHOUT_EXT="${SYSTEM_NAME}-${VERSION}"
+IMG_FILENAME_WITHOUT_EXT="${SYSTEM_NAME}-${VERSION}-${BUILD_BRANCH}"
 if [ -z "${NO_COMPRESS}" ]; then
 	if [[ $COMRESS_ON_THE_FLY == true ]]; then
 		IMG_FILENAME="${IMG_FILENAME_WITHOUT_EXT}.img.xz"
@@ -190,7 +205,7 @@ umount -l ${MOUNT_PATH}
 rm -rf ${MOUNT_PATH}
 rm -rf ${BUILD_IMG}
 
-if [ -z "${NO_COMPRESS}" ]; then
+if [ -z "${NO_COMPRESS}" ] || [ -n "${TEST_BUILD}" ]; then
 	sha256sum ${IMG_FILENAME_WITHOUT_EXT}* >sha256sum.txt
 	cat sha256sum.txt
 
@@ -216,6 +231,6 @@ else
 	echo "Local build, output IMG directly"
 	if [ -n "${OUTPUT_DIR}" ]; then
 		mkdir -p "${OUTPUT_DIR}"
-		mv ${SYSTEM_NAME}-${VERSION}.img ${OUTPUT_DIR}
+		mv ${IMG_FILENAME_WITHOUT_EXT}.img ${OUTPUT_DIR}
 	fi
 fi
