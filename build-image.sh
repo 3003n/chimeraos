@@ -160,13 +160,13 @@ fi
 echo "Free space"
 df -h
 
-COMRESS_ON_THE_FLY=false
+COMRESS_ON_THE_FLY="1"
 
 btrfs subvolume snapshot -r ${BUILD_PATH} ${SNAP_PATH}
 
 IMG_FILENAME_WITHOUT_EXT="${SYSTEM_NAME}-${VERSION}-${BUILD_BRANCH}"
 if [ -z "${NO_COMPRESS}" ]; then
-	if [[ $COMRESS_ON_THE_FLY == true ]]; then
+	if [ -n "${COMRESS_ON_THE_FLY}" ]; then
 		IMG_FILENAME="${IMG_FILENAME_WITHOUT_EXT}.img.xz"
 		btrfs send ${SNAP_PATH} | xz -9 -T0 >${IMG_FILENAME}
 	else
