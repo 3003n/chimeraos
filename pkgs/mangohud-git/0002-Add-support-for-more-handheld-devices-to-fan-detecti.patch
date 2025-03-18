@@ -1,17 +1,17 @@
-From 6a1a3ffce34406f53a470362956d7f96c75b645f Mon Sep 17 00:00:00 2001
+From c0ce226dc4d072a32a82762751dbb152b5bb7c42 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
 Date: Wed, 5 Mar 2025 22:01:18 +0800
 Subject: [PATCH 2/2] Add support for more handheld devices to fan detection
 
 ---
- src/overlay.cpp | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ src/overlay.cpp | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/src/overlay.cpp b/src/overlay.cpp
-index 80ebac5..8d9a86b 100644
+index 80ebac5..ecbc73b 100644
 --- a/src/overlay.cpp
 +++ b/src/overlay.cpp
-@@ -866,7 +866,13 @@ void update_fan(){
+@@ -866,7 +866,15 @@ void update_fan(){
        auto dirs = ls(path.c_str(), "hwmon", LS_DIRS);
        for (auto& dir : dirs) {
           string full_path = (path + dir + "/name").c_str();
@@ -21,6 +21,8 @@ index 80ebac5..8d9a86b 100644
 +             name.find("asus") != string::npos ||
 +             name.find("aynec") != string::npos ||
 +             name.find("gpdfan") != string::npos ||
++             name.find("msi_ec") != string::npos ||
++             name.find("msi-ec") != string::npos ||
 +             name.find("oxp_ec") != string::npos ||
 +             name.find("oxpec") != string::npos){
              hwmon_path = path + dir + "/fan1_input";
