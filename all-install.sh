@@ -37,7 +37,7 @@ for file in ${OWN_PACKAGES_FILE_TO_DELETE}; do
 done
 
 # install override packages
-pacman --noconfirm -U --overwrite '*' /override_pkgs/*
+pacman --noconfirm -U --overwrite '*' /override_pkgs/* --needed
 rm -rf /var/cache/pacman/pkg
 
 for file in ${OWN_PACKAGES_FILE_TO_DELETE}; do
