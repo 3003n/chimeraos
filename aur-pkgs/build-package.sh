@@ -35,10 +35,13 @@ if [ ${RETRY_COUNT} -eq ${MAX_RETRIES} ]; then
     exit -1
 fi
 
-# 为 *.pkg.tar* 文件添加 前缀: [${1}]-
+PACKAGE_NAME=${1#aur-pkgs/}
+PACKAGE_NAME=${PACKAGE_NAME%/}
+
+# 为 *.pkg.tar* 文件添加 前缀: [${PACKAGE_NAME}]-
 find /workdir/aur-pkgs -type f -name "*.pkg.tar*" | while read file; do
     filename=$(basename "$file")
-    new_filename="[${1}]-$filename"
+    new_filename="[${PACKAGE_NAME}]-$filename"
     mv "$file" "/workdir/aur-pkgs/$new_filename"
     echo ">>>>>> Renamed: $filename -> $new_filename"
 done
