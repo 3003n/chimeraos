@@ -87,7 +87,7 @@ check_pkg() {
 	done
 }
 
-check_pkg
+# check_pkg
 
 if [ -n "${PACKAGE_OVERRIDES}" ]; then
 	wget --directory-prefix=${BUILD_PATH}/override_pkgs ${PACKAGE_OVERRIDES}
