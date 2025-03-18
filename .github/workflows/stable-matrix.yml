@@ -18,13 +18,12 @@ jobs:
     steps:
       - run: echo "skip in test"
 
-  list-info:
-    name: List info
+  list-pkgbuilds:
+    name: List Packages
     runs-on: ubuntu-latest
     outputs:
       aur-pkgs: ${{ steps.set-aur-pkgs.outputs.matrix }}
       pkgs: ${{ steps.set-pkgs.outputs.matrix }}
-      branches: ${{ steps.set-branches.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,20 +34,17 @@ jobs:
       - id: set-pkgs
         run: echo "matrix=$(ls -d pkgs/*/ | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
         shell: bash
-      - id: set-branches
-        run: echo "matrix=$(ls -d branch/*/ | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
-        shell: bash
 
   aur-pkgbuild:
     needs:
      - build-docker-image
-     - list-info
+     - list-pkgbuilds
     name: Build AUR package
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        package: ${{ fromJson(needs.list-info.outputs.aur-pkgs) }}
+        package: ${{ fromJson(needs.list-pkgbuilds.outputs.aur-pkgs) }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -62,7 +58,7 @@ jobs:
           PACKAGE_NAME=${PACKAGE_NAME%/}
           echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
 
-      - name: Mock build
+      - name: Fake build
         env:
           PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
         run: touch aur-pkgs/${{ env.PACKAGE_NAME }}.pkg.tar
@@ -81,13 +77,13 @@ jobs:
   pkgbuild:
     needs:
      - build-docker-image
-     - list-info
+     - list-pkgbuilds
     name: Build package
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        package: ${{ fromJson(needs.list-info.outputs.pkgs) }}
+        package: ${{ fromJson(needs.list-pkgbuilds.outputs.pkgs) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -99,7 +95,7 @@ jobs:
           PACKAGE_NAME=${PACKAGE_NAME%/}
           echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV 
      
-      - name: Mock build
+      - name: Fake build
         env:
           PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
         run: touch pkgs/${{ env.PACKAGE_NAME }}.pkg.tar
@@ -114,3 +110,11 @@ jobs:
               pkgs/*.pkg.tar*
             overwrite: true
             retention-days: 3
+
+  build:
+    needs:
+      - build-docker-image
+      - aur-pkgbuild
+      - pkgbuild
+    name: Build ChimeraOS STABLE image matrix
+    uses: ./.github/workflows/build-system-image-matrix.yml

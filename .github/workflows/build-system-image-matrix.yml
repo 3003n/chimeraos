@@ -1,0 +1,51 @@
+name: Build ChimeraOS image matrix
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+on:
+  workflow_call:
+    inputs:
+      postfix:
+        type: string
+        description: Postfix used in release.
+        default: ''
+
+jobs:
+  list-branches:
+    name: List branches
+    runs-on: ubuntu-latest
+    outputs:
+      branches: ${{ steps.set-branches.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-branches
+        run: echo "matrix=$(ls -d branch/*/ | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        shell: bash
+  
+  build-system-image:
+    needs: list-branches
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: true
+      matrix:
+        branch: ${{ fromJson(needs.list-branches.outputs.branches) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+            pattern: AUR-packages*
+            merge-multiple: true
+            path: aur-pkgs/
+      - uses: actions/download-artifact@v4
+        with:
+            pattern: Packages*
+            merge-multiple: true
+            path: pkgs/
+      
+      - name: Merge rootfs
+        run: |
+          cp -a branch/${{ matrix.branch }}/rootfs/* rootfs/
