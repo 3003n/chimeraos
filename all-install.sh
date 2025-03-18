@@ -4,6 +4,7 @@ set -e
 set -x
 
 source manifest
+source sub-manifest
 
 pacman-key --populate
 
@@ -57,7 +58,7 @@ for package in ${PACKAGES_TO_DELETE}; do
 done
 
 # install packages
-pacman --noconfirm -S --overwrite '*' --disable-download-timeout ${PACKAGES} --needed
+pacman --noconfirm -S --overwrite '*' --disable-download-timeout ${PACKAGES} ${SUB_PACKAGES} --needed
 rm -rf /var/cache/pacman/pkg
 
 # delete packages
@@ -173,6 +174,9 @@ trust anchor --store /extra/*.crt
 
 # run post install hook
 postinstallhook
+
+# run sub post install hook
+sub_postinstallhook
 
 # pre-download
 source /postinstall

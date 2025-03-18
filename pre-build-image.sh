@@ -16,8 +16,8 @@ cp -f branch/${BUILD_BRANCH}/sub-manifest .
 mv aur-pkgs aur-pkgs-ori
 mv pkgs pkgs-ori
 
-source manifest
-source sub-manifest
+source ./manifest
+source ./sub-manifest
 
 # branch aur packages
 for package in ${SUB_AUR_PACKAGES}; do
