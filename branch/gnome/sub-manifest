@@ -36,6 +36,9 @@ export SUB_AUR_PACKAGES="\
 	gnome-shell-extension-screen-autorotate \
 "
 
+export SUB_LOCAL_PACKAGES="\
+"
+
 sub_postinstallhook() {
 	:
 }

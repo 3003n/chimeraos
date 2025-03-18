@@ -42,6 +42,9 @@ export SUB_AUR_PACKAGES="\
 	gnome-shell-extension-screen-autorotate \
 "
 
+export SUB_LOCAL_PACKAGES="\
+"
+
 sub_postinstallhook() {
 	# add nvidia-drm.modeset=1 to /usr/lib/frzr.d/bootconfig.conf line start
 	sed -i 's/^/nvidia-drm.modeset=1 /' /usr/lib/frzr.d/bootconfig.conf
