@@ -9,7 +9,7 @@ if [ $EUID -ne 0 ]; then
 fi
 
 TEST_BUILD=""
-NO_COMPRESS="1"
+NO_COMPRESS=""
 
 BUILD_USER=${BUILD_USER:-}
 OUTPUT_DIR=${OUTPUT_DIR:-}
@@ -171,7 +171,7 @@ if [ -z "${NO_COMPRESS}" ]; then
 	else
 		IMG_FILENAME="${IMG_FILENAME_WITHOUT_EXT}.img.tar.xz"
 		btrfs send -f ${IMG_FILENAME_WITHOUT_EXT}.img ${SNAP_PATH}
-		tar -c -I"xz -9 -T0" -f ${IMG_FILENAME} ${IMG_FILENAME_WITHOUT_EXT}.img
+		tar -c -I"xz -T0" -f ${IMG_FILENAME} ${IMG_FILENAME_WITHOUT_EXT}.img
 		rm ${IMG_FILENAME_WITHOUT_EXT}.img
 	fi
 else
