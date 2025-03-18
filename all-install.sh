@@ -32,16 +32,16 @@ else
 	pacman --noconfirm -S "${KERNEL_PACKAGE}" "${KERNEL_PACKAGE}-headers" --needed
 fi
 
-for package in ${OWN_PACKAGES_TO_DELETE}; do
-	rm -f /override_pkgs/${package} || true
+for file in ${OWN_PACKAGES_FILE_TO_DELETE}; do
+	rm -f /override_pkgs/${file} || true
 done
 
 # install override packages
 pacman --noconfirm -U --overwrite '*' /override_pkgs/*
 rm -rf /var/cache/pacman/pkg
 
-for package in ${OWN_PACKAGES_TO_DELETE}; do
-	rm -f /local_pkgs/${package} || true
+for file in ${OWN_PACKAGES_FILE_TO_DELETE}; do
+	rm -f /local_pkgs/${file} || true
 done
 
 # install local packages
@@ -71,8 +71,8 @@ for package in ${PACKAGES_TO_DELETE}; do
 done
 
 # remove AUR packages
-for package in ${AUR_PACKAGES_TO_DELETE}; do
-	rm -f /aur_pkgs/${package} || true
+for file in ${AUR_PACKAGES_FILE_TO_DELETE}; do
+	rm -f /aur_pkgs/${file} || true
 done
 
 # install AUR packages

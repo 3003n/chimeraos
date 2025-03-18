@@ -40,9 +40,6 @@ for package in ${SUB_LOCAL_PACKAGES}; do
   cp -rv "pkgs-ori/[${package}]-"*.pkg.tar* pkgs/ || true
 done
 
-# ls -l ./aur-pkgs
-# ls -l ./pkgs
-
 rm -rf aur-pkgs-ori
 rm -rf pkgs-ori
 
