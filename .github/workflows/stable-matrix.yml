@@ -1,0 +1,44 @@
+name: System image matrix build - stable
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+on:
+  push:
+    branches:
+      - matrix*
+  workflow_dispatch:
+
+jobs:
+  build-docker-image:
+    name: Build and publish docker container
+    uses: ./.github/workflows/build-builder.yml
+
+  list-branches:
+    name: List Branches
+    runs-on: ubuntu-latest
+    outputs:
+      branches: ${{ steps.set-branches.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-branches
+        run: echo "matrix=$(ls -d branch/*/ | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        shell: bash
+
+  list-pkgbuilds:
+    name: List Packages
+    runs-on: ubuntu-latest
+    outputs:
+      aur-pkgs: ${{ steps.set-aur-pkgs.outputs.matrix }}
+      pkgs: ${{ steps.set-pkgs.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - id: set-aur-pkgs
+        run: echo "matrix=$(ls -d aur-pkgs/*/ | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        shell: bash
+      - id: set-pkgs
+        run: echo "matrix=$(ls -d pkgs/*/ | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        shell: bash
