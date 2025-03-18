@@ -175,7 +175,8 @@ if [ -z "${NO_COMPRESS}" ]; then
 		rm ${IMG_FILENAME_WITHOUT_EXT}.img
 	fi
 else
-	btrfs send -f ${IMG_FILENAME_WITHOUT_EXT}.img ${SNAP_PATH}
+	IMG_FILENAME="${IMG_FILENAME_WITHOUT_EXT}.img"
+	btrfs send -f ${IMG_FILENAME} ${SNAP_PATH}
 fi
 
 # 分割文件
