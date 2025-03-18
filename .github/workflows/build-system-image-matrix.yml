@@ -39,6 +39,22 @@ jobs:
       display_version: ${{ steps.build_image.outputs.display_version }}
       display_name: ${{ steps.build_image.outputs.display_name }}
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+          
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
       - uses: actions/checkout@v4
       - name: Extract metadata (tags, labels) for Docker
         id: meta
