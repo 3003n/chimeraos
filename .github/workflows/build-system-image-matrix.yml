@@ -46,6 +46,6 @@ jobs:
             pattern: Packages*
             merge-multiple: true
             path: pkgs/
-      - name: Merge rootfs
+      - name: Pre-build image
         run: |
           env BUILD_BRANCH=${{ matrix.branch }} ./pre-build-image.sh
