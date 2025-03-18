@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ waydroid &> /dev/null ]; then
+  waydroid session stop
+fi
+
+rm /tmp/chimeraos-short-session-tracker || true
+plasma-session-oneshot
+# sudo chimera-session-use-lightdm gamescope-session-steam
