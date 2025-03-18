@@ -46,9 +46,9 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.list-pkgbuilds.outputs.aur-pkgs) }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+      # - uses: actions/checkout@v4
+      #   with:
+      #     submodules: recursive
       # - name: Extract metadata (tags, labels) for Docker
       #   id: meta
       #   uses: docker/metadata-action@v5
@@ -73,6 +73,7 @@ jobs:
         env:
           PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
         run: |
+          mkdir -p aur-pkgs
           touch aur-pkgs/[${{ env.PACKAGE_NAME }}]-A.pkg.tar.zst
           touch aur-pkgs/[${{ env.PACKAGE_NAME }}]-B.pkg.tar.zst
 
@@ -98,7 +99,7 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.list-pkgbuilds.outputs.pkgs) }}
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
 
       - name: Process package name
         id: process_package
@@ -112,6 +113,7 @@ jobs:
         env:
           PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
         run: |
+          mkdir -p pkgs
           touch pkgs/[${{ env.PACKAGE_NAME }}]-A.pkg.tar.zst
           touch pkgs/[${{ env.PACKAGE_NAME }}]-B.pkg.tar.zst
 
