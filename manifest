@@ -104,6 +104,7 @@ export PACKAGES="\
 	mesa-demos \
 	mission-center \
 	modemmanager \
+	moonlight-qt \
 	mpv \
 	nano \
 	networkmanager \
@@ -230,7 +231,6 @@ export AUR_PACKAGES="\
 	legendary \
 	lib32-extest \
 	linux-firmware-valve \
-	moonlight-qt \
 	nintendo-udev \
 	onedrive-abraunegg \
 	pikaur \
