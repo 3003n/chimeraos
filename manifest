@@ -132,7 +132,7 @@ export PACKAGES="\
 	noto-fonts-emoji \
 	nss-mdns \
 	ntfs-3g \
-	nvidia-dkms \
+	nvidia-open-dkms \
 	opencl-nvidia \
 	lib32-opencl-nvidia \
 	nvidia-utils \
