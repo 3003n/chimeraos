@@ -94,7 +94,9 @@ jobs:
       - name: Download image
         uses: actions/download-artifact@v4
         with:
-          name: Build-image-*
+          pattern: Build-image-*
+          merge-multiple: true
+          path: output/
 
       - name: Create release
         id: create_release
@@ -108,7 +110,7 @@ jobs:
           prerelease: true
           fail_on_unmatched_files: true
           files: |
-            chimeraos*img*
-            build_info*.txt
-            sha256sum*.txt
-            container*.txt
+            output/chimeraos*img*
+            output/build_info*.txt
+            output/sha256sum*.txt
+            output/container*.txt
