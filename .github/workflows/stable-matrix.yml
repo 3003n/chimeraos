@@ -13,7 +13,10 @@ on:
 jobs:
   build-docker-image:
     name: Build and publish docker container
-    uses: ./.github/workflows/build-builder.yml
+    # uses: ./.github/workflows/build-builder.yml
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "skip for test"
 
   list-pkgbuilds:
     name: List Packages
@@ -46,15 +49,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      - name: Build packages
-        run: |
-          docker pull ${{ steps.meta.outputs.tags }}
-          docker run --rm -v $(pwd):/workdir --entrypoint=/workdir/aur-pkgs/build-package.sh ${{ steps.meta.outputs.tags }} ${{ matrix.package }}
+      # - name: Extract metadata (tags, labels) for Docker
+      #   id: meta
+      #   uses: docker/metadata-action@v5
+      #   with:
+      #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      # - name: Build packages
+      #   run: |
+      #     docker pull ${{ steps.meta.outputs.tags }}
+      #     docker run --rm -v $(pwd):/workdir --entrypoint=/workdir/aur-pkgs/build-package.sh ${{ steps.meta.outputs.tags }} ${{ matrix.package }}
       - name: Process package name
         id: process_package
         run: |
@@ -63,14 +66,15 @@ jobs:
           PACKAGE_NAME=${PACKAGE_NAME%/}
           echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
 
-      # - name: Fake build
-      #   env:
-      #     PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
-      #   run: touch aur-pkgs/${{ env.PACKAGE_NAME }}.pkg.tar
-
-      - name: Generate checksums
+      # - name: Generate checksums
+      #   run: |
+      #     docker run --rm -v $(pwd):/workdir --entrypoint=/bin/bash ${{ steps.meta.outputs.tags }} -c "cd /workdir/aur-pkgs && sha256sum *.pkg.tar* > sha256sums-${PACKAGE_NAME}.txt"
+      - name: Fake build
+        env:
+          PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
         run: |
-          docker run --rm -v $(pwd):/workdir --entrypoint=/bin/bash ${{ steps.meta.outputs.tags }} -c "cd /workdir/aur-pkgs && sha256sum *.pkg.tar* > sha256sums-${PACKAGE_NAME}.txt"
+          touch aur-pkgs/[${{ env.PACKAGE_NAME }}]-A.pkg.tar.zst
+          touch aur-pkgs/[${{ env.PACKAGE_NAME }}]-B.pkg.tar.zst
 
       - name: Upload Package Archives
         uses: actions/upload-artifact@v4
@@ -80,7 +84,6 @@ jobs:
             name: AUR-packages-${{ env.PACKAGE_NAME }}
             path: |
               aur-pkgs/*.pkg.tar*
-              aur-pkgs/sha256sums-${{ env.PACKAGE_NAME }}.txt
             compression-level: 0
             overwrite: true
 
@@ -108,7 +111,9 @@ jobs:
       - name: Fake build
         env:
           PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
-        run: touch pkgs/[${{ env.PACKAGE_NAME }}]-${{ env.PACKAGE_NAME }}.pkg.tar
+        run: |
+          touch pkgs/[${{ env.PACKAGE_NAME }}]-A.pkg.tar.zst
+          touch pkgs/[${{ env.PACKAGE_NAME }}]-B.pkg.tar.zst
 
       - name: Upload Package Archives
         uses: actions/upload-artifact@v4
