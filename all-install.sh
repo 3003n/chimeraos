@@ -32,6 +32,14 @@ else
 fi
 
 for package in ${OWN_PACKAGES_TO_DELETE}; do
+	rm -f /override_pkgs/${package} || true
+done
+
+# install override packages
+pacman --noconfirm -U --overwrite '*' /override_pkgs/*
+rm -rf /var/cache/pacman/pkg
+
+for package in ${OWN_PACKAGES_TO_DELETE}; do
 	rm -f /local_pkgs/${package} || true
 done
 
@@ -79,9 +87,6 @@ for package in ${PACKAGES_TO_DELETE}; do
 	fi
 done
 
-# install override packages
-pacman --noconfirm -U --overwrite '*' /override_pkgs/*
-rm -rf /var/cache/pacman/pkg
 
 # Install the new iptables
 # See https://gitlab.archlinux.org/archlinux/packaging/packages/iptables/-/issues/1

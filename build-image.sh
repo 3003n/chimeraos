@@ -67,8 +67,6 @@ cp /etc/pacman.d/mirrorlist rootfs/etc/pacman.d/mirrorlist
 # copy files into chroot
 cp -R manifest postinstall all-install.sh rootfs/. ${BUILD_PATH}/
 
-# mkdir ${BUILD_PATH}/own_pkgs
-# mkdir ${BUILD_PATH}/extra_pkgs
 mkdir ${BUILD_PATH}/local_pkgs
 mkdir ${BUILD_PATH}/aur_pkgs
 mkdir ${BUILD_PATH}/override_pkgs
@@ -76,7 +74,7 @@ mkdir ${BUILD_PATH}/override_pkgs
 cp -rv aur-pkgs/*.pkg.tar* ${BUILD_PATH}/aur_pkgs
 cp -rv pkgs/*.pkg.tar* ${BUILD_PATH}/local_pkgs
 
-mv ${BUILD_PATH}/extra/*.pkg.tar.zst ${BUILD_PATH}/aur_pkgs/
+mv ${BUILD_PATH}/extra/*.pkg.tar.zst ${BUILD_PATH}/override_pkgs/
 
 #  检查 ${BUILD_PATH}/local_pkgs 和 ${BUILD_PATH}/aur_pkgs 中的 pkg.tar 的完整性, 判断压缩包是否完整
 check_pkg() {
@@ -91,8 +89,7 @@ check_pkg() {
 check_pkg
 
 if [ -n "${PACKAGE_OVERRIDES}" ]; then
-	wget --directory-prefix=/tmp/extra_pkgs ${PACKAGE_OVERRIDES}
-	cp -rv /tmp/extra_pkgs/*.pkg.tar* ${BUILD_PATH}/override_pkgs
+	wget --directory-prefix=${BUILD_PATH}/override_pkgs ${PACKAGE_OVERRIDES}
 fi
 
 # chroot into target
