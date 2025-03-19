@@ -164,7 +164,7 @@ COMRESS_ON_THE_FLY="1"
 
 btrfs subvolume snapshot -r ${BUILD_PATH} ${SNAP_PATH}
 
-IMG_FILENAME_WITHOUT_EXT="${SYSTEM_NAME}-${VERSION}-${BUILD_BRANCH}"
+IMG_FILENAME_WITHOUT_EXT="${SYSTEM_NAME}-${VERSION}--${BUILD_BRANCH}"
 if [ -z "${NO_COMPRESS}" ]; then
 	if [ -n "${COMRESS_ON_THE_FLY}" ]; then
 		IMG_FILENAME="${IMG_FILENAME_WITHOUT_EXT}.img.xz"
@@ -199,7 +199,7 @@ if [ ${file_size} -gt ${split_bytes} ]; then
 	rm ${IMG_FILENAME}
 fi
 
-cp ${BUILD_PATH}/build_info build_info-${BUILD_BRANCH}.txt
+cp ${BUILD_PATH}/build_info build_info--${BUILD_BRANCH}.txt
 
 # clean up
 umount -l ${BUILD_PATH}
@@ -208,14 +208,14 @@ rm -rf ${MOUNT_PATH}
 rm -rf ${BUILD_IMG}
 
 if [ -z "${LOCAL_BUILD}" ]; then
-	sha256sum ${IMG_FILENAME_WITHOUT_EXT}* >sha256sum-${BUILD_BRANCH}.txt
-	cat sha256sum-${BUILD_BRANCH}.txt
+	sha256sum ${IMG_FILENAME_WITHOUT_EXT}* >sha256sum--${BUILD_BRANCH}.txt
+	cat sha256sum--${BUILD_BRANCH}.txt
 
 	# Move the image to the output directory, if one was specified.
 	if [ -n "${OUTPUT_DIR}" ]; then
 		mkdir -p "${OUTPUT_DIR}"
 		mv ${IMG_FILENAME_WITHOUT_EXT}* ${OUTPUT_DIR} || true
-		mv build_info-${BUILD_BRANCH}.txt ${OUTPUT_DIR}
+		mv build_info--${BUILD_BRANCH}.txt ${OUTPUT_DIR}
 		mv sha256sum*.txt ${OUTPUT_DIR} || true
 	fi
 

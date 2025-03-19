@@ -81,7 +81,7 @@ jobs:
         run: |
           docker pull ${{ steps.meta.outputs.tags }}
           docker run -u root --rm --entrypoint=/workdir/build-image.sh -v $(pwd):/workdir -v $(pwd)/output:/output -v $GITHUB_OUTPUT:$GITHUB_OUTPUT -e "GITHUB_OUTPUT=$GITHUB_OUTPUT" -e "BUILD_BRANCH=${{ matrix.branch }}" --privileged=true ${{ steps.meta.outputs.tags }} $(echo ${GITHUB_SHA} | cut -c1-7)
-          echo -e "$(docker inspect --format='{{index .RepoDigests 0}}' ${{ steps.meta.outputs.tags }})" > output/container-${{ matrix.branch }}.txt
+          echo -e "$(docker inspect --format='{{index .RepoDigests 0}}' ${{ steps.meta.outputs.tags }})" > output/container--${{ matrix.branch }}.txt
       
       - name: list output
         run: |
