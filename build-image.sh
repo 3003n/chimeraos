@@ -91,7 +91,7 @@ mkdir ${BUILD_PATH}/override_pkgs
 cp -rv aur-pkgs/*.pkg.tar* ${BUILD_PATH}/aur_pkgs
 cp -rv pkgs/*.pkg.tar* ${BUILD_PATH}/local_pkgs
 
-mv ${BUILD_PATH}/extra/*.pkg.tar.zst ${BUILD_PATH}/override_pkgs/
+mv ${BUILD_PATH}/extra/*.pkg.tar.zst ${BUILD_PATH}/override_pkgs/ || true
 
 #  检查 ${BUILD_PATH}/local_pkgs 和 ${BUILD_PATH}/aur_pkgs 中的 pkg.tar 的完整性, 判断压缩包是否完整
 check_pkg() {
