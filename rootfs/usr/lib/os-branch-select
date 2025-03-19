@@ -9,7 +9,7 @@ VALID_BRANCHES=(
   "testing#testing:gnome"
   "unstable#unstable:gnome"
   "plasma#stable:kde"
-  "plasma-pre#stable:kde"
+  "plasma-pre#testing:kde"
   "plasma-dev#unstable:kde"
 )
 
