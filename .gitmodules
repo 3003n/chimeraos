@@ -139,9 +139,6 @@
 [submodule "aur-pkgs/hid-msi-claw-dkms-git"]
 	path = aur-pkgs/hid-msi-claw-dkms-git
 	url = https://aur.archlinux.org/hid-msi-claw-dkms-git.git
-[submodule "aur-pkgs/plasma5-themes-vapor-steamos"]
-	path = aur-pkgs/plasma5-themes-vapor-steamos
-	url = https://aur.archlinux.org/plasma5-themes-vapor-steamos.git
 [submodule "aur-pkgs/kylin-virtual-keyboard-git"]
 	path = aur-pkgs/kylin-virtual-keyboard-git
 	url = https://aur.archlinux.org/kylin-virtual-keyboard-git.git
@@ -151,3 +148,6 @@
 [submodule "aur-pkgs/mutter-x11-scaling"]
 	path = aur-pkgs/mutter-x11-scaling
 	url = https://aur.archlinux.org/mutter-x11-scaling.git
+[submodule "aur-pkgs/plasma6-themes-vapor-steamos"]
+	path = aur-pkgs/plasma6-themes-vapor-steamos
+	url = https://aur.archlinux.org/plasma6-themes-vapor-steamos.git
