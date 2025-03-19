@@ -243,6 +243,7 @@ export AUR_PACKAGES="\
 	rtl8821au-dkms-git \
 	ryzenadj-git \
 	sk-boot-to-windows \
+	sk-chos-tool \
 	steam_notif_daemon \
 	steam-powerbuttond-git \
 	tsukimi-bin \

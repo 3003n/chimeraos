@@ -58,6 +58,9 @@
 [submodule "aur-pkgs/python-pyclip"]
 	path = aur-pkgs/python-pyclip
 	url = https://aur.archlinux.org/python-pyclip.git
+[submodule "aur-pkgs/sk-chos-tool"]
+	path = aur-pkgs/sk-chos-tool
+	url = https://aur.archlinux.org/sk-chos-tool.git
 [submodule "aur-pkgs/sk-boot-to-windows"]
 	path = aur-pkgs/sk-boot-to-windows
 	url = https://aur.archlinux.org/sk-boot-to-windows.git
