@@ -213,7 +213,6 @@ export AUR_PACKAGES="\
 	boxtron \
 	chimeraos-device-quirks-sk-git \
 	downgrade \
-	ds-inhibit \
 	evdev-keepalive \
 	frzr-sk \
 	gamescope-session-sk-git \
@@ -228,7 +227,6 @@ export AUR_PACKAGES="\
 	ibus-pinyin \
 	inputplumber-bin \
 	kanit-font \
-	legendary \
 	lib32-extest \
 	linux-firmware-valve \
 	nintendo-udev \

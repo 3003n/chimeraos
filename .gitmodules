@@ -16,9 +16,6 @@
 [submodule "aur-pkgs/hhfc-git"]
 	path = aur-pkgs/hhfc-git
 	url = https://aur.archlinux.org/hhfc-git.git
-[submodule "aur-pkgs/legendary"]
-	path = aur-pkgs/legendary
-	url = https://aur.archlinux.org/legendary.git
 [submodule "aur-pkgs/nintendo-udev"]
 	path = aur-pkgs/nintendo-udev
 	url = https://aur.archlinux.org/nintendo-udev.git
