@@ -85,6 +85,9 @@
 [submodule "aur-pkgs/gamescope-session-sk-git"]
 	path = aur-pkgs/gamescope-session-sk-git
 	url = https://aur.archlinux.org/gamescope-session-sk-git.git
+[submodule "aur-pkgs/gamescope-sk"]
+	path = aur-pkgs/gamescope-sk
+	url = https://aur.archlinux.org/gamescope-sk.git
 [submodule "aur-pkgs/evdev-keepalive"]
 	path = aur-pkgs/evdev-keepalive
 	url = https://aur.archlinux.org/evdev-keepalive.git
