@@ -1,11 +1,11 @@
 #! /bin/bash
 
-export VERSION="48-6"
+export VERSION="49"
 export SYSTEM_DESC="ChimeraOS"
 export SYSTEM_NAME="chimeraos"
 export USERNAME="gamer"
 export SIZE="20000MB"
-export ARCHIVE_DATE="2025/03/17"
+export ARCHIVE_DATE=$(date -d 'yesterday' +%Y/%m/%d)
 export WEBSITE="https://chimeraos.org"
 export DOCUMENTATION_URL="https://chimeraos.org/about"
 export BUG_REPORT_URL="https://github.com/ChimeraOS/chimeraos/issues"
@@ -41,6 +41,7 @@ export PACKAGES="\
 	efibootmgr \
 	expect \
 	exfatprogs \
+	fakeroot \
 	fd \
 	ffmpeg \
 	file \
@@ -86,6 +87,7 @@ export PACKAGES="\
 	lib32-mangohud \
 	lib32-openal \
 	lib32-pipewire \
+	lib32-sdl2 \
 	lib32-systemd \
 	lib32-vulkan-icd-loader \
 	libcec \
@@ -178,27 +180,10 @@ export PACKAGES="\
 "
 
 export PACKAGE_OVERRIDES="\
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-5/linux-chimeraos-6.13.7.sko-5-x86_64.pkg.tar.zst \
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-5/linux-chimeraos-headers-6.13.7.sko-5-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-opencl-clover-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-opencl-rusticl-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-vulkan-intel-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-vulkan-mesa-layers-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-vulkan-nouveau-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-vulkan-radeon-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-vulkan-swrast-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-vulkan-virtio-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/mesa-docs-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/opencl-clover-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/opencl-rusticl-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/vulkan-intel-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/vulkan-mesa-layers-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/vulkan-nouveau-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/vulkan-radeon-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/vulkan-swrast-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/vulkan-virtio-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.rc6-skf-1/linux-chimeraos-6.14.rc6.skf-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.rc6-skf-1/linux-chimeraos-headers-6.14.rc6.skf-1-x86_64.pkg.tar.zst \
+	https://github.com/honjow/mesa-git-packages/releases/download/61feea6/lib32-mesa-git-25.1.0_devel.203213.61feea6954a.869876d-1-x86_64.pkg.tar.zst \
+	https://github.com/honjow/mesa-git-packages/releases/download/61feea6/mesa-git-25.1.0_devel.203213.61feea6954a.869876d-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
 "
@@ -233,7 +218,7 @@ export AUR_PACKAGES="\
 	nintendo-udev \
 	onedrive-abraunegg \
 	pikaur \
-	protonup-qt \
+	protonup-qt-bin \
 	python-pyclip \
 	python-vdf \
 	r8152-dkms \
