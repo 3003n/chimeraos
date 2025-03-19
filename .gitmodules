@@ -142,3 +142,6 @@
 [submodule "aur-pkgs/plasma5-themes-vapor-steamos"]
 	path = aur-pkgs/plasma5-themes-vapor-steamos
 	url = https://aur.archlinux.org/plasma5-themes-vapor-steamos.git
+[submodule "aur-pkgs/kylin-virtual-keyboard-git"]
+	path = aur-pkgs/kylin-virtual-keyboard-git
+	url = https://aur.archlinux.org/kylin-virtual-keyboard-git.git
