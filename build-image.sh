@@ -39,6 +39,9 @@ DISPLAY_VERSION=${VERSION}
 LSB_VERSION=${VERSION}
 VERSION_NUMBER=${VERSION}
 
+UNIFIED_VERSION=${VERSION}
+UNIFIED_DISPLAY_VERSION=${DISPLAY_VERSION}
+
 if [ -n "$1" ]; then
 	DISPLAY_VERSION="${VERSION} (${1}-${BUILD_BRANCH})"
 	VERSION="${VERSION}_${1}-${BUILD_BRANCH}"
@@ -53,6 +56,8 @@ export FULL_VERSION=${VERSION}
 export DISPLAY_VERSION=${DISPLAY_VERSION}
 export LSB_VERSION=${LSB_VERSION}
 export VERSION_NUMBER=${VERSION_NUMBER}
+export UNIFIED_VERSION=${UNIFIED_VERSION}
+export UNIFIED_DISPLAY_VERSION=${UNIFIED_DISPLAY_VERSION}
 
 MOUNT_PATH=/tmp/${SYSTEM_NAME}-build
 BUILD_PATH=${MOUNT_PATH}/subvolume
@@ -221,8 +226,8 @@ if [ -z "${LOCAL_BUILD}" ]; then
 
 	# set outputs for github actions
 	if [ -f "${GITHUB_OUTPUT}" ]; then
-		echo "version=${VERSION}" >>"${GITHUB_OUTPUT}"
-		echo "display_version=${DISPLAY_VERSION}" >>"${GITHUB_OUTPUT}"
+		echo "version=${UNIFIED_VERSION}" >>"${GITHUB_OUTPUT}"
+		echo "display_version=${UNIFIED_DISPLAY_VERSION}" >>"${GITHUB_OUTPUT}"
 		echo "display_name=${SYSTEM_DESC}" >>"${GITHUB_OUTPUT}"
 		echo "image_filename=${IMG_FILENAME}" >>"${GITHUB_OUTPUT}"
 		echo "image_filename_without_ext=${IMG_FILENAME_WITHOUT_EXT}" >>"${GITHUB_OUTPUT}"
