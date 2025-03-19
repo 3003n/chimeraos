@@ -346,9 +346,9 @@ postinstallhook() {
 	echo "unqualified-search-registries = ['docker.io']" >>/etc/containers/registries.conf
 
 	# Remove build tools for slimmer image
-	rm /usr/share/libalpm/hooks/70-dkms-install.hook
-	rm /usr/share/libalpm/hooks/70-dkms-upgrade.hook
-	rm /usr/share/libalpm/hooks/71-dkms-remove.hook
+	rm /usr/share/libalpm/hooks/70-dkms-install.hook || true
+	rm /usr/share/libalpm/hooks/70-dkms-upgrade.hook || true
+	rm /usr/share/libalpm/hooks/71-dkms-remove.hook || true
 	# pacman --noconfirm -Rnsdd make gcc dkms ${KERNEL_PACKAGE}-headers retroarch ardour
 
 	remove_packages=(
