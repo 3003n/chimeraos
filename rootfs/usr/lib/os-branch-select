@@ -29,18 +29,45 @@ for b in "${VALID_BRANCHES[@]}"; do
   SHOW_BRANCHES+=($(echo "$b" | cut -d '#' -f 1))
 done
 
+REAL_BRANCHES=()
+for b in "${VALID_BRANCHES[@]}"; do
+  REAL_BRANCHES+=($(echo "$b" | cut -d '#' -f 2))
+done
+
+function get_real_branch() {
+  show_branch="$1"
+  for b in "${VALID_BRANCHES[@]}"; do
+    if [[ "$b" == "${show_branch}#"* ]]; then
+      echo "$(echo "$b" | cut -d '#' -f 2)"
+      return
+    fi
+  done
+  echo "$1"
+}
+
+function get_show_branch() {
+  real_branch="$1"
+  for b in "${VALID_BRANCHES[@]}"; do
+    if [[ "$b" == *"#${real_branch}" ]]; then
+      echo "$(echo "$b" | cut -d '#' -f 1)"
+      return
+    fi
+  done
+  echo "$1"
+}
+
 if [[ $# -eq 1 ]]; then
   case "$1" in
   "-c")
-    branch=$(cat "$BRANCH_PATH" 2>/dev/null | sed -n 's/^\(honjow\|3003n\)\/chimeraos://p')
-    show_branch=$(echo "$branch" | cut -d '#' -f 1)
-    real_branch=$(echo "$branch" | cut -d '#' -f 2)
-    if [[ " ${SHOW_BRANCHES[*]} " =~ "$show_branch" ]]; then
+    real_branch=$(cat "$BRANCH_PATH" 2>/dev/null | sed -n 's/^\(honjow\|3003n\)\/chimeraos://p')
+    if [[ " ${REAL_BRANCHES[*]} " =~ "$real_branch" ]]; then
+      show_branch=$(get_show_branch "$real_branch")
+      echo "Selected branch: $show_branch" >&2
       echo "$show_branch"
       exit 0
     else
-      echo >&2 "Warning: Unrecognized currently selected branch name '$branch', updates may not succeed."
-      echo "$show_branch"
+      echo >&2 "Warning: Unrecognized currently selected branch name '$real_branch', updates may not succeed."
+      echo "$real_branch"
       exit 0
     fi
     ;;
@@ -52,17 +79,13 @@ if [[ $# -eq 1 ]]; then
     ;;
   *)
     if [[ " ${VALID_BRANCHES[*]} " =~ "$1" ]]; then
-      for b in "${VALID_BRANCHES[@]}"; do
-        if [[ "$b" == "${1}#"* ]]; then
-          show_branch=$(echo "$b" | cut -d '#' -f 1)
-          real_branch=$(echo "$b" | cut -d '#' -f 2)
-          echo "Setting branch to $show_branch"
-          echo "$REPO:$real_branch" >"$BRANCH_PATH"
-          exit 0
-        fi
-      done
-      echo "Setting branch to $1"
-      echo "$REPO:$1" >"$BRANCH_PATH"
+      show_branch=$1
+      real_branch=$(get_real_branch "$show_branch")
+      if [ -z "$real_branch" ]; then
+        real_branch="$show_branch"
+      fi
+      echo "Setting branch to $show_branch"
+      echo "$REPO:$real_branch" >"$BRANCH_PATH"
       exit 0
     fi
     ;;
