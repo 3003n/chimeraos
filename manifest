@@ -229,6 +229,7 @@ export AUR_PACKAGES="\
 	kanit-font \
 	lib32-extest \
 	linux-firmware-valve \
+	nbfc-linux \
 	nintendo-udev \
 	onedrive-abraunegg \
 	pikaur \
