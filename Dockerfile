@@ -17,6 +17,7 @@ RUN echo -e "keyserver-options auto-key-retrieve" >> /etc/pacman.d/gnupg/gpg.con
     arch-install-scripts \
     btrfs-progs \
     base-devel \
+    cmake \
     fmt \
     glib2-devel \
     xcb-util-wm \

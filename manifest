@@ -30,6 +30,7 @@ export PACKAGES="\
 	cage \
 	cifs-utils \
 	cpupower \
+	cmake \
 	ddcutil \
 	diffutils \
 	dkms \
@@ -351,6 +352,7 @@ postinstallhook() {
 
 	remove_packages=(
 		make
+		cmake
 		gcc
 		${KERNEL_PACKAGE}-headers
 		ardour
