@@ -5,46 +5,62 @@ BRANCH_PATH="/frzr_root/source"
 REPO="3003n/chimeraos"
 
 VALID_BRANCHES=(
-  "stable"
-  "unstable"
-  "testing"
-  "plasma"
-  "plasma-pre"
-  "plasma-dev"
+  "stable#stable:gnome"
+  "testing#testing:gnome"
+  "unstable#unstable:gnome"
+  "plasma#stable:kde"
+  "plasma-pre#stable:kde"
+  "plasma-dev#unstable:kde"
 )
 
 VALID_NV_BRANCHES=(
-  "gnome_nvidia"
-  "gnome_nvidia-pre"
-  "gnome_nvidia-dev"
-  "plasma_nvidia"
-  "plasma_nvidia-pre"
-  "plasma_nvidia-dev"
+  "gnome_nvidia#stable:gnome-nv"
+  "gnome_nvidia-pre#testing:gnome-nv"
+  "gnome_nvidia-dev#unstable:gnome-nv"
+  "plasma_nvidia#stable:kde-nv"
+  "plasma_nvidia-pre#testing:kde-nv"
+  "plasma_nvidia-dev#unstable:kde-nv"
 )
 
 VALID_BRANCHES+=("${VALID_NV_BRANCHES[@]}")
+
+SHOW_BRANCHES=()
+for b in "${VALID_BRANCHES[@]}"; do
+  SHOW_BRANCHES+=($(echo "$b" | cut -d '#' -f 1))
+done
 
 if [[ $# -eq 1 ]]; then
   case "$1" in
   "-c")
     branch=$(cat "$BRANCH_PATH" 2>/dev/null | sed -n 's/^\(honjow\|3003n\)\/chimeraos://p')
-    if [[ " ${VALID_BRANCHES[*]} " =~ "$branch" ]]; then
-      echo "$branch"
+    show_branch=$(echo "$branch" | cut -d '#' -f 1)
+    real_branch=$(echo "$branch" | cut -d '#' -f 2)
+    if [[ " ${SHOW_BRANCHES[*]} " =~ "$show_branch" ]]; then
+      echo "$show_branch"
       exit 0
     else
       echo >&2 "Warning: Unrecognized currently selected branch name '$branch', updates may not succeed."
-      echo "$branch"
+      echo "$show_branch"
       exit 0
     fi
     ;;
   "-l")
-    for b in "${VALID_BRANCHES[@]}"; do
+    for b in "${SHOW_BRANCHES[@]}"; do
       echo "$b"
     done
     exit 0
     ;;
   *)
     if [[ " ${VALID_BRANCHES[*]} " =~ "$1" ]]; then
+      for b in "${VALID_BRANCHES[@]}"; do
+        if [[ "$b" == "${1}#"* ]]; then
+          show_branch=$(echo "$b" | cut -d '#' -f 1)
+          real_branch=$(echo "$b" | cut -d '#' -f 2)
+          echo "Setting branch to $show_branch"
+          echo "$REPO:$real_branch" >"$BRANCH_PATH"
+          exit 0
+        fi
+      done
       echo "Setting branch to $1"
       echo "$REPO:$1" >"$BRANCH_PATH"
       exit 0
@@ -54,5 +70,5 @@ if [[ $# -eq 1 ]]; then
 fi
 
 IFS="|"
-echo "Usage: steamos-select-branch <-${VALID_BRANCHES[*]}>" 1>&2
+echo "Usage: steamos-select-branch <-${SHOW_BRANCHES[*]}>" 1>&2
 IFS=" "
