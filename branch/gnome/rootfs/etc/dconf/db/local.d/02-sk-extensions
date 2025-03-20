@@ -13,3 +13,6 @@ symbolic-icon=false
 menu-button-icon-image=27
 menu-button-terminal='kgx'
 show-activities-button=true
+
+[org/gnome/shell/extensions/screen-rotate]
+manual-flip=true
