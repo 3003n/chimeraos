@@ -123,6 +123,7 @@ export PACKAGES="\
 	pipewire-alsa \
 	pipewire-jack \
 	pipewire-pulse \
+	plymouth \
 	podman \
 	podman-compose \
 	poppler \
