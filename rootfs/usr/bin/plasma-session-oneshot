@@ -7,14 +7,23 @@ die() {
   exit 1
 }
 
+# TODO: can't read from environment.d
+SK_CHOS_SESSION=${SK_CHOS_SESSION:-"xorg"}
+
+echo "SK_CHOS_SESSION=$SK_CHOS_SESSION" | sudo systemd-cat -t os-session-select
+
 SESSION_FILE="/etc/lightdm/lightdm.conf.d/10-chimeraos-session.conf"
 
 SENTINEL_FILE="steamos-session-select"
 RETURN_SESSION_FILE="chimeraos-session-return"
 
 # If we proceed, execute this
-# CHAINED_SESSION="/usr/bin/startplasma-wayland"
-CHAINED_SESSION="/usr/bin/startx /usr/bin/startplasma-x11"
+if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
+  CHAINED_SESSION="/usr/bin/startplasma-wayland"
+else
+  CHAINED_SESSION="/usr/bin/startx /usr/bin/startplasma-x11"
+fi
+
 # If we decide the sentinel is consumed, execute this command instead and fail
 RESTORE_SESSION=(/usr/lib/os-session-select) # No arguments restores the session
 
@@ -59,8 +68,11 @@ function check_sentinel() {
     cd "$config_dir"
     sentinel_value="$(cat "$SENTINEL_FILE")"
     if [[ "$sentinel_value" == "wayland" ]]; then
-      # echo "/usr/bin/startplasma-wayland"
-      echo "/usr/bin/startx /usr/bin/startplasma-x11"
+      if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
+        echo "/usr/bin/startplasma-wayland"
+      else
+        echo "/usr/bin/startx /usr/bin/startplasma-x11"
+      fi
     else
       return 1
     fi
@@ -74,7 +86,7 @@ function check_sentinel() {
 
 function delay_set_return_session() {
   # Check if 'at' is installed
-  if ! command -v at &> /dev/null; then
+  if ! command -v at &>/dev/null; then
     echo "'at' command not found. Please install 'at' first."
     return 0
   fi
@@ -86,12 +98,15 @@ function delay_set_return_session() {
 if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then
   # We found and consumed the oneshot sentinel, proceed to launch plasma
   echo >&2 "$0: Found and removed sentinel file for one-shot desktop, proceeding to launch"
-  return_file="$HOME/.config/${RETURN_SESSION_FILE}"
-  return_session=$(cat "$return_file")
-  # echo "RETURN_SESSION: $cat($HOME/.config/${RETURN_SESSION_FILE})" >> $HOME/session.log
-  # exec "$CONFIGURED_CHAINED_SESSION"
-  delay_set_return_session $return_session || true
-  sudo chimera-session-use-lightdm plasmax11
+  if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
+    exec "$CONFIGURED_CHAINED_SESSION"
+  else
+    return_file="$HOME/.config/${RETURN_SESSION_FILE}"
+    return_session=$(cat "$return_file")
+    delay_set_return_session $return_session || true
+    sudo chimera-session-use-lightdm plasmax11
+  fi
+
 else
   if CONFIGURED_RETURN_SESSION=$(check_return); then
     /usr/lib/os-session-select "$CONFIGURED_RETURN_SESSION"

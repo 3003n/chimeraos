@@ -4,6 +4,17 @@ if [ waydroid &> /dev/null ]; then
   waydroid session stop
 fi
 
-rm /tmp/chimeraos-short-session-tracker || true
-plasma-session-oneshot
-# sudo chimera-session-use-lightdm gamescope-session-steam
+sudo sed -i "s/^NoDisplay=true/#NoDisplay=true/" /usr/share/applications/plasma-wayland.desktop
+# plasma-session-oneshot
+# # sudo chimera-session-use-lightdm gamescope-session-steam
+
+USER=$(id -nu 1000)
+
+echo "retuen gamemode, XDG_SESSION_TYPE=$XDG_SESSION_TYPE" | sudo systemd-cat -t os-session-select
+# if wayland
+if [ "$XDG_SESSION_TYPE "== "wayland" ]; then
+  sudo -Eu $USER qdbus6 org.kde.Shutdown /Shutdown org.kde.Shutdown.logout
+  exit
+else
+  sudo chimera-session-use-lightdm gamescope-session-steam
+fi
