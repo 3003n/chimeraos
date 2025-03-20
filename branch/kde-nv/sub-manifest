@@ -20,6 +20,8 @@ export SUB_PACKAGES="\
     kinfocenter \
     konsole \
     kpipewire \
+    krdc \
+    krdp \
     kscreen \
     ksshaskpass \
     kwallet-pam \
