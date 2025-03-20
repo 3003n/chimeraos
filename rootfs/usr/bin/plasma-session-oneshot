@@ -7,7 +7,11 @@ die() {
   exit 1
 }
 
-# TODO: can't read from environment.d
+DEFAULT_SESSION_CONFIG="/etc/default/sk-chos-desktop-session"
+if [ -f "$DEFAULT_SESSION_CONFIG" ]; then
+  source "$DEFAULT_SESSION_CONFIG"
+fi
+
 SK_CHOS_SESSION=${SK_CHOS_SESSION:-"xorg"}
 
 echo "SK_CHOS_SESSION=$SK_CHOS_SESSION" | sudo systemd-cat -t os-session-select
