@@ -28,13 +28,13 @@ jobs:
         shell: bash
   
   build-system-image:
-    name: Build ChimeraOS image
+    name: Build image
     needs: list-branches
     runs-on: ubuntu-latest
     permissions:
       contents: write
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         branch: ${{ fromJson(needs.list-branches.outputs.branches) }}
     outputs:
