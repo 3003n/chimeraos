@@ -36,6 +36,8 @@ function download_decky_plugin() {
 	rm -rf $decky_plugin_path/*/{node_modules,.git,.vscode}
 
 	rm -rf $temp_decky
+
+	sleep 5
 }
 
 postinstall_download() {
