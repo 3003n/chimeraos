@@ -179,8 +179,8 @@ export PACKAGES="\
 "
 
 export PACKAGE_OVERRIDES="\
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-5/linux-chimeraos-6.13.7.sko-5-x86_64.pkg.tar.zst \
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-5/linux-chimeraos-headers-6.13.7.sko-5-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-6/linux-chimeraos-6.13.7.sko-6-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.7-sko-6/linux-chimeraos-headers-6.13.7.sko-6-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-opencl-clover-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.1-chos1-1/lib32-opencl-rusticl-mesa-1--25.0.1.chos1-1-x86_64.pkg.tar.zst \
