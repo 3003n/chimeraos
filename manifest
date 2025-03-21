@@ -377,6 +377,14 @@ postinstallhook() {
 	sed -i 's/SCX_SCHEDULER=scx_bpfland/SCX_SCHEDULER=scx_lavd/g' /etc/default/scx
 	sed -i "s/#SCX_FLAGS=.*/SCX_FLAGS='--autopower'/g" /etc/default/scx
 
+	# if mutter-x11-scaling is installed, add 'x11-randr-fractional-scaling' to experimental-features
+	dconf_conf_path="/etc/dconf/db/local.d/00-sk-global"
+	if pacman -Q mutter-x11-scaling > /dev/null 2>&1; then
+		if [ -f "$dconf_conf_path" ] && ! grep -q "x11-randr-fractional-scaling" "$dconf_conf_path"; then
+			sed -i "s/experimental-features=\['/experimental-features=\['x11-randr-fractional-scaling','/g" "$dconf_conf_path"
+		fi
+	fi
+
 	# set permissions for intel_gpu_top and gamescope
 	setcap cap_perfmon=+ep /usr/bin/intel_gpu_top
 	setcap 'CAP_SYS_NICE=eip' /usr/bin/gamescope
