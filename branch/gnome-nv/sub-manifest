@@ -54,6 +54,10 @@ export SUB_LOCAL_PACKAGES="\
 	xonedo-firmware \
 "
 
+export SUB_PACKAGES_TO_DELETE="\
+	mutter \
+"
+
 sub_postinstallhook() {
 	# add nvidia-drm.modeset=1 to /usr/lib/frzr.d/bootconfig.conf line start
 	sed -i 's/^/nvidia-drm.modeset=1 /' /usr/lib/frzr.d/bootconfig.conf
