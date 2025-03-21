@@ -48,6 +48,10 @@ export SUB_LOCAL_PACKAGES="\
 	xonedo-firmware \
 "
 
+export SUB_PACKAGES_TO_DELETE="\
+	mutter \
+"
+
 sub_postinstallhook() {
 	:
 }

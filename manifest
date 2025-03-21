@@ -259,7 +259,6 @@ export PACKAGES_TO_DELETE="\
 	jack2 \
 	lib32-amdvlk \
 	lib32-clang \
-	mutter \
 	openvr \
 	pulseaudio \
 	pulseaudio-alsa \

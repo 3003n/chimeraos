@@ -6,6 +6,8 @@ set -x
 source manifest
 source sub-manifest
 
+PACKAGES_TO_DELETE+=" ${SUB_PACKAGES_TO_DELETE}"
+
 pacman-key --populate
 
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
