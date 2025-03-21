@@ -62,8 +62,8 @@ if [[ $# -eq 1 ]]; then
     real_branch=$(cat "$BRANCH_PATH" 2>/dev/null | sed -n 's/^\(honjow\|3003n\)\/chimeraos://p')
     if [[ " ${REAL_BRANCHES[*]} " =~ "$real_branch" ]]; then
       show_branch=$(get_show_branch "$real_branch")
-      echo "Selected branch: $show_branch" >&2
-      echo "$show_branch"
+      echo "Selected branch: $show_branch, real branch: $real_branch" >&2
+      echo "$real_branch"
       exit 0
     else
       echo >&2 "Warning: Unrecognized currently selected branch name '$real_branch', updates may not succeed."
@@ -72,19 +72,19 @@ if [[ $# -eq 1 ]]; then
     fi
     ;;
   "-l")
-    for b in "${SHOW_BRANCHES[@]}"; do
+    for b in "${REAL_BRANCHES[@]}"; do
       echo "$b"
     done
     exit 0
     ;;
   *)
     if [[ " ${VALID_BRANCHES[*]} " =~ "$1" ]]; then
-      show_branch=$1
-      real_branch=$(get_real_branch "$show_branch")
+      input_branch=$1
+      real_branch=$(get_real_branch "$input_branch")
       if [ -z "$real_branch" ]; then
-        real_branch="$show_branch"
+        real_branch="$input_branch"
       fi
-      echo "Setting branch to $show_branch"
+      echo "Setting branch to $input_branch, real branch: $real_branch" >&2
       echo "$REPO:$real_branch" >"$BRANCH_PATH"
       exit 0
     fi
@@ -93,5 +93,5 @@ if [[ $# -eq 1 ]]; then
 fi
 
 IFS="|"
-echo "Usage: steamos-select-branch <-${SHOW_BRANCHES[*]}>" 1>&2
+echo "Usage: steamos-select-branch <-${REAL_BRANCHES[*]}>" 1>&2
 IFS=" "
