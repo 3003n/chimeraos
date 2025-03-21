@@ -17,7 +17,7 @@ tap-to-click=true
 show-create-link=true
 
 [org/gnome/mutter]
-experimental-features=['variable-refresh-rate','scale-monitor-framebuffer','xwayland-native-scaling','x11-randr-fractional-scaling']
+experimental-features=['variable-refresh-rate','scale-monitor-framebuffer','xwayland-native-scaling']
 
 [org/gnome/software]
 allow-updates=false
