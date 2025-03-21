@@ -1,6 +1,6 @@
-From 8ea0037f4b88c83013cc2636e48ccbac24c9ec87 Mon Sep 17 00:00:00 2001
+From 4ae21b9c6faaf0a1a76f0b8633c03e59a6917618 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Thu, 6 Mar 2025 17:35:50 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 01/14] Add Claw 8
 
 ---
@@ -8,10 +8,10 @@ Subject: [PATCH 01/14] Add Claw 8
  1 file changed, 68 insertions(+)
 
 diff --git a/msi-ec.c b/msi-ec.c
-index 4d55ebb..52a1c57 100644
+index 073bea8..3055520 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -2886,6 +2886,73 @@ static struct msi_ec_conf CONF40 __initdata = {
+@@ -2887,6 +2887,73 @@ static struct msi_ec_conf CONF40 __initdata = {
  	},
  };
  
@@ -85,21 +85,21 @@ index 4d55ebb..52a1c57 100644
  static const char *ALLOWED_FW_41[] __initconst = {
  	"15M1IMS2.111", // MSI Vector 16 HX A14VHG
  	NULL
-@@ -3060,6 +3127,7 @@ static struct msi_ec_conf *CONFIGURATIONS[] __initdata = {
+@@ -3201,6 +3268,7 @@ static struct msi_ec_conf *CONFIGURATIONS[] __initdata = {
  	&CONF38,
  	&CONF39,
  	&CONF40,
 +	&CONF401,
  	&CONF41,
  	&CONF42,
- 	NULL
+ 	&CONF43,
 -- 
 2.39.1
 
 
-From 2d5c2c8a9e2764992d625f5a826718f42930c7dd Mon Sep 17 00:00:00 2001
+From 1249be847209bfe66d71277cffe673c043188981 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Thu, 6 Mar 2025 17:36:14 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 02/14] Implement Fan Thermal Curve
 
 ---
@@ -155,10 +155,10 @@ index ff9503f..8e59048 100644
  
  struct msi_ec_led_conf {
 diff --git a/msi-ec.c b/msi-ec.c
-index 52a1c57..3c0a25a 100644
+index 3055520..e80672c 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -3719,27 +3719,42 @@ static ssize_t available_fan_modes_show(struct device *device,
+@@ -3862,27 +3862,42 @@ static ssize_t available_fan_modes_show(struct device *device,
  	return count;
  }
  
@@ -207,7 +207,7 @@ index 52a1c57..3c0a25a 100644
  static ssize_t fan_mode_store(struct device *dev, struct device_attribute *attr,
  			      const char *buf, size_t count)
  {
-@@ -3749,6 +3764,12 @@ static ssize_t fan_mode_store(struct device *dev, struct device_attribute *attr,
+@@ -3892,6 +3907,12 @@ static ssize_t fan_mode_store(struct device *dev, struct device_attribute *attr,
  		// NULL entries have NULL name
  
  		if (sysfs_streq(conf.fan_mode.modes[i].name, buf)) {
@@ -220,7 +220,7 @@ index 52a1c57..3c0a25a 100644
  			result = ec_write(conf.fan_mode.address,
  					  conf.fan_mode.modes[i].value);
  			if (result < 0)
-@@ -3838,6 +3859,340 @@ static struct attribute *msi_root_attrs[] = {
+@@ -3981,6 +4002,340 @@ static struct attribute *msi_root_attrs[] = {
  	NULL
  };
  
@@ -561,7 +561,7 @@ index 52a1c57..3c0a25a 100644
  // ============================================================ //
  // Sysfs platform device attributes (cpu)
  // ============================================================ //
-@@ -3889,6 +4244,7 @@ static struct device_attribute dev_attr_cpu_realtime_fan_speed = {
+@@ -4032,6 +4387,7 @@ static struct device_attribute dev_attr_cpu_realtime_fan_speed = {
  static struct attribute *msi_cpu_attrs[] = {
  	&dev_attr_cpu_realtime_temperature.attr,
  	&dev_attr_cpu_realtime_fan_speed.attr,
@@ -569,7 +569,7 @@ index 52a1c57..3c0a25a 100644
  	NULL
  };
  
-@@ -3943,6 +4299,7 @@ static struct device_attribute dev_attr_gpu_realtime_fan_speed = {
+@@ -4086,6 +4442,7 @@ static struct device_attribute dev_attr_gpu_realtime_fan_speed = {
  static struct attribute *msi_gpu_attrs[] = {
  	&dev_attr_gpu_realtime_temperature.attr,
  	&dev_attr_gpu_realtime_fan_speed.attr,
@@ -577,7 +577,7 @@ index 52a1c57..3c0a25a 100644
  	NULL
  };
  
-@@ -4238,6 +4595,8 @@ static const struct attribute_group *msi_platform_groups[] = {
+@@ -4381,6 +4738,8 @@ static const struct attribute_group *msi_platform_groups[] = {
  
  static int __init msi_platform_probe(struct platform_device *pdev)
  {
@@ -586,7 +586,7 @@ index 52a1c57..3c0a25a 100644
  	if (debug) {
  		int result = sysfs_create_group(&pdev->dev.kobj,
  						&msi_debug_group);
-@@ -4381,6 +4740,10 @@ static void __exit msi_ec_exit(void)
+@@ -4524,6 +4883,10 @@ static void __exit msi_ec_exit(void)
  			battery_hook_unregister(&battery_hook);
  	}
  
@@ -601,9 +601,9 @@ index 52a1c57..3c0a25a 100644
 2.39.1
 
 
-From b2f133cfc1ce8e3b6d047ed4c18510dc9b30389c Mon Sep 17 00:00:00 2001
+From bdfb5443bf5610d849c36aa3adf3be52215586c6 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Fri, 7 Mar 2025 00:14:32 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 03/14] Add hwmon support for fan speed and temperature
  monitoring
 
@@ -623,7 +623,7 @@ index bffcbd4..a8f09af 100644
  TARGET ?= $(shell uname -r)
  
 diff --git a/msi-ec.c b/msi-ec.c
-index 3c0a25a..b43bae6 100644
+index e80672c..7248797 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
 @@ -39,10 +39,23 @@
@@ -650,7 +650,7 @@ index 3c0a25a..b43bae6 100644
  
  #define SM_ECO_NAME		"eco"
  #define SM_COMFORT_NAME		"comfort"
-@@ -4675,6 +4688,133 @@ static int __init load_configuration(void)
+@@ -4818,6 +4831,133 @@ static int __init load_configuration(void)
  	return -EOPNOTSUPP;
  }
  
@@ -784,7 +784,7 @@ index 3c0a25a..b43bae6 100644
  static int __init msi_ec_init(void)
  {
  	int result;
-@@ -4720,6 +4860,23 @@ static int __init msi_ec_init(void)
+@@ -4863,6 +5003,23 @@ static int __init msi_ec_init(void)
  		led_classdev_register(&msi_platform_device->dev,
  				      &msiacpi_led_kbdlight);
  
@@ -808,7 +808,7 @@ index 3c0a25a..b43bae6 100644
  	return 0;
  }
  
-@@ -4740,6 +4897,10 @@ static void __exit msi_ec_exit(void)
+@@ -4883,6 +5040,10 @@ static void __exit msi_ec_exit(void)
  			battery_hook_unregister(&battery_hook);
  	}
  
@@ -823,9 +823,9 @@ index 3c0a25a..b43bae6 100644
 2.39.1
 
 
-From 68e68e2ace5f47f8f6463f010ca50ee4a68cd5d4 Mon Sep 17 00:00:00 2001
+From 7908f758e76ea71cf348a0b0e2655fb3e9256f3b Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Fri, 7 Mar 2025 00:33:14 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 04/14] Add fan label support to hwmon interface
 
 ---
@@ -833,10 +833,10 @@ Subject: [PATCH 04/14] Add fan label support to hwmon interface
  1 file changed, 29 insertions(+), 2 deletions(-)
 
 diff --git a/msi-ec.c b/msi-ec.c
-index b43bae6..21c2b37 100644
+index 7248797..d62361f 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -4707,6 +4707,10 @@ static umode_t msi_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types
+@@ -4850,6 +4850,10 @@ static umode_t msi_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types
  		    ((channel == 0 && conf.cpu.rt_fan_speed_address != MSI_EC_ADDR_UNSUPP) ||
  		     (channel == 1 && conf.gpu.rt_fan_speed_address != MSI_EC_ADDR_UNSUPP)))
  			return 0444;
@@ -847,7 +847,7 @@ index b43bae6..21c2b37 100644
  		break;
  	default:
  		break;
-@@ -4715,6 +4719,28 @@ static umode_t msi_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types
+@@ -4858,6 +4862,28 @@ static umode_t msi_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types
  	return 0;
  }
  
@@ -876,7 +876,7 @@ index b43bae6..21c2b37 100644
  static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
                               u32 attr, int channel, long *val)
  {
-@@ -4798,6 +4824,7 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -4941,6 +4967,7 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  static const struct hwmon_ops msi_ec_hwmon_ops = {
  	.is_visible = msi_ec_hwmon_is_visible,
  	.read = msi_ec_hwmon_read,
@@ -884,7 +884,7 @@ index b43bae6..21c2b37 100644
  };
  
  static const struct hwmon_channel_info *msi_ec_hwmon_info[] = {
-@@ -4805,8 +4832,8 @@ static const struct hwmon_channel_info *msi_ec_hwmon_info[] = {
+@@ -4948,8 +4975,8 @@ static const struct hwmon_channel_info *msi_ec_hwmon_info[] = {
                    HWMON_T_INPUT,  // CPU temperature
                    HWMON_T_INPUT), // GPU temperature
  	HWMON_CHANNEL_INFO(fan,
@@ -899,9 +899,9 @@ index b43bae6..21c2b37 100644
 2.39.1
 
 
-From 386da7f3e2cc291cbd1b7440cf0023df2573719a Mon Sep 17 00:00:00 2001
+From cc0c15d4b5e00c9533ca62a45e4c337a2b3abd49 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Fri, 7 Mar 2025 03:17:25 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 05/14] hwmon: Implement fan PWM control functionality
 
 ---
@@ -909,10 +909,10 @@ Subject: [PATCH 05/14] hwmon: Implement fan PWM control functionality
  1 file changed, 226 insertions(+), 8 deletions(-)
 
 diff --git a/msi-ec.c b/msi-ec.c
-index 21c2b37..924a3e1 100644
+index d62361f..a188d95 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -4692,6 +4692,23 @@ static int __init load_configuration(void)
+@@ -4835,6 +4835,23 @@ static int __init load_configuration(void)
  // Hwmon functions
  // ============================================================ //
  
@@ -936,7 +936,7 @@ index 21c2b37..924a3e1 100644
  static umode_t msi_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
                                         u32 attr, int channel)
  {
-@@ -4712,6 +4729,12 @@ static umode_t msi_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types
+@@ -4855,6 +4872,12 @@ static umode_t msi_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types
  			  (channel == 1 && conf.gpu.rt_fan_speed_address != MSI_EC_ADDR_UNSUPP)))
  			return 0444;
  		break;
@@ -949,7 +949,7 @@ index 21c2b37..924a3e1 100644
  	default:
  		break;
  	}
-@@ -4719,6 +4742,108 @@ static umode_t msi_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types
+@@ -4862,6 +4885,108 @@ static umode_t msi_ec_hwmon_is_visible(const void *data, enum hwmon_sensor_types
  	return 0;
  }
  
@@ -1058,7 +1058,7 @@ index 21c2b37..924a3e1 100644
  static int msi_ec_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
                                     u32 attr, int channel, const char **str)
  {
-@@ -4787,7 +4912,7 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -4930,7 +5055,7 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  				if (fan_value == 0)
  					*val = 0;
  				else
@@ -1067,7 +1067,7 @@ index 21c2b37..924a3e1 100644
  				
  				return 0;
  			} else if (channel == 1) { // GPU fan
-@@ -4808,12 +4933,47 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -4951,12 +5076,47 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  				if (fan_value == 0)
  					*val = 0;
  				else
@@ -1116,7 +1116,7 @@ index 21c2b37..924a3e1 100644
  	default:
  		break;
  	}
-@@ -4821,10 +4981,44 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -4964,10 +5124,44 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  	return -EOPNOTSUPP;
  }
  
@@ -1161,7 +1161,7 @@ index 21c2b37..924a3e1 100644
  };
  
  static const struct hwmon_channel_info *msi_ec_hwmon_info[] = {
-@@ -4832,8 +5026,11 @@ static const struct hwmon_channel_info *msi_ec_hwmon_info[] = {
+@@ -4975,8 +5169,11 @@ static const struct hwmon_channel_info *msi_ec_hwmon_info[] = {
                    HWMON_T_INPUT,  // CPU temperature
                    HWMON_T_INPUT), // GPU temperature
  	HWMON_CHANNEL_INFO(fan,
@@ -1175,7 +1175,7 @@ index 21c2b37..924a3e1 100644
  	NULL
  };
  
-@@ -4842,6 +5039,20 @@ static const struct hwmon_chip_info msi_ec_hwmon_chip_info = {
+@@ -4985,6 +5182,20 @@ static const struct hwmon_chip_info msi_ec_hwmon_chip_info = {
  	.info = msi_ec_hwmon_info,
  };
  
@@ -1196,7 +1196,7 @@ index 21c2b37..924a3e1 100644
  static int __init msi_ec_init(void)
  {
  	int result;
-@@ -4887,22 +5098,29 @@ static int __init msi_ec_init(void)
+@@ -5030,22 +5241,29 @@ static int __init msi_ec_init(void)
  		led_classdev_register(&msi_platform_device->dev,
  				      &msiacpi_led_kbdlight);
  
@@ -1234,9 +1234,9 @@ index 21c2b37..924a3e1 100644
 2.39.1
 
 
-From 096517b323e6925a97a5a43602631bfec27e9e3f Mon Sep 17 00:00:00 2001
+From 41ca71039e6bcee33bccfc5eef018f26cf45b56b Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Fri, 7 Mar 2025 12:58:47 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 06/14] hwmon: Implement fan PWM curve control functionality
 
 ---
@@ -1281,10 +1281,10 @@ index 8e59048..f6b57a4 100644
 +
  #endif // __MSI_EC_REGISTERS_CONFIG__
 diff --git a/msi-ec.c b/msi-ec.c
-index 924a3e1..fc8143f 100644
+index a188d95..98d2aaf 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -3151,6 +3151,10 @@ static struct msi_ec_conf conf; // current configuration
+@@ -3294,6 +3294,10 @@ static struct msi_ec_conf conf; // current configuration
  
  static bool charge_control_supported = false;
  
@@ -1295,7 +1295,7 @@ index 924a3e1..fc8143f 100644
  static char *firmware = NULL;
  module_param(firmware, charp, 0);
  MODULE_PARM_DESC(firmware, "Load a configuration for a specified firmware version");
-@@ -4052,6 +4056,18 @@ static int curve_init(struct curve_pack curve_data) {
+@@ -4195,6 +4199,18 @@ static int curve_init(struct curve_pack curve_data) {
  
  		if (status < 0) return status;
  
@@ -1314,7 +1314,7 @@ index 924a3e1..fc8143f 100644
  		for (int i = 0; i < CURVE_MAX_ENTRIES; i++) {
  			curve_data.curve_fan_speed[i] = curve_data.curve_fan_speed_default[i];
  			curve_data.curve_temp[i] = curve_data.curve_temp_default[i];
-@@ -4063,6 +4079,17 @@ static int curve_init(struct curve_pack curve_data) {
+@@ -4206,6 +4222,17 @@ static int curve_init(struct curve_pack curve_data) {
  
  static int curve_destroy(struct curve_pack curve_data) {
  	if (is_curve_allowed(*curve_data.curve)) {
@@ -1332,7 +1332,7 @@ index 924a3e1..fc8143f 100644
  		int status = push_ec_curve(*curve_data.curve,
  			curve_data.curve_fan_speed_default, curve_data.curve_temp_default);
  
-@@ -4617,6 +4644,12 @@ static int __init msi_platform_probe(struct platform_device *pdev)
+@@ -4760,6 +4787,12 @@ static int __init msi_platform_probe(struct platform_device *pdev)
  			return result;
  	}
  
@@ -1345,7 +1345,7 @@ index 924a3e1..fc8143f 100644
  	return 0;
  }
  
-@@ -4628,6 +4661,11 @@ static int msi_platform_remove(struct platform_device *pdev)
+@@ -4771,6 +4804,11 @@ static int msi_platform_remove(struct platform_device *pdev)
  {
  	if (debug)
  		sysfs_remove_group(&pdev->dev.kobj, &msi_debug_group);
@@ -1357,7 +1357,7 @@ index 924a3e1..fc8143f 100644
  
  #if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0))
  	return 0;
-@@ -4689,13 +4727,373 @@ static int __init load_configuration(void)
+@@ -4832,13 +4870,373 @@ static int __init load_configuration(void)
  }
  
  // ============================================================ //
@@ -1732,7 +1732,7 @@ index 924a3e1..fc8143f 100644
  // Check if a specific fan mode is available in the configuration
  static bool fan_mode_is_available(const char *mode)
  {
-@@ -5098,6 +5496,19 @@ static int __init msi_ec_init(void)
+@@ -5241,6 +5639,19 @@ static int __init msi_ec_init(void)
  		led_classdev_register(&msi_platform_device->dev,
  				      &msiacpi_led_kbdlight);
  
@@ -1752,7 +1752,7 @@ index 924a3e1..fc8143f 100644
  	pr_info("msi-ec: Registering hwmon device\n");
  
  	// register hwmon device
-@@ -5120,6 +5531,16 @@ static int __init msi_ec_init(void)
+@@ -5263,6 +5674,16 @@ static int __init msi_ec_init(void)
  		pr_err("msi-ec: hwmon device register failed with error %d\n", err);
  		return err;
  	}
@@ -1773,9 +1773,9 @@ index 924a3e1..fc8143f 100644
 2.39.1
 
 
-From 5b289080b9715bf237328b735be4fdbb32593e9e Mon Sep 17 00:00:00 2001
+From 4305d921a45feacaee8b3de5bd25ba48ee49108d Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Fri, 7 Mar 2025 15:56:26 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 07/14] Fix: Module unload issues and hwmon naming
 
 ---
@@ -1796,10 +1796,10 @@ index f6b57a4..1e0faf3 100644
  #define MSI_EC_ADDR_UNKNOWN 0xff01 // unknown address
  #define MSI_EC_ADDR_UNSUPP  0xff01 // unsupported parameter
 diff --git a/msi-ec.c b/msi-ec.c
-index fc8143f..a90edd7 100644
+index 98d2aaf..f98ed22 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -4662,10 +4662,10 @@ static int msi_platform_remove(struct platform_device *pdev)
+@@ -4805,10 +4805,10 @@ static int msi_platform_remove(struct platform_device *pdev)
  	if (debug)
  		sysfs_remove_group(&pdev->dev.kobj, &msi_debug_group);
  	
@@ -1814,7 +1814,7 @@ index fc8143f..a90edd7 100644
  
  #if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0))
  	return 0;
-@@ -5072,23 +5072,28 @@ cleanup:
+@@ -5215,23 +5215,28 @@ cleanup:
  static void remove_fan_curve_attrs(struct device *dev)
  {
      int i;
@@ -1857,7 +1857,7 @@ index fc8143f..a90edd7 100644
  }
  
  // ============================================================ //
-@@ -5496,19 +5501,6 @@ static int __init msi_ec_init(void)
+@@ -5639,19 +5644,6 @@ static int __init msi_ec_init(void)
  		led_classdev_register(&msi_platform_device->dev,
  				      &msiacpi_led_kbdlight);
  
@@ -1877,7 +1877,7 @@ index fc8143f..a90edd7 100644
  	pr_info("msi-ec: Registering hwmon device\n");
  
  	// register hwmon device
-@@ -5517,7 +5509,7 @@ static int __init msi_ec_init(void)
+@@ -5660,7 +5652,7 @@ static int __init msi_ec_init(void)
  		return -ENOMEM;
  	
  	hwmon_data->dev = &msi_platform_device->dev;
@@ -1886,7 +1886,7 @@ index fc8143f..a90edd7 100644
  	
  	dev_set_drvdata(&msi_platform_device->dev, hwmon_data);
  	
-@@ -5563,6 +5555,11 @@ static void __exit msi_ec_exit(void)
+@@ -5706,6 +5698,11 @@ static void __exit msi_ec_exit(void)
  			battery_hook_unregister(&battery_hook);
  	}
  
@@ -1902,9 +1902,9 @@ index fc8143f..a90edd7 100644
 2.39.1
 
 
-From 495135904b67ade64ebe0db8fc24bb9210bc7546 Mon Sep 17 00:00:00 2001
+From 0d00ee1db0da28282e0eb234146f0c565005c580 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Fri, 7 Mar 2025 16:36:01 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 08/14] Add: PWM value scaling between hwmon and EC
 
 Scale PWM values between hwmon standard (0-255) and EC device (0-100) ranges when reading and writing fan curve points.
@@ -1913,10 +1913,10 @@ Scale PWM values between hwmon standard (0-255) and EC device (0-100) ranges whe
  1 file changed, 22 insertions(+), 13 deletions(-)
 
 diff --git a/msi-ec.c b/msi-ec.c
-index a90edd7..e55f11f 100644
+index f98ed22..eaffbe5 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -4661,11 +4661,6 @@ static int msi_platform_remove(struct platform_device *pdev)
+@@ -4804,11 +4804,6 @@ static int msi_platform_remove(struct platform_device *pdev)
  {
  	if (debug)
  		sysfs_remove_group(&pdev->dev.kobj, &msi_debug_group);
@@ -1928,7 +1928,7 @@ index a90edd7..e55f11f 100644
  
  #if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0))
  	return 0;
-@@ -4819,8 +4814,12 @@ static ssize_t curve_attr_show(struct device *dev,
+@@ -4962,8 +4957,12 @@ static ssize_t curve_attr_show(struct device *dev,
  		pr_debug("msi-ec: Failed to read EC value from address: 0x%04x\n", address);
  		return ret;
  	}
@@ -1943,7 +1943,7 @@ index a90edd7..e55f11f 100644
      return sysfs_emit(buf, "%u\n", value);
  }
  
-@@ -4861,9 +4860,13 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5004,9 +5003,13 @@ static ssize_t curve_attr_store(struct device *dev,
              // Validate PWM value (0-255)
              if (val > 255)
                  return -EINVAL;
@@ -1958,7 +1958,7 @@ index a90edd7..e55f11f 100644
          } else {
              // Last point has no temperature value
              if (point < 1 || point >= conf.cpu.fan_curve.entries_count) {
-@@ -4887,8 +4890,13 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5030,8 +5033,13 @@ static ssize_t curve_attr_store(struct device *dev,
                  
              if (val > 255)
                  return -EINVAL;
@@ -1972,7 +1972,7 @@ index a90edd7..e55f11f 100644
          } else {
              if (point < 1 || point >= conf.gpu.fan_curve.entries_count)
                  return -EINVAL;
-@@ -4897,6 +4905,7 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5040,6 +5048,7 @@ static ssize_t curve_attr_store(struct device *dev,
                  return -EINVAL;
                  
              address = conf.gpu.fan_curve.temperature_start_address + (point - 1);
@@ -1980,7 +1980,7 @@ index a90edd7..e55f11f 100644
          }
      }
      
-@@ -5059,7 +5068,7 @@ cleanup:
+@@ -5202,7 +5211,7 @@ cleanup:
      for (i = 0; i < idx; i++) {
  		if (curve_attrs[i].dev_attr.attr.name) {
  			kfree(curve_attrs[i].dev_attr.attr.name);
@@ -1989,7 +1989,7 @@ index a90edd7..e55f11f 100644
  		}
      }
      kfree(curve_attrs);
-@@ -5074,16 +5083,16 @@ static void remove_fan_curve_attrs(struct device *dev)
+@@ -5217,16 +5226,16 @@ static void remove_fan_curve_attrs(struct device *dev)
      int i;
  
  	if (!dev) {
@@ -2009,7 +2009,7 @@ index a90edd7..e55f11f 100644
      for (i = 0; i < curve_attrs_count; i++) {
          if (curve_attrs[i].dev_attr.attr.name) {
              // device_remove_file(dev, &curve_attrs[i].dev_attr);
-@@ -5093,7 +5102,7 @@ static void remove_fan_curve_attrs(struct device *dev)
+@@ -5236,7 +5245,7 @@ static void remove_fan_curve_attrs(struct device *dev)
      kfree(curve_attrs);
      curve_attrs = NULL;
      curve_attrs_count = 0;
@@ -2022,9 +2022,9 @@ index a90edd7..e55f11f 100644
 2.39.1
 
 
-From cc12a53247df20a64c106d7f59f9e8724599fddc Mon Sep 17 00:00:00 2001
+From ad2e1f0fa556dc951d1049180415866590f40ea9 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Fri, 7 Mar 2025 17:45:52 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 09/14] Refactor: Use lazy-sync for fan curve hwmon attributes
 
 Refactored the hwmon implementation of fan curve attributes to:
@@ -2039,10 +2039,10 @@ This change improves system stability and maintains consistency with the existin
  1 file changed, 116 insertions(+), 61 deletions(-)
 
 diff --git a/msi-ec.c b/msi-ec.c
-index e55f11f..57d6846 100644
+index eaffbe5..c944f70 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -3951,10 +3951,14 @@ static int sync_ec_curve_safe(struct msi_ec_fan_curve curve, u8 *fan_speed_buf,
+@@ -4094,10 +4094,14 @@ static int sync_ec_curve_safe(struct msi_ec_fan_curve curve, u8 *fan_speed_buf,
  static int push_ec_curve_safe(struct msi_ec_fan_curve curve, const u8 *fan_speed_buf, const u8 *temperature_buf) {
  	const char *fan_mode;
  
@@ -2058,7 +2058,7 @@ index e55f11f..57d6846 100644
  	}
  
  	return push_ec_curve(curve, fan_speed_buf, temperature_buf);
-@@ -4767,59 +4771,82 @@ static ssize_t curve_attr_show(struct device *dev,
+@@ -4910,59 +4914,82 @@ static ssize_t curve_attr_show(struct device *dev,
      int is_pwm = curve_attr->is_pwm;
      u8 value;
      int ret;
@@ -2184,7 +2184,7 @@ index e55f11f..57d6846 100644
      return sysfs_emit(buf, "%u\n", value);
  }
  
-@@ -4837,13 +4864,18 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -4980,13 +5007,18 @@ static ssize_t curve_attr_store(struct device *dev,
      int ret;
      u16 address;
  
@@ -2205,7 +2205,7 @@ index e55f11f..57d6846 100644
  		return ret;
  	}
      
-@@ -4863,10 +4895,14 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5006,10 +5038,14 @@ static ssize_t curve_attr_store(struct device *dev,
  
  			unsigned long orig_val = val;
  			val = val * 100 / 255;
@@ -2223,7 +2223,7 @@ index e55f11f..57d6846 100644
          } else {
              // Last point has no temperature value
              if (point < 1 || point >= conf.cpu.fan_curve.entries_count) {
-@@ -4878,9 +4914,13 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5021,9 +5057,13 @@ static ssize_t curve_attr_store(struct device *dev,
              // Validate temperature value (0-100°C)
              if (val > 100)
                  return -EINVAL;
@@ -2239,7 +2239,7 @@ index e55f11f..57d6846 100644
          }
      } else { // GPU fan
          // Similar validation for GPU fan...
-@@ -4893,28 +4933,43 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5036,28 +5076,43 @@ static ssize_t curve_attr_store(struct device *dev,
  			
  			unsigned long orig_val = val;
  			val = val * 100 / 255;
@@ -2297,9 +2297,9 @@ index e55f11f..57d6846 100644
 2.39.1
 
 
-From 8412d17a9104d71b7172e7d4665bbe6b69e424e9 Mon Sep 17 00:00:00 2001
+From 7c88ffdf6df2d70696130bd8362241e05503dae1 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Sat, 8 Mar 2025 18:03:55 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 10/14] Add max_speed to fan_curve
 
 ---
@@ -2321,10 +2321,10 @@ index 1e0faf3..01c6272 100644
  
  struct msi_ec_cpu_conf {
 diff --git a/msi-ec.c b/msi-ec.c
-index 57d6846..2f67c0c 100644
+index c944f70..00b4c7f 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -4729,14 +4729,12 @@ static int __init load_configuration(void)
+@@ -4872,14 +4872,12 @@ static int __init load_configuration(void)
  // Hwmon functions (curve)
  // ============================================================ //
  
@@ -2341,7 +2341,7 @@ index 57d6846..2f67c0c 100644
  // Forward declarations
  static ssize_t curve_attr_show(struct device *dev, struct device_attribute *attr, char *buf);
  static ssize_t curve_attr_store(struct device *dev, struct device_attribute *attr, const char *buf, size_t count);
-@@ -4756,6 +4754,7 @@ static ssize_t pwm2_auto_points_count_show(struct device *dev,
+@@ -4899,6 +4897,7 @@ static ssize_t pwm2_auto_points_count_show(struct device *dev,
      return sysfs_emit(buf, "%d\n", conf.gpu.fan_curve.entries_count);
  }
  
@@ -2349,7 +2349,7 @@ index 57d6846..2f67c0c 100644
  static DEVICE_ATTR_RO(pwm1_auto_points_count);
  static DEVICE_ATTR_RO(pwm2_auto_points_count);
  
-@@ -4769,58 +4768,18 @@ static ssize_t curve_attr_show(struct device *dev,
+@@ -4912,58 +4911,18 @@ static ssize_t curve_attr_show(struct device *dev,
      int fan = curve_attr->fan;
      int point = curve_attr->point;
      int is_pwm = curve_attr->is_pwm;
@@ -2415,7 +2415,7 @@ index 57d6846..2f67c0c 100644
  	if (is_pwm) {
  		if (point < 1 || point > conf_curve->entries_count) {
  			pr_err("msi-ec: Invalid PWM point: %d, max allowed: %d\n", 
-@@ -4830,7 +4789,7 @@ static ssize_t curve_attr_show(struct device *dev,
+@@ -4973,7 +4932,7 @@ static ssize_t curve_attr_show(struct device *dev,
  
  		value = curve_data->curve_fan_speed[point - 1];
  		unsigned int orig_val = value;
@@ -2424,7 +2424,7 @@ index 57d6846..2f67c0c 100644
  		pr_debug("msi-ec: Reading PWM from buffer, index: %d, scaled value: %u (from %u)\n", 
                   point - 1, value, orig_val);
  	} else {
-@@ -4845,8 +4804,6 @@ static ssize_t curve_attr_show(struct device *dev,
+@@ -4988,8 +4947,6 @@ static ssize_t curve_attr_show(struct device *dev,
                   point - 1, value);
  	}
  
@@ -2433,7 +2433,7 @@ index 57d6846..2f67c0c 100644
      return sysfs_emit(buf, "%u\n", value);
  }
  
-@@ -4860,18 +4817,20 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5003,18 +4960,20 @@ static ssize_t curve_attr_store(struct device *dev,
      int fan = curve_attr->fan;
      int point = curve_attr->point;
      int is_pwm = curve_attr->is_pwm;
@@ -2459,7 +2459,7 @@ index 57d6846..2f67c0c 100644
      // Parse value from user
      ret = kstrtoul(buf, 10, &val);
      if (ret < 0) {
-@@ -4894,15 +4853,11 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5037,15 +4996,11 @@ static ssize_t curve_attr_store(struct device *dev,
                  return -EINVAL;
  
  			unsigned long orig_val = val;
@@ -2476,7 +2476,7 @@ index 57d6846..2f67c0c 100644
          } else {
              // Last point has no temperature value
              if (point < 1 || point >= conf.cpu.fan_curve.entries_count) {
-@@ -4918,9 +4873,6 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5061,9 +5016,6 @@ static ssize_t curve_attr_store(struct device *dev,
  			temp_buf[point - 1] = (u8)val;
  			pr_info("msi-ec: Updating CPU temperature in buffer, index: %d, value: %lu\n", 
                       point - 1, val);
@@ -2486,7 +2486,7 @@ index 57d6846..2f67c0c 100644
          }
      } else { // GPU fan
          // Similar validation for GPU fan...
-@@ -4932,15 +4884,11 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5075,15 +5027,11 @@ static ssize_t curve_attr_store(struct device *dev,
                  return -EINVAL;
  			
  			unsigned long orig_val = val;
@@ -2503,7 +2503,7 @@ index 57d6846..2f67c0c 100644
          } else {
              if (point < 1 || point >= conf.gpu.fan_curve.entries_count)
                  return -EINVAL;
-@@ -4951,18 +4899,8 @@ static ssize_t curve_attr_store(struct device *dev,
+@@ -5094,18 +5042,8 @@ static ssize_t curve_attr_store(struct device *dev,
  			temp_buf[point - 1] = (u8)val;
  			pr_debug("msi-ec: Updating GPU temperature in buffer, index: %d, value: %lu\n", 
                       point - 1, val);
@@ -2526,9 +2526,9 @@ index 57d6846..2f67c0c 100644
 2.39.1
 
 
-From 24c37c0ab5deb6af07cb29bec3a4f5c29ff03522 Mon Sep 17 00:00:00 2001
+From 8fda6783e3f5d031f35560d026decf57e8b9c1a3 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Sun, 9 Mar 2025 21:55:42 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 11/14] hwmon: Add virtual fan mode state for independent fan
  control
 
@@ -2538,10 +2538,10 @@ Implements virtual pwm_enable state to allow individual fan control through hwmo
  1 file changed, 28 insertions(+), 4 deletions(-)
 
 diff --git a/msi-ec.c b/msi-ec.c
-index 2f67c0c..7ff799e 100644
+index 00b4c7f..dabb24b 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -4729,6 +4729,8 @@ static int __init load_configuration(void)
+@@ -4872,6 +4872,8 @@ static int __init load_configuration(void)
  // Hwmon functions (curve)
  // ============================================================ //
  
@@ -2550,7 +2550,7 @@ index 2f67c0c..7ff799e 100644
  // Array to hold dynamically created attributes
  static struct msi_ec_curve_attr *curve_attrs;
  static int curve_attrs_count;
-@@ -5200,6 +5202,8 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+@@ -5343,6 +5345,8 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
          if (attr == hwmon_pwm_enable) {
              if (channel == 0 || channel == 1) { // CPU and GPU fans share mode control
                  // Change fan mode based on val
@@ -2559,7 +2559,7 @@ index 2f67c0c..7ff799e 100644
                  switch (val) {
                  case 1: // Manual mode - Advanced
                      result = set_cooler_boost(false);
-@@ -5207,19 +5211,26 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+@@ -5350,19 +5354,26 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
                          result = set_fan_mode(FM_ADVANCED_NAME);
                      else
                          return -EINVAL;
@@ -2590,7 +2590,7 @@ index 2f67c0c..7ff799e 100644
                      break;
                  case 4: // Silent mode
                      result = set_cooler_boost(false);
-@@ -5227,6 +5238,8 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+@@ -5370,6 +5381,8 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
                          result = set_fan_mode(FM_SILENT_NAME);
                      else
                          return -EINVAL;
@@ -2599,7 +2599,7 @@ index 2f67c0c..7ff799e 100644
                      break;
                  case 5: // Basic mode
                      result = set_cooler_boost(false);
-@@ -5234,6 +5247,8 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+@@ -5377,6 +5390,8 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
                          result = set_fan_mode(FM_BASIC_NAME);
                      else
                          return -EINVAL;
@@ -2608,7 +2608,7 @@ index 2f67c0c..7ff799e 100644
                      break;
                  default:
                      return -EINVAL;
-@@ -5348,6 +5363,11 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -5491,6 +5506,11 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  		if (attr == hwmon_pwm_enable) {
  			// CPU and GPU fans share mode control, so return the same value for both channels
      		if (channel == 0 || channel == 1) {
@@ -2620,7 +2620,7 @@ index 2f67c0c..7ff799e 100644
  				int result;
  				bool cooler_boost_enabled = false;
  				const char *mode_name = NULL;
-@@ -5358,6 +5378,8 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -5501,6 +5521,8 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  				}
      		    if (cooler_boost_enabled) {
  					*val = 3; // Full speed mode
@@ -2629,7 +2629,7 @@ index 2f67c0c..7ff799e 100644
  					return 0;
  				} else {
  					result = fan_mode_get(&mode_name);
-@@ -5374,6 +5396,8 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -5517,6 +5539,8 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  						*val = 5; // Basic mode
  					else
  						*val = 0; // Unknown mode
@@ -2642,9 +2642,9 @@ index 2f67c0c..7ff799e 100644
 2.39.1
 
 
-From f88b43d93b155c3236047930920791a99449cbf2 Mon Sep 17 00:00:00 2001
+From 82a437884d0b9b7a70a1b39f430f459f17caf99b Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Mon, 10 Mar 2025 04:52:33 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 12/14] pwm_enable: set full mode to 0
 
 ---
@@ -2652,10 +2652,10 @@ Subject: [PATCH 12/14] pwm_enable: set full mode to 0
  1 file changed, 42 insertions(+), 32 deletions(-)
 
 diff --git a/msi-ec.c b/msi-ec.c
-index 7ff799e..e44294b 100644
+index dabb24b..431271c 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -4729,6 +4729,14 @@ static int __init load_configuration(void)
+@@ -4872,6 +4872,14 @@ static int __init load_configuration(void)
  // Hwmon functions (curve)
  // ============================================================ //
  
@@ -2670,7 +2670,7 @@ index 7ff799e..e44294b 100644
  static int virtual_hwmon_pwm_enable[2] = {-1, -1};
  
  // Array to hold dynamically created attributes
-@@ -5103,6 +5111,7 @@ static void remove_fan_curve_attrs(struct device *dev)
+@@ -5246,6 +5254,7 @@ static void remove_fan_curve_attrs(struct device *dev)
  // ============================================================ //
  // Hwmon functions (other)
  // ============================================================ //
@@ -2678,7 +2678,7 @@ index 7ff799e..e44294b 100644
  // Check if a specific fan mode is available in the configuration
  static bool fan_mode_is_available(const char *mode)
  {
-@@ -5205,50 +5214,51 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+@@ -5348,50 +5357,51 @@ static int msi_ec_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
  				virtual_hwmon_pwm_enable[channel] = val;
  
                  switch (val) {
@@ -2749,7 +2749,7 @@ index 7ff799e..e44294b 100644
                      break;
                  default:
                      return -EINVAL;
-@@ -5377,9 +5387,9 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -5520,9 +5530,9 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  						return result;
  				}
      		    if (cooler_boost_enabled) {
@@ -2762,7 +2762,7 @@ index 7ff799e..e44294b 100644
  					return 0;
  				} else {
  					result = fan_mode_get(&mode_name);
-@@ -5387,15 +5397,15 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -5530,15 +5540,15 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  						return result;
  					
  					if (strcmp(mode_name, FM_ADVANCED_NAME) == 0)
@@ -2783,7 +2783,7 @@ index 7ff799e..e44294b 100644
  					virtual_hwmon_pwm_enable[1] = *val;
  					virtual_hwmon_pwm_enable[0] = *val;
  					return 0;
-@@ -5413,7 +5423,7 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+@@ -5556,7 +5566,7 @@ static int msi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
  static ssize_t pwm_enable_available_show(struct device *dev, struct device_attribute *attr, char *buf)
  {
      int len = 0;
@@ -2792,7 +2792,7 @@ index 7ff799e..e44294b 100644
      
      // First collect all mode names
      for (int i = 0; conf.fan_mode.modes[i].name; i++) {
-@@ -5422,18 +5432,18 @@ static ssize_t pwm_enable_available_show(struct device *dev, struct device_attri
+@@ -5565,18 +5575,18 @@ static ssize_t pwm_enable_available_show(struct device *dev, struct device_attri
          else if (strcmp(conf.fan_mode.modes[i].name, FM_AUTO_NAME) == 0)
              mode_names[2] = conf.fan_mode.modes[i].name;  // Auto mode
          else if (strcmp(conf.fan_mode.modes[i].name, FM_SILENT_NAME) == 0)
@@ -2819,20 +2819,32 @@ index 7ff799e..e44294b 100644
 2.39.1
 
 
-From f46f7139b851257e6e1a96e9de93531a00c6bc90 Mon Sep 17 00:00:00 2001
+From f528c8fadd8214b0da142af852fd510072106eb3 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Thu, 6 Mar 2025 17:36:44 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 13/14] Add fan_curve for claw8
 
 ---
- msi-ec.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ msi-ec.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
 diff --git a/msi-ec.c b/msi-ec.c
-index e44294b..7088ecb 100644
+index 431271c..72b90a1 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -2946,10 +2946,24 @@ static struct msi_ec_conf CONF401 __initdata = {
+@@ -2938,19 +2938,33 @@ static struct msi_ec_conf CONF401 __initdata = {
+ 	.fan_mode = {
+ 		.address = 0xd4,
+ 		.modes = {
+-			{ FM_AUTO_NAME,     0x0d },
+-			{ FM_SILENT_NAME,   0x1d },
+-			{ FM_ADVANCED_NAME, 0x8d },
++			{ FM_AUTO_NAME,     0x00 },
++			{ FM_SILENT_NAME,   0x10 },
++			{ FM_ADVANCED_NAME, 0x80 },
+ 			MSI_EC_MODE_NULL
+ 		},
+ 	},
  	.cpu = {
  		.rt_temp_address       = 0x68,
  		.rt_fan_speed_address  = 0x71,
@@ -2861,9 +2873,9 @@ index e44294b..7088ecb 100644
 2.39.1
 
 
-From c135c1f4b68658d7ef99444ff26f4c85314fa4a4 Mon Sep 17 00:00:00 2001
+From f571994e6d25a6cc274a4eae09a12e6930ddfea0 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Mon, 17 Mar 2025 17:47:08 +0800
+Date: Fri, 21 Mar 2025 20:20:48 +0800
 Subject: [PATCH 14/14] Add MODULE_DEVICE_TABLE
 
 ---
@@ -2871,10 +2883,10 @@ Subject: [PATCH 14/14] Add MODULE_DEVICE_TABLE
  1 file changed, 15 insertions(+)
 
 diff --git a/msi-ec.c b/msi-ec.c
-index 7088ecb..6a29859 100644
+index 72b90a1..6058086 100644
 --- a/msi-ec.c
 +++ b/msi-ec.c
-@@ -4699,6 +4699,21 @@ static struct platform_driver msi_platform_driver = {
+@@ -4842,6 +4842,21 @@ static struct platform_driver msi_platform_driver = {
  // Module load/unload
  // ============================================================ //
  

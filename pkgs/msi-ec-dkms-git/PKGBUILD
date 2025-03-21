@@ -2,8 +2,8 @@
 
 _pkgbase=msi-ec
 pkgname=msi-ec-dkms-git
-pkgver=r415.f169e6a
-pkgrel=5
+pkgver=r421.23b8194
+pkgrel=1
 pkgdesc="Driver for MSI laptop EC (DKMS)"
 arch=('x86_64')
 license=('GPL2')
