@@ -9,3 +9,4 @@ Icon=steamdeck-gaming-return
 Terminal=false
 Type=Application
 StartupNotify=false
+Categories=Application;Game;System;

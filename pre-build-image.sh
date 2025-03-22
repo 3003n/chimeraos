@@ -10,6 +10,7 @@ if [ -z "${BUILD_BRANCH}" ]; then
   exit 1
 fi
 
+echo "Merging branch ${BUILD_BRANCH} into rootfs"
 cp -rav branch/${BUILD_BRANCH}/rootfs/* rootfs/
 cp -f branch/${BUILD_BRANCH}/sub-manifest .
 
@@ -22,6 +23,8 @@ mv pkgs pkgs-ori
 mkdir -p aur-pkgs
 mkdir -p pkgs
 
+
+echo "Copying branch aur packages"
 # branch aur packages
 for package in ${SUB_AUR_PACKAGES}; do
   # echo "copying ${package}"
