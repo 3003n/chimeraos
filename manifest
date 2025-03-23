@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export VERSION="48-6"
+export VERSION="48-7"
 export SYSTEM_DESC="ChimeraOS"
 export SYSTEM_NAME="chimeraos"
 export USERNAME="gamer"
@@ -248,6 +248,7 @@ export AUR_PACKAGES="\
 	steam-powerbuttond-git \
 	tsukimi-bin \
 	v4l-utils-git \
+	vboard \
 	waydroid-script-git \
 	yay-git \
 	zenergy-dkms-git \

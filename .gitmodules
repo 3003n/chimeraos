@@ -154,3 +154,6 @@
 [submodule "aur-pkgs/moonlight-qt-axi"]
 	path = aur-pkgs/moonlight-qt-axi
 	url = https://aur.archlinux.org/moonlight-qt-axi.git
+[submodule "aur-pkgs/vboard"]
+	path = aur-pkgs/vboard
+	url = https://aur.archlinux.org/vboard.git
