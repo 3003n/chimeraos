@@ -107,7 +107,6 @@ export PACKAGES="\
 	mesa-demos \
 	mission-center \
 	modemmanager \
-	moonlight-qt \
 	mpv \
 	nano \
 	networkmanager \
@@ -217,6 +216,7 @@ export AUR_PACKAGES="\
 	linux-firmware-valve \
 	nbfc-linux \
 	nintendo-udev \
+	moonlight-qt-axi \
 	onedrive-abraunegg \
 	pikaur \
 	protonup-qt-bin \
