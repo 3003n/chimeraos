@@ -233,6 +233,7 @@ export AUR_PACKAGES="\
 	steam-powerbuttond-git \
 	tsukimi-bin \
 	v4l-utils-git \
+	vboard \
 	waydroid-script-git \
 	yay-git \
 	zenergy-dkms-git \
