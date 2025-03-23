@@ -40,6 +40,7 @@ export SUB_AUR_PACKAGES="\
 	gnome-shell-extension-enhanced-osk-git \
 	gnome-shell-extension-hibernate-status-git \
 	gnome-shell-extension-screen-autorotate \
+	mutter-x11-scaling \
 "
 
 export SUB_LOCAL_PACKAGES="\
@@ -54,6 +55,7 @@ export SUB_LOCAL_PACKAGES="\
 "
 
 export SUB_PACKAGES_TO_DELETE="\
+	mutter \
 "
 
 sub_postinstallhook() {
