@@ -4,10 +4,10 @@ set -e
 
 module_path="aur-pkgs/"
 
-for module in $(ls $module_path); do
-    if [ -d "$module_path/$module" ]; then
-        echo "Updating $module"
-        git submodule update --remote --init "$module_path/$module"
+for module in "$module_path"*; do
+    if [ -d "$module" ]; then
+        echo "Updating $(basename "$module")"
+        git submodule update --remote --init "$module"
         sleep 1
     fi
 done
