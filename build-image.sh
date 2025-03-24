@@ -3,8 +3,8 @@
 set -e
 set -x
 
-if [ $EUID -ne 0 ]; then
-	echo "$(basename $0) must be run as root"
+if [ "$EUID" -ne 0 ]; then
+	echo "$(basename "$0") must be run as root"
 	exit 1
 fi
 
@@ -97,11 +97,11 @@ mv ${BUILD_PATH}/extra/*.pkg.tar.zst ${BUILD_PATH}/override_pkgs/ || true
 
 #  检查 ${BUILD_PATH}/local_pkgs 和 ${BUILD_PATH}/aur_pkgs 中的 pkg.tar 的完整性, 判断压缩包是否完整
 check_pkg() {
-	for pkg in $(ls ${BUILD_PATH}/local_pkgs/*.pkg.tar*); do
-		tar -tf $pkg
+	for pkg in "${BUILD_PATH}/local_pkgs"/*.pkg.tar*; do
+		tar -tf "$pkg"
 	done
-	for pkg in $(ls ${BUILD_PATH}/aur_pkgs/*.pkg.tar*); do
-		tar -tf $pkg
+	for pkg in "${BUILD_PATH}/aur_pkgs"/*.pkg.tar*; do
+		tar -tf "$pkg"
 	done
 }
 
@@ -133,7 +133,7 @@ if [ -z "${TEST_BUILD}" ]; then
 	set -e
 	if [ ${RETRY_COUNT} -eq ${MAX_RETRIES} ]; then
 		echo ">>>>>> All install failed after ${MAX_RETRIES} attempts. Stopping..."
-		exit -1
+		exit 1
 	fi
 else
 	echo "Test build, skipping all install"

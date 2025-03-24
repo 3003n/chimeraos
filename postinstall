@@ -8,7 +8,8 @@ function download_decky_plugin() {
 	local decky_plugin_path=$2
 	local grep_expression=${3:-".tar.gz"}
 
-	local temp_decky=$(mktemp -d)
+	local temp_decky
+	temp_decky=$(mktemp -d)
 
 	if [ -z "$temp_decky" ]; then
 		echo "temp_decky is empty"
@@ -123,10 +124,10 @@ postinstall_download() {
 	git clone --depth 1 $rime_git_url $rime_config_path
 
 	# zsh pre download
-	mkdir -p $zsh_path
-	rm -rf $zsh_path/*
-	git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git $zsh_path/ohmyzsh
-	git clone --depth 1 https://github.com/zdharma-continuum/fast-syntax-highlighting "$zsh_path/ohmyzsh/custom/plugins/fast-syntax-highlighting"
+	mkdir -p "${zsh_path:?}"
+	rm -rf "${zsh_path:?}"/*
+	git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git "${zsh_path:?}/ohmyzsh"
+	git clone --depth 1 https://github.com/zdharma-continuum/fast-syntax-highlighting "${zsh_path:?}/ohmyzsh/custom/plugins/fast-syntax-highlighting"
 	cp $zsh_path/ohmyzsh/templates/zshrc.zsh-template $zsh_path/.zshrc
 	sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="ys"/g' $zsh_path/.zshrc
 	sed -i 's/plugins=(git)/plugins=(git sudo z fast-syntax-highlighting)/g' $zsh_path/.zshrc

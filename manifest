@@ -340,7 +340,7 @@ postinstallhook() {
 		make
 		cmake
 		gcc
-		${KERNEL_PACKAGE}-headers
+		"${KERNEL_PACKAGE}-headers"
 		ardour
 		)
 	for package in "${remove_packages[@]}"; do
