@@ -210,7 +210,6 @@ export AUR_PACKAGES="\
 	ayaneo-platform-dkms-git \
 	ayn-platform-dkms-git \
 	bcm20702a1-firmware \
-	boxtron \
 	chimeraos-device-quirks-sk-git \
 	downgrade \
 	evdev-keepalive \

@@ -4,9 +4,6 @@
 [submodule "aur-pkgs/bcm20702a1-firmware"]
 	path = aur-pkgs/bcm20702a1-firmware
 	url = https://aur.archlinux.org/bcm20702a1-firmware.git
-[submodule "aur-pkgs/boxtron"]
-	path = aur-pkgs/boxtron
-	url = https://aur.archlinux.org/boxtron.git
 [submodule "aur-pkgs/downgrade"]
 	path = aur-pkgs/downgrade
 	url = https://aur.archlinux.org/downgrade.git
