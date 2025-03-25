@@ -3,11 +3,11 @@ color-scheme='prefer-dark'
 icon-theme='Papirus'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/gnome/ring-l.jxl'
-picture-uri-dark='file:///usr/share/backgrounds/gnome/ring-d.jxl'
+picture-uri='file:///usr/share/backgrounds/gnome/PinkLady.png'
+picture-uri-dark='file:///usr/share/backgrounds/gnome/BlueLady.png'
 picture-options='zoom'
-primary-color='26A269'
-secondary-color='000000'
+primary-color='#86b6ef'
+secondary-color='#000000'
 
 [org/gnome/mutter]
 center-new-windows=true
