@@ -124,9 +124,6 @@
 [submodule "aur-pkgs/hhd-ui"]
 	path = aur-pkgs/hhd-ui
 	url = https://aur.archlinux.org/hhd-ui.git
-[submodule "aur-pkgs/gnome-shell-extension-hibernate-status-git"]
-	path = aur-pkgs/gnome-shell-extension-hibernate-status-git
-	url = https://aur.archlinux.org/gnome-shell-extension-hibernate-status-git.git
 [submodule "aur-pkgs/tsukimi-bin"]
 	path = aur-pkgs/tsukimi-bin
 	url = https://aur.archlinux.org/tsukimi-bin.git
