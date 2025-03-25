@@ -2,7 +2,7 @@
 
 set -e
 
-sub_manifest_paths=(branch/*/sub-manifest)
+sub_manifest_paths=(branch/manifest-*)
 
 source ./manifest
 

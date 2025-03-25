@@ -11,11 +11,19 @@ if [ -z "${BUILD_BRANCH}" ]; then
 fi
 
 echo "Merging branch ${BUILD_BRANCH} into rootfs"
-cp -rav branch/${BUILD_BRANCH}/rootfs/* rootfs/
-cp -f branch/${BUILD_BRANCH}/sub-manifest .
+
+cp -f branch/manifest-${BUILD_BRANCH} sub-manifest
 
 source ./manifest
 source ./sub-manifest
+
+if [ -n "${POSTCOPY}" ]; then
+  echo "Copying postcopy files"
+  for dir in ${POSTCOPY}; do
+    echo "Copying ${dir}"
+    cp -rav postcopy/${dir}/* rootfs/
+  done
+fi
 
 mv aur-pkgs aur-pkgs-ori
 mv pkgs pkgs-ori
