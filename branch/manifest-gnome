@@ -1,5 +1,9 @@
 #! /bin/bash
 
+export POSTCOPY="\
+	gnome \
+"
+
 export SUB_PACKAGES="\
 	dconf-editor \
 	epiphany \

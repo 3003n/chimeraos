@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - id: set-branches
         # remove branch/ prefix
-        run: echo "matrix=$(ls -d branch/*/ | sed 's/branch\///' | sed 's/\///' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        run: echo "matrix=$(ls -1 branch/manifest-* | sed 's/branch\/manifest-//' | sed 's/\///' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
         shell: bash
   
   build-system-image:
