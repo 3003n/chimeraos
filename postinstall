@@ -27,7 +27,7 @@ function download_decky_plugin() {
 	ext=${basename##*.}
 	curl -L $download_url -o "${temp_decky}/${basename}"
 
-	if [[ "$ext" == "gz" && "$basename" =~ ".tar.gz" ]]; then
+	if [[ "$ext" == "gz" && "$basename" =~ \.tar\.gz ]]; then
 		tar -xzvf "${temp_decky}/${basename}" -C $decky_plugin_path
 	elif [ "$ext" == "zip" ]; then
 		unzip -o "${temp_decky}/${basename}" -d $decky_plugin_path
