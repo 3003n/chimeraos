@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
+<wallpapers>
+  <wallpaper deleted="false">
+    <name>Metal</name>
+    <filename>/usr/share/backgrounds/cachyos/Metal.png</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#86b6ef</pcolor>
+    <scolor>#000000</scolor>
+  </wallpaper>
+</wallpapers>
