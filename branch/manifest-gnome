@@ -37,13 +37,13 @@ export SUB_AUR_PACKAGES="\
 	gnome-shell-extension-dash-to-dock \
 	gnome-shell-extension-enhanced-osk-git \
 	gnome-shell-extension-hibernate-status-git \
+	gnome-shell-extension-logo-menu \
 	gnome-shell-extension-screen-autorotate \
 	mutter-x11-scaling \
 "
 
 export SUB_LOCAL_PACKAGES="\
 	ds-inhibit \
-	gnome-shell-extension-logo-menu \
 	mangohud-git \
 	msi-ec-dkms-git \
 	rtl88x2bu-dkms \
