@@ -133,9 +133,6 @@
 [submodule "aur-pkgs/hid-msi-claw-dkms-git"]
 	path = aur-pkgs/hid-msi-claw-dkms-git
 	url = https://aur.archlinux.org/hid-msi-claw-dkms-git.git
-[submodule "aur-pkgs/kylin-virtual-keyboard-git"]
-	path = aur-pkgs/kylin-virtual-keyboard-git
-	url = https://aur.archlinux.org/kylin-virtual-keyboard-git.git
 [submodule "aur-pkgs/nbfc-linux"]
 	path = aur-pkgs/nbfc-linux
 	url = https://aur.archlinux.org/nbfc-linux.git

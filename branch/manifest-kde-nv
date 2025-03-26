@@ -51,7 +51,6 @@ export SUB_PACKAGES="\
 
 export SUB_AUR_PACKAGES="\
     plasma6-themes-vapor-steamos \
-    kylin-virtual-keyboard-git \
 "
 
 export SUB_LOCAL_PACKAGES="\
