@@ -148,7 +148,6 @@ export PACKAGES="\
 	sudo \
 	switcheroo-control \
 	s-tui \
-	tree \
 	tar \
 	tree \
 	ttf-dejavu \
