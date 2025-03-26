@@ -16,6 +16,7 @@ export SUB_PACKAGES="\
 	gnome-shell \
 	gnome-software \
 	gnome-system-monitor \
+	gnome-terminal \
 	gnome-text-editor \
 	gnome-tweaks \
 	gnome-remote-desktop \
