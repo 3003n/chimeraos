@@ -3,8 +3,8 @@ color-scheme='prefer-dark'
 icon-theme='Papirus'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/gnome/PinkLady.png'
-picture-uri-dark='file:///usr/share/backgrounds/gnome/BlueLady.png'
+picture-uri='file:///usr/share/backgrounds/cachyos/PinkLady.png'
+picture-uri-dark='file:///usr/share/backgrounds/cachyos/BlueLady.png'
 picture-options='zoom'
 primary-color='#86b6ef'
 secondary-color='#000000'
