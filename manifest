@@ -48,6 +48,7 @@ export PACKAGES="\
 	firejail \
 	flatpak \
 	fmt \
+	freerdp \
 	fuse-zip \
 	fuse2 \
 	fwupd \
