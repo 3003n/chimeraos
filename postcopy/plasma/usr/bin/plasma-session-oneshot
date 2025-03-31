@@ -75,7 +75,7 @@ function check_sentinel() {
       if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
         echo "/usr/bin/startplasma-wayland"
       else
-        echo "/usr/bin/startx /usr/bin/startplasma-x11"
+        echo "/usr/bin/sx /usr/bin/startplasma-x11"
       fi
     else
       return 1
