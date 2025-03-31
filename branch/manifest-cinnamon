@@ -21,6 +21,7 @@ export SUB_PACKAGES="\
 	xreader \
 	network-manager-applet \
 	blueman \
+	gnome-software \
 	gnome-terminal \
 	noto-fonts-cjk \
 	xdg-user-dirs-gtk \
@@ -32,7 +33,6 @@ export SUB_AUR_PACKAGES="\
 export SUB_LOCAL_PACKAGES="\
 	ds-inhibit \
 	mangohud-git \
-	mintinstall \
 	mint-themes \
 	mint-y-icons \
 	msi-ec-dkms-git \
@@ -48,8 +48,6 @@ export SUB_PACKAGES_TO_DELETE="\
 	gnome-desktop \
 	mutter \
 "
-
-# gnome-backgrounds ?
 
 sub_postinstallhook() {
 	:
