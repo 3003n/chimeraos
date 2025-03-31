@@ -25,7 +25,7 @@ RETURN_SESSION_FILE="chimeraos-session-return"
 if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
   CHAINED_SESSION="/usr/bin/startplasma-wayland"
 else
-  CHAINED_SESSION="/usr/bin/startx /usr/bin/startplasma-x11"
+  CHAINED_SESSION="/usr/bin/sx /usr/bin/startplasma-x11"
 fi
 
 # If we decide the sentinel is consumed, execute this command instead and fail
