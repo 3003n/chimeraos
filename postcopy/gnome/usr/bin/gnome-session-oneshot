@@ -70,14 +70,7 @@ function check_sentinel()
 if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then
   # We found and consumed the oneshot sentinel, proceed to launch plasma
   echo >&2 "$0: Found and removed sentinel file for one-shot desktop, proceeding to launch"
-  PRODUCT_NAME="$(cat /sys/devices/virtual/dmi/id/product_name)"
-  # if [[ "ROG Ally RC71L_RC71L" == "$PRODUCT_NAME" ]]; then
-  #   /usr/bin/gnome-x11
-  # else
-  #   exec "$CONFIGURED_CHAINED_SESSION"
-  # fi
   exec "$CONFIGURED_CHAINED_SESSION"
-  # sudo chimera-session-use-lightdm gnome-xorg
 else
   if CONFIGURED_RETURN_SESSION=$(check_return); then
     /usr/lib/os-session-select "$CONFIGURED_RETURN_SESSION"
