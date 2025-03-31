@@ -18,11 +18,12 @@ export SUB_PACKAGES="\
 	cosmic-panel \
 	cosmic-session \
 	cosmic-settings \
+	cosmic-store \
 	cosmic-terminal \
 	cosmic-text-editor \
 	cosmic-player \
 	cosmic-wallpapers \
-    noto-fonts-cjk \
+	noto-fonts-cjk \
 	xdg-desktop-portal-cosmic \
 	xdg-user-dirs-gtk \
 "
