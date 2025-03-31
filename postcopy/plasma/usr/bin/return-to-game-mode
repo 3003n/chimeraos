@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ waydroid &> /dev/null ]; then
+if command -v waydroid &> /dev/null; then
   waydroid session stop
 fi
 
