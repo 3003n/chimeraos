@@ -45,14 +45,14 @@ function desktop() {
 	clean_steam_shortcuts
 
 	# switch to Desktop
-	sudo chimera-session-use-lightdm cosmic-wayland
+	sudo chimera-session-use-lightdm cosmic
 }
 
 function desktop_xorg() {
 	clean_steam_shortcuts
 
 	# switch to Desktop (Xorg)
-	sudo chimera-session-use-lightdm cosmic-xorg
+	sudo chimera-session-use-lightdm cosmic
 }
 
 function gamescope_steam() {
