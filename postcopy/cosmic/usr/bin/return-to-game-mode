@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if command -v waydroid &> /dev/null; then
+  waydroid session stop
+fi
+
+rm /tmp/chimeraos-short-session-tracker || true
+
+# 尝试多种方法来注销Cosmic会话
+if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+  # 首先尝试使用start-cosmic的退出功能（如果存在）
+  if command -v start-cosmic &> /dev/null; then
+    start-cosmic --exit
+  # 尝试使用cosmic-comp的退出信号（如果存在）
+  elif command -v killall &> /dev/null; then
+    killall -SIGTERM cosmic-comp
+  # 最后，回退到终止当前会话
+  else
+    SESSION_ID=$(loginctl session-status | head -n 1 | awk '{print $1}')
+    loginctl terminate-session $SESSION_ID
+  fi
+else
+  cosmic-session-oneshot
+fi
