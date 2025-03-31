@@ -1,0 +1,56 @@
+#! /bin/bash
+
+export POSTCOPY="\
+	cinnamon \
+"
+
+export SUB_PACKAGES="\
+	cinnamon \
+	cinnamon-session \
+	cinnamon-settings-daemon \
+	cinnamon-control-center \
+	cinnamon-screensaver \
+	cinnamon-translations \
+	cinnamon-menus \
+	cinnamon-desktop \
+	nemo \
+	nemo-fileroller \
+	nemo-preview \
+	metacity \
+	xed \
+	xreader \
+	network-manager-applet \
+	blueman \
+	gnome-terminal \
+	noto-fonts-cjk \
+	xdg-user-dirs-gtk \
+"
+
+export SUB_AUR_PACKAGES="\
+"
+
+export SUB_LOCAL_PACKAGES="\
+	ds-inhibit \
+	mangohud-git \
+	mintinstall \
+	mint-themes \
+	mint-y-icons \
+	msi-ec-dkms-git \
+	rtl88x2bu-dkms \
+	steam-removable-media-git \
+	xonedo-dkms \
+	xonedo-firmware \
+	xviewer \
+	xplayer \
+"
+
+export SUB_PACKAGES_TO_DELETE="\
+	gnome-desktop \
+	mutter \
+"
+
+# gnome-backgrounds ?
+
+sub_postinstallhook() {
+	:
+}
