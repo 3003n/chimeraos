@@ -63,13 +63,13 @@ fi
 # We use "plasma" as "desktop" to hook up to SteamOS's scripts
 case "$session" in
 plasma-wayland-persistent)
-	session_launcher="cosmic"
+	session_launcher="cinnamon-wayland"
 	;;
 plasma-x11-persistent)
-	session_launcher="cosmic"
+	session_launcher="cinnamon"
 	;;
 desktop | plasma)
-	session_launcher="cosmic-session-oneshot"
+	session_launcher="cinnamon-session-oneshot"
 	create_sentinel=1
 	;;
 steam | gamescope-session-steam)
