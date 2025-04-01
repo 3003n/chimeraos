@@ -13,6 +13,7 @@ export SUB_PACKAGES="\
 	cinnamon-translations \
 	cinnamon-menus \
 	cinnamon-desktop \
+	dconf-editor \
 	nemo \
 	nemo-fileroller \
 	nemo-preview \
