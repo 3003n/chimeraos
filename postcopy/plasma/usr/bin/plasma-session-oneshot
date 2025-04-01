@@ -89,15 +89,8 @@ function check_sentinel() {
 }
 
 function delay_set_return_session() {
-  # Check if 'at' is installed
-  if ! command -v at &>/dev/null; then
-    echo "'at' command not found. Please install 'at' first."
-    return 0
-  fi
-
-  # Schedule the command to run after 1 minute
-  # shellcheck disable=SC2028
-  echo "echo -e \"[Seat:*]\nautologin-session=$1\" > $SESSION_FILE" | sudo at now + 1 minutes
+  local session="$1"
+  systemd-run --on-active=5s bash -c "sudo /usr/bin/chimera-session-only-update $session"
 }
 
 if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then

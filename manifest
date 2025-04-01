@@ -331,6 +331,7 @@ postinstallhook() {
 	" >/etc/sudoers.d/steam
 	echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-use-gamescope
 	${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-use-lightdm
+	${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-only-update
 	${USERNAME} ALL=(ALL) NOPASSWD: /usr/share/chimera/bin/power-tool
 	" >/etc/sudoers.d/chimera
 

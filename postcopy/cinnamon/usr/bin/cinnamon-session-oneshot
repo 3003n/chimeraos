@@ -14,14 +14,16 @@ die() {
 
 SK_CHOS_SESSION=${SK_CHOS_SESSION:-"xorg"}
 
+SESSION_FILE="/etc/lightdm/lightdm.conf.d/10-chimeraos-session.conf"
+
 SENTINEL_FILE="steamos-session-select"
 RETURN_SESSION_FILE="chimeraos-session-return"
 
 # If we proceed, execute this
 if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
-  CHAINED_SESSION="/usr/bin/cinnamon-session-cinnamon  --wayland"
+  CHAINED_SESSION=("/usr/bin/cinnamon-session-cinnamon" "--wayland")
 else
-  CHAINED_SESSION="/usr/bin/sx /usr/bin/cinnamon-session-cinnamon"
+  CHAINED_SESSION=("/usr/bin/sx" "/usr/bin/cinnamon-session-cinnamon")
 fi
 # If we decide the sentinel is consumed, execute this command instead and fail
 RESTORE_SESSION=(/usr/lib/os-session-select) # No arguments restores the session
@@ -80,15 +82,8 @@ function check_sentinel() {
 }
 
 function delay_set_return_session() {
-  # Check if 'at' is installed
-  if ! command -v at &>/dev/null; then
-    echo "'at' command not found. Please install 'at' first."
-    return 0
-  fi
-
-  # Schedule the command to run after 1 minute
-  # shellcheck disable=SC2028
-  echo "echo -e \"[Seat:*]\nautologin-session=$1\" > $SESSION_FILE" | sudo at now + 1 minutes
+  local session="$1"
+  systemd-run --on-active=5s bash -c "sudo /usr/bin/chimera-session-only-update $session"
 }
 
 if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then
@@ -111,5 +106,5 @@ else
   echo >&2 "$0: Sentinel value not found, executing session-select to restore session"
   "${RESTORE_SESSION[@]}" || echo >&2 "$0: !! Failed to restore previous session, executing chained session"
   # Session restore should've stopped us, if it is broken at least let cosmic continue to open
-  exec "$CHAINED_SESSION"
+  exec "${CHAINED_SESSION[@]}"
 fi
