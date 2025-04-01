@@ -160,3 +160,6 @@
 [submodule "aur-pkgs/xplayer"]
 	path = aur-pkgs/xplayer
 	url = https://aur.archlinux.org/xplayer.git
+[submodule "aur-pkgs/ibus-autostart"]
+	path = aur-pkgs/ibus-autostart
+	url = https://aur.archlinux.org/ibus-autostart.git
