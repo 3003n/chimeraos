@@ -25,6 +25,7 @@ export SUB_PACKAGES="\
 	gnome-software \
 	gnome-terminal \
 	noto-fonts-cjk \
+	touchegg \
 	xdg-user-dirs-gtk \
 "
 
@@ -51,5 +52,5 @@ export SUB_PACKAGES_TO_DELETE="\
 "
 
 sub_postinstallhook() {
-	:
+	systemctl enable touchegg
 }
