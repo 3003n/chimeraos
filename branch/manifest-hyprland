@@ -1,0 +1,65 @@
+#! /bin/bash
+
+export POSTCOPY="\
+	hyprland \
+"
+
+export SUB_PACKAGES="\
+	brightnessctl \
+	cliphist \
+	dconf-editor \
+	fcitx5-im \
+	fcitx5-chinese-addons \
+	falkon \
+	hyprland \
+	hyprpaper \
+	kitty \
+	mako \
+	nemo \
+	nemo-fileroller \
+	nemo-image-converter \
+	nemo-preview \
+	nemo-terminal \
+	network-manager-applet \
+	noto-fonts-cjk \
+	otf-font-awesome \
+	polkit-kde-agent \
+	qt5ct \
+	rofi-wayland \
+	swayidle \
+	swaylock \
+	waybar \
+	xed \
+	xdg-desktop-portal-gtk \
+	xdg-desktop-portal-hyprland \
+	wofi \
+	uwsm \
+"
+
+export SUB_AUR_PACKAGES="\
+	adwaita-qt-git \
+	hyprshot \
+	nerd-fonts-sarasa-term \
+	pw-volume \
+	tofi \
+	wlogout \
+"
+
+export SUB_LOCAL_PACKAGES="\
+	ds-inhibit \
+	mangohud-git \
+	msi-ec-dkms-git \
+	rtl88x2bu-dkms \
+	steam-removable-media-git \
+	xonedo-dkms \
+	xonedo-firmware \
+"
+
+export SUB_PACKAGES_TO_DELETE="\
+	gnome-desktop \
+	mutter \
+"
+
+sub_postinstallhook() {
+	:
+}

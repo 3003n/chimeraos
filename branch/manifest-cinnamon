@@ -18,7 +18,9 @@ export SUB_PACKAGES="\
 	dconf-editor \
 	nemo \
 	nemo-fileroller \
+	nemo-image-converter \
 	nemo-preview \
+	nemo-terminal \
 	metacity \
 	xed \
 	xreader \

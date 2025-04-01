@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Hyprland on Wayland (single time session)
+Comment=This session logs you into Hyprland one time
+Exec=/usr/bin/hyprland-session-oneshot
+TryExec=/usr/bin/hyprland-session-oneshot
+Type=Application
+DesktopNames=Hyprland
+X-GDM-SessionRegisters=true

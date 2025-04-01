@@ -163,3 +163,21 @@
 [submodule "aur-pkgs/ibus-autostart"]
 	path = aur-pkgs/ibus-autostart
 	url = https://aur.archlinux.org/ibus-autostart.git
+[submodule "aur-pkgs/adwaita-qt-git"]
+	path = aur-pkgs/adwaita-qt-git
+	url = https://aur.archlinux.org/adwaita-qt-git.git
+[submodule "aur-pkgs/hyprshot"]
+	path = aur-pkgs/hyprshot
+	url = https://aur.archlinux.org/hyprshot.git
+[submodule "aur-pkgs/nerd-fonts-sarasa-term"]
+	path = aur-pkgs/nerd-fonts-sarasa-term
+	url = https://aur.archlinux.org/nerd-fonts-sarasa-term.git
+[submodule "aur-pkgs/pw-volume"]
+	path = aur-pkgs/pw-volume
+	url = https://aur.archlinux.org/pw-volume.git
+[submodule "aur-pkgs/tofi"]
+	path = aur-pkgs/tofi
+	url = https://aur.archlinux.org/tofi.git
+[submodule "aur-pkgs/wlogout"]
+	path = aur-pkgs/wlogout
+	url = https://aur.archlinux.org/wlogout.git
