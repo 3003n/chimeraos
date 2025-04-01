@@ -136,9 +136,6 @@
 [submodule "aur-pkgs/nbfc-linux"]
 	path = aur-pkgs/nbfc-linux
 	url = https://aur.archlinux.org/nbfc-linux.git
-[submodule "aur-pkgs/mutter-x11-scaling"]
-	path = aur-pkgs/mutter-x11-scaling
-	url = https://aur.archlinux.org/mutter-x11-scaling.git
 [submodule "aur-pkgs/plasma6-themes-vapor-steamos"]
 	path = aur-pkgs/plasma6-themes-vapor-steamos
 	url = https://aur.archlinux.org/plasma6-themes-vapor-steamos.git
