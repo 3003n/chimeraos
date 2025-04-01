@@ -2,6 +2,8 @@
 
 export POSTCOPY="\
 	gnome \
+	gnome-backgrounds \
+	gnome-backgrounds-cachyos \
 "
 
 export SUB_PACKAGES="\

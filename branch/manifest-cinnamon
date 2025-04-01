@@ -2,6 +2,8 @@
 
 export POSTCOPY="\
 	cinnamon \
+	gnome-backgrounds \
+	gnome-backgrounds-cachyos \
 "
 
 export SUB_PACKAGES="\
@@ -53,4 +55,10 @@ export SUB_PACKAGES_TO_DELETE="\
 
 sub_postinstallhook() {
 	systemctl enable touchegg
+
+	{
+		echo "export GTK_IM_MODULE=ibus"
+		echo "export QT_IM_MODULE=ibus"
+		echo "export XMODIFIERS=@im=ibus"
+	} >>/etc/environment
 }
