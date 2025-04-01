@@ -1,0 +1,16 @@
+[org/cinnamon/desktop/peripherals/keyboard]
+numlock-state=true
+
+[org/cinnamon/muffin]
+experimental-features=['scale-monitor-framebuffer','x11-randr-fractional-scaling']
+
+[org/cinnamon/desktop/a11y/applications]
+screen-keyboard-enabled=true
+
+[org/cinnamon/muffin]
+center-new-windows=true
+
+[org/gnome/software]
+allow-updates=false
+download-updates=false
+download-updates-notify=false

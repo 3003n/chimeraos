@@ -1,0 +1,16 @@
+[desktop/ibus/general]
+embed-preedit-text=false
+preload-engines=['xkb:us::eng', 'libpinyin']
+use-system-keyboard-layout=true
+switcher-delay-time=0
+
+[desktop/ibus/panel]
+custom-icon='Mint-Y'
+custom-theme='Mint-Y-Dark'
+xkb-icon-rgba='#ffffff'
+
+[desktop/ibus/general/hotkey]
+triggers=['<Control>space']
+
+[org/cinnamon/gestures]
+enabled=true

@@ -1,0 +1,15 @@
+[org/cinnamon/desktop/interface]
+gtk-theme='Mint-Y-Dark'
+icon-theme='Mint-Y'
+
+[org/gnome/desktop/interface]
+gtk-theme='Mint-Y-Dark'
+icon-theme='Mint-Y'
+[org/cinnamon/desktop/background/slideshow]
+image-source='xml:///usr/share/gnome-background-properties/lady.xml'
+
+[org/cinnamon/desktop/background]
+picture-uri='file:///usr/share/backgrounds/cachyos/PinkLady.png'
+picture-options='zoom'
+primary-color='#000000'
+secondary-color='#000000'
