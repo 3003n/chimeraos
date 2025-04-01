@@ -30,7 +30,7 @@ function check_return()
         echo "$revert_value"
         ;;
       *)
-        echo "gamescope-session-steam-plus"
+        echo "gamescope-session-steam"
         ;;
     esac
     rm "$RETURN_SESSION_FILE"
