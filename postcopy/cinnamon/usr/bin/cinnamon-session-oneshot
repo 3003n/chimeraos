@@ -99,7 +99,12 @@ if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then
   fi
 else
   if CONFIGURED_RETURN_SESSION=$(check_return); then
-    /usr/lib/os-session-select "$CONFIGURED_RETURN_SESSION"
+    if /usr/lib/os-session-select "$CONFIGURED_RETURN_SESSION"; then
+      echo "Session restored successfully"
+      exit 0
+    else
+      echo "Failed to restore session"
+    fi
   fi
   # Session restore should've stopped us, if it is broken at least let cosmic continue to open
 
