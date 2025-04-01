@@ -17,3 +17,7 @@ enabled-applets=['panel1:left:0:menu@cinnamon.org:0', 'panel1:left:1:separator@c
 
 [org/cinnamon/gestures]
 enabled=true
+
+[org/nemo/extensions/nemo-terminal]
+default-visible=false
+terminal-position='bottom'
