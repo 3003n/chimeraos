@@ -3,10 +3,7 @@
   "position": "top",
   "height": 40,
   "spacing": 6,
-  "modules-left": [
-    "wlr/workspaces",
-    "hyprland/window"
-  ],
+  "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-center": [],
   "modules-right": [
     "tray",
@@ -18,12 +15,15 @@
     "clock",
     "battery"
   ],
-  "wlr/workspaces": {
+  "hyprland/workspaces": {
     "format": "{icon}",
     "sort-by-number": true,
+    "persistent-workspaces": {
+      "*": 3
+    },
     "on-click": "activate",
-    "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1"
+    "on-scroll-up": "hyprctl dispatch workspace e+1 1>/dev/null",
+    "on-scroll-down": "hyprctl dispatch workspace e-1 1>/dev/null"
   },
   "hyprland/window": {
     "format": "\uf061 {}",
@@ -92,11 +92,7 @@
       "phone": "",
       "portable": "",
       "car": "",
-      "default": [
-        "",
-        "",
-        ""
-      ]
+      "default": ["", "", ""]
     },
     "on-click-right": "pavucontrol"
   },
@@ -117,12 +113,6 @@
     "format-charging": " {capacity}%",
     "format-plugged": " {capacity}%",
     "format-alt": "{time} {icon}",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
+    "format-icons": ["", "", "", "", ""]
   }
 }
