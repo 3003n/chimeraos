@@ -2,7 +2,7 @@
 
 export POSTCOPY="\
 	hyprland \
-	wallpapers \
+	wallpapers/wallpapers \
 "
 
 export SUB_PACKAGES="\

@@ -2,6 +2,7 @@
 
 export POSTCOPY="\
 	cosmic \
+	wallpapers/wallpapers \
 "
 
 export SUB_PACKAGES="\

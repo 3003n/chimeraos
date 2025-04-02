@@ -2,7 +2,7 @@
 
 export POSTCOPY="\
 	plasma \
-	wallpapers \
+	wallpapers/wallpapers \
 "
 
 export SUB_PACKAGES="\
