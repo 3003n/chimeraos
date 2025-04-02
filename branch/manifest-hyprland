@@ -23,11 +23,6 @@ export SUB_PACKAGES="\
 	hyprutils \
 	kitty \
 	mako \
-	nemo \
-	nemo-fileroller \
-	nemo-image-converter \
-	nemo-preview \
-	nemo-terminal \
 	network-manager-applet \
 	noto-fonts-cjk \
 	nwg-look \
@@ -35,6 +30,11 @@ export SUB_PACKAGES="\
 	qt5ct \
 	qt6ct \
 	rofi-wayland \
+	thunar \
+	thunar-archive-plugin \
+	thunar-media-tags-plugin \
+	thunar-volman \
+	tumbler \
 	waybar \
 	xed \
 	xdg-desktop-portal-gtk \
