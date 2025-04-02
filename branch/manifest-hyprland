@@ -19,7 +19,6 @@ export SUB_PACKAGES="\
 	hyprlock \
 	hyprpaper \
 	hyprpicker \
-	hyprpolkitagent \
 	hyprutils \
 	kitty \
 	kvantum \
@@ -30,6 +29,7 @@ export SUB_PACKAGES="\
 	nwg-look \
 	papirus-icon-theme \
 	pavucontrol \
+	polkit-gnome \
 	qt5ct \
 	qt6ct \
 	rofi-wayland \
