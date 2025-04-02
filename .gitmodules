@@ -172,6 +172,6 @@
 [submodule "aur-pkgs/tofi"]
 	path = aur-pkgs/tofi
 	url = https://aur.archlinux.org/tofi.git
-[submodule "aur-pkgs/wlogout"]
-	path = aur-pkgs/wlogout
-	url = https://aur.archlinux.org/wlogout.git
+[submodule "aur-pkgs/wlogout-git"]
+	path = aur-pkgs/wlogout-git
+	url = https://aur.archlinux.org/wlogout-git.git

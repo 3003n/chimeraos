@@ -49,7 +49,7 @@ export SUB_AUR_PACKAGES="\
 	hyprshot \
 	nerd-fonts-sarasa-term \
 	tofi \
-	wlogout \
+	wlogout-git \
 "
 
 export SUB_LOCAL_PACKAGES="\
