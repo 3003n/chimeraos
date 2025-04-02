@@ -22,10 +22,12 @@ export SUB_PACKAGES="\
 	hyprpolkitagent \
 	hyprutils \
 	kitty \
+	kvantum \
 	mako \
 	network-manager-applet \
 	noto-fonts-cjk \
 	nwg-look \
+	papirus-icon-theme \
 	pavucontrol \
 	qt5ct \
 	qt6ct \
@@ -37,6 +39,7 @@ export SUB_PACKAGES="\
 	tumbler \
 	waybar \
 	xed \
+	xorg-xhost \
 	xdg-desktop-portal-gtk \
 	xdg-desktop-portal-hyprland \
 	wofi \
