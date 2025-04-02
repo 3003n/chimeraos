@@ -169,9 +169,6 @@
 [submodule "aur-pkgs/nerd-fonts-sarasa-term"]
 	path = aur-pkgs/nerd-fonts-sarasa-term
 	url = https://aur.archlinux.org/nerd-fonts-sarasa-term.git
-[submodule "aur-pkgs/pw-volume"]
-	path = aur-pkgs/pw-volume
-	url = https://aur.archlinux.org/pw-volume.git
 [submodule "aur-pkgs/tofi"]
 	path = aur-pkgs/tofi
 	url = https://aur.archlinux.org/tofi.git

@@ -11,8 +11,15 @@ export SUB_PACKAGES="\
 	fcitx5-im \
 	fcitx5-chinese-addons \
 	falkon \
+	grim \
+	hypridle \
 	hyprland \
+	hyprland-qt-support \
+	hyprlock \
 	hyprpaper \
+	hyprpicker \
+	hyprpolkitagent \
+	hyprutils \
 	kitty \
 	mako \
 	nemo \
@@ -22,12 +29,12 @@ export SUB_PACKAGES="\
 	nemo-terminal \
 	network-manager-applet \
 	noto-fonts-cjk \
+	nwg-look \
 	otf-font-awesome \
-	polkit-kde-agent \
+	pavucontrol \
 	qt5ct \
+	qt6ct \
 	rofi-wayland \
-	swayidle \
-	swaylock \
 	waybar \
 	xed \
 	xdg-desktop-portal-gtk \
@@ -40,7 +47,6 @@ export SUB_AUR_PACKAGES="\
 	adwaita-qt-git \
 	hyprshot \
 	nerd-fonts-sarasa-term \
-	pw-volume \
 	tofi \
 	wlogout \
 "
