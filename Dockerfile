@@ -19,6 +19,7 @@ RUN echo -e "keyserver-options auto-key-retrieve" >> /etc/pacman.d/gnupg/gpg.con
     base-devel \
     cmake \
     fmt \
+    git \
     glib2-devel \
     xcb-util-wm \
     wget \
@@ -32,7 +33,8 @@ RUN echo -e "keyserver-options auto-key-retrieve" >> /etc/pacman.d/gnupg/gpg.con
     sudo \
     zsh \
     && \
-    pacman --noconfirm -S --needed git && \
+    # Receive key for wlogout
+    gpg --recv-keys E25D679AF73C6D2F && \
     echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     useradd build -G wheel -m && \
     su - build -c "git clone https://aur.archlinux.org/pikaur.git /tmp/pikaur" && \
