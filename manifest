@@ -39,6 +39,7 @@ export PACKAGES="\
 	efibootmgr \
 	expect \
 	exfatprogs \
+	fastfetch \
 	fd \
 	ffmpeg \
 	file \
