@@ -35,7 +35,6 @@ export PACKAGES="\
 	dkms \
 	distrobox \
 	dmidecode \
-	dosbox \
 	evtest \
 	efibootmgr \
 	expect \
@@ -117,6 +116,7 @@ export PACKAGES="\
 	openssh \
 	openrgb \
 	otf-fira-mono \
+	otf-fira-sans \
 	otf-font-awesome \
 	p7zip \
 	patch \
