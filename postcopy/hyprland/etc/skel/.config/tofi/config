@@ -168,7 +168,7 @@
 #
 	# Width and height of the window. Can be pixels or a percentage.
 	width = 50%
-	height = 50%
+	height = 60%
 
 	# Window background color
 	background-color = #1B1D1EBF
