@@ -23,6 +23,7 @@ export SUB_PACKAGES="\
 	hyprutils \
 	kitty \
 	kvantum \
+	kvantum-qt5 \
 	mako \
 	network-manager-applet \
 	noto-fonts-cjk \
