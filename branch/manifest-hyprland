@@ -31,7 +31,6 @@ export SUB_PACKAGES="\
 	network-manager-applet \
 	noto-fonts-cjk \
 	nwg-look \
-	otf-font-awesome \
 	pavucontrol \
 	qt5ct \
 	qt6ct \
