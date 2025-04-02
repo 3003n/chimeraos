@@ -47,7 +47,6 @@ export SUB_PACKAGES="\
 export SUB_AUR_PACKAGES="\
 	adwaita-qt-git \
 	hyprshot \
-	nerd-fonts-sarasa-term \
 	tofi \
 	wlogout-git \
 "

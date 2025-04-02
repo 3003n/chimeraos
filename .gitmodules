@@ -166,9 +166,6 @@
 [submodule "aur-pkgs/hyprshot"]
 	path = aur-pkgs/hyprshot
 	url = https://aur.archlinux.org/hyprshot.git
-[submodule "aur-pkgs/nerd-fonts-sarasa-term"]
-	path = aur-pkgs/nerd-fonts-sarasa-term
-	url = https://aur.archlinux.org/nerd-fonts-sarasa-term.git
 [submodule "aur-pkgs/tofi"]
 	path = aur-pkgs/tofi
 	url = https://aur.archlinux.org/tofi.git
