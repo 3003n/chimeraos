@@ -10,7 +10,7 @@ export WEBSITE="https://chimeraos.org"
 export DOCUMENTATION_URL="https://chimeraos.org/about"
 export BUG_REPORT_URL="https://github.com/ChimeraOS/chimeraos/issues"
 
-export KERNEL_PACKAGE="linux-chimeraos"
+export KERNEL_PACKAGE="linux-skchimeraos"
 export KERNEL_PACKAGE_ORIGIN="local"
 
 export PACKAGES="\
@@ -181,8 +181,8 @@ export PACKAGES="\
 "
 
 export PACKAGE_OVERRIDES="\
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.9-sko-1/linux-chimeraos-6.13.9.sko-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.9-sko-1/linux-chimeraos-headers-6.13.9.sko-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.9-skb-3/linux-skchimeraos-6.13.9.skb-3-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.13.9-skb-3/linux-skchimeraos-headers-6.13.9.skb-3-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.3-chos1-1/lib32-mesa-1--25.0.3.chos1-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.3-chos1-1/lib32-opencl-clover-mesa-1--25.0.3.chos1-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.0.3-chos1-1/lib32-opencl-rusticl-mesa-1--25.0.3.chos1-1-x86_64.pkg.tar.zst \
