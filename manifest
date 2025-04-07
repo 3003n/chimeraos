@@ -147,7 +147,6 @@ export PACKAGES="\
 	steam \
 	sudo \
 	switcheroo-control \
-	sx \
 	s-tui \
 	tar \
 	tree \
@@ -248,6 +247,7 @@ export AUR_PACKAGES="\
 	sk-chos-tool \
 	steam_notif_daemon \
 	steam-powerbuttond-git \
+	sx \
 	tsukimi-bin \
 	v4l-utils-git \
 	vboard \
