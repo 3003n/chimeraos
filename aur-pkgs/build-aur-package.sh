@@ -40,3 +40,15 @@ if [ ${RETRY_COUNT} -eq ${MAX_RETRIES} ]; then
     echo ">>>>>> Build failed after ${MAX_RETRIES} attempts. Stopping..."
     exit 1
 fi
+
+PACKAGE_NAME=$1
+
+# 为 *.pkg.tar* 文件添加 前缀: [${PACKAGE_NAME}]-
+find /workdir/aur-pkgs -type f -name "*.pkg.tar*" | while read file; do
+    filename=$(basename "$file")
+    new_filename="[${PACKAGE_NAME}]-$filename"
+    mv "$file" "/workdir/aur-pkgs/$new_filename"
+    echo ">>>>> Renamed: $filename -> $new_filename"
+done
+
+echo ">>>>> Build completed successfully!"
