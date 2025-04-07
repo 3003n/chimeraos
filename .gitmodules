@@ -172,3 +172,6 @@
 [submodule "aur-pkgs/sx"]
 	path = aur-pkgs/sx
 	url = https://aur.archlinux.org/sx.git
+[submodule "aur-pkgs/protonup-qt"]
+	path = aur-pkgs/protonup-qt
+	url = https://aur.archlinux.org/protonup-qt.git
