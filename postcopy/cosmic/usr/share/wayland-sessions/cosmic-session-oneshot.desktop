@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Cosmic on Wayland (single time session)
+Comment=This session logs you into Cosmic one time
+Exec=/usr/bin/cosmic-session-oneshot
+TryExec=/usr/bin/cosmic-session-oneshot
+Type=Application
+DesktopNames=Cosmic
+X-GDM-SessionRegisters=true

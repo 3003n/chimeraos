@@ -27,7 +27,7 @@ function print_session_list() {
 
 
 	# print active and available sessions
-	for t in ${SESSION_LIST[@]}; do
+	for t in "${SESSION_LIST[@]}"; do
 		if [ "${CURRENT_SESSION}" = "${t}" ]; then
 			echo "* $t"
 		else

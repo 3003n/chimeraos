@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if command -v waydroid &> /dev/null; then
+  waydroid session stop
+fi
+
+rm /tmp/chimeraos-short-session-tracker || true
+
+if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+  cinnamon-session-quit --logout --force
+else
+  cinnamon-session-oneshot
+fi

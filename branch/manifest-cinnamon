@@ -1,0 +1,67 @@
+#! /bin/bash
+
+export POSTCOPY="\
+	cinnamon \
+	wallpapers/gnome-backgrounds \
+	wallpapers/gnome-backgrounds-cachyos \
+"
+
+export SUB_PACKAGES="\
+	cinnamon \
+	cinnamon-session \
+	cinnamon-settings-daemon \
+	cinnamon-control-center \
+	cinnamon-screensaver \
+	cinnamon-translations \
+	cinnamon-menus \
+	cinnamon-desktop \
+	dconf-editor \
+	nemo \
+	nemo-fileroller \
+	nemo-image-converter \
+	nemo-preview \
+	nemo-terminal \
+	metacity \
+	xed \
+	xreader \
+	network-manager-applet \
+	blueman \
+	gnome-software \
+	gnome-terminal \
+	noto-fonts-cjk \
+	touchegg \
+	xdg-user-dirs-gtk \
+"
+
+export SUB_AUR_PACKAGES="\
+	ibus-autostart \
+	mint-themes \
+	mint-y-icons \
+	xviewer \
+	xplayer \
+"
+
+export SUB_LOCAL_PACKAGES="\
+	ds-inhibit \
+	mangohud-git \
+	msi-ec-dkms-git \
+	rtl88x2bu-dkms \
+	steam-removable-media-git \
+	xonedo-dkms \
+	xonedo-firmware \
+"
+
+export SUB_PACKAGES_TO_DELETE="\
+	gnome-desktop \
+	mutter \
+"
+
+sub_postinstallhook() {
+	systemctl enable touchegg
+
+	{
+		echo "export GTK_IM_MODULE=ibus"
+		echo "export QT_IM_MODULE=ibus"
+		echo "export XMODIFIERS=@im=ibus"
+	} >>/etc/environment
+}

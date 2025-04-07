@@ -1,0 +1,96 @@
+#!/bin/bash
+
+DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+SESSION_CONFIG="${CONFIG_HOME}/environment.d/01-chimera-session.conf"
+SESSION_LIGHTDM_CONFIG="/etc/lightdm/lightdm.conf.d/10-chimeraos-session.conf"
+SESSION_LIST=('desktop' 'desktop-xorg' 'steam')
+SELECTED_SESSION="$1"
+
+
+mkdir -p "${CONFIG_HOME}/environment.d"
+
+function print_session_list() {
+	# detect active session
+	CURRENT_SESSION="unknown"
+	if grep "cosmic" ${SESSION_LIGHTDM_CONFIG} &> /dev/null; then
+		CURRENT_SESSION="desktop"
+	fi
+
+	if grep "cosmic-xorg" ${SESSION_LIGHTDM_CONFIG} &> /dev/null; then
+		CURRENT_SESSION="desktop-xorg"
+	fi
+
+	if grep "gamescope-session-steam" ${SESSION_LIGHTDM_CONFIG} &> /dev/null; then
+		CURRENT_SESSION="steam"
+	fi
+
+
+	# print active and available sessions
+	for t in "${SESSION_LIST[@]}"; do
+		if [ "${CURRENT_SESSION}" = "${t}" ]; then
+			echo "* $t"
+		else
+			echo "  $t"
+		fi
+	done
+}
+
+function clean_steam_shortcuts() {
+	# clear steam game desktop shortcut clutter
+	grep -r --files-with-matches "Exec=steam steam://rungameid/" ${DATA_HOME}/applications/ | tr '\n' '\0' | xargs -0 -I {} rm {}
+}
+
+function desktop() {
+	clean_steam_shortcuts
+
+	# switch to Desktop
+	sudo chimera-session-use-lightdm cinnamon-wayland
+}
+
+function desktop_xorg() {
+	clean_steam_shortcuts
+
+	# switch to Desktop (Xorg)
+	sudo chimera-session-use-lightdm cinnamon
+}
+
+function gamescope_steam() {
+	# switch to Steam Big Picture UI (Gamescope/Wayland)
+	echo '' > ${SESSION_CONFIG}
+	sudo chimera-session-use-lightdm gamescope-session-steam
+	# sudo systemctl enable --now handycon
+}
+
+function print_invalid_session() {
+	echo "Unknown or invalid session type: ${SELECTED_SESSION}"
+	echo
+	echo "Available session types:"
+	print_session_list
+}
+
+
+
+# print current and available sessions when no argument specified
+if [ -z "${SELECTED_SESSION}" ]; then
+	print_session_list
+	exit
+fi
+
+# print message when invalid session is specified
+if [[ ! "${SESSION_LIST[*]}" =~ "${SELECTED_SESSION}" ]]; then
+	print_invalid_session
+	exit
+fi
+
+# apply the specified session type
+if [ "${SELECTED_SESSION}" = "desktop" ]; then
+	echo "Switching to desktop session"
+	desktop
+elif [ "${SELECTED_SESSION}" = "desktop-xorg" ]; then
+	echo "Switching to desktop-xorg session"
+	desktop_xorg
+elif [ "${SELECTED_SESSION}" = "steam" ]; then
+	echo "Switching to steam session"
+	gamescope_steam
+fi

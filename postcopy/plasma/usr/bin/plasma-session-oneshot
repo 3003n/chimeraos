@@ -25,7 +25,7 @@ RETURN_SESSION_FILE="chimeraos-session-return"
 if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
   CHAINED_SESSION="/usr/bin/startplasma-wayland"
 else
-  CHAINED_SESSION="/usr/bin/startx /usr/bin/startplasma-x11"
+  CHAINED_SESSION="/usr/bin/sx /usr/bin/startplasma-x11"
 fi
 
 # If we decide the sentinel is consumed, execute this command instead and fail
@@ -75,7 +75,7 @@ function check_sentinel() {
       if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
         echo "/usr/bin/startplasma-wayland"
       else
-        echo "/usr/bin/startx /usr/bin/startplasma-x11"
+        echo "/usr/bin/sx /usr/bin/startplasma-x11"
       fi
     else
       return 1
@@ -89,14 +89,8 @@ function check_sentinel() {
 }
 
 function delay_set_return_session() {
-  # Check if 'at' is installed
-  if ! command -v at &>/dev/null; then
-    echo "'at' command not found. Please install 'at' first."
-    return 0
-  fi
-
-  # Schedule the command to run after 5 seconds
-  echo "echo -e \"[Seat:*]\nautologin-session=$1\" > $SESSION_FILE" | sudo at now + 1 minutes
+  local session="$1"
+  systemd-run --on-active=5s bash -c "sudo /usr/bin/chimera-session-only-update $session"
 }
 
 if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then
@@ -113,7 +107,12 @@ if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then
 
 else
   if CONFIGURED_RETURN_SESSION=$(check_return); then
-    /usr/lib/os-session-select "$CONFIGURED_RETURN_SESSION"
+    if /usr/lib/os-session-select "$CONFIGURED_RETURN_SESSION"; then
+      echo "Session restored successfully"
+      exit 0
+    else
+      echo "Failed to restore session"
+    fi
   fi
   # Session restore should've stopped us, if it is broken at least let plasma continue to open
 

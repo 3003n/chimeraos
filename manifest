@@ -21,7 +21,6 @@ export PACKAGES="\
 	amd-ucode \
 	antimicrox \
 	aria2 \
-	at \
 	bash-completion \
 	bat \
 	bluez-utils \
@@ -36,11 +35,11 @@ export PACKAGES="\
 	dkms \
 	distrobox \
 	dmidecode \
-	dosbox \
 	evtest \
 	efibootmgr \
 	expect \
 	exfatprogs \
+	fastfetch \
 	fakeroot \
 	fd \
 	ffmpeg \
@@ -119,6 +118,9 @@ export PACKAGES="\
 	openal \
 	openssh \
 	openrgb \
+	otf-fira-mono \
+	otf-fira-sans \
+	otf-font-awesome \
 	p7zip \
 	patch \
 	pipewire \
@@ -147,6 +149,7 @@ export PACKAGES="\
 	steam \
 	sudo \
 	switcheroo-control \
+	sx \
 	s-tui \
 	tar \
 	tree \
@@ -213,12 +216,12 @@ export AUR_PACKAGES="\
 	kanit-font \
 	lib32-extest \
 	linux-firmware-valve \
+	moonlight-qt-axi \
 	nbfc-linux \
 	nintendo-udev \
-	moonlight-qt-axi \
 	onedrive-abraunegg \
 	pikaur \
-	protonup-qt-bin \
+	protonup-qt \
 	python-pyclip \
 	python-vdf \
 	r8152-dkms \
@@ -260,7 +263,6 @@ export AUR_PACKAGES_FILE_TO_DELETE="\
 
 export SERVICES="\
 	NetworkManager \
-	atd \
 	avahi-daemon \
 	auto-expand-home \
 	bluetooth \
@@ -315,6 +317,7 @@ postinstallhook() {
 	" >/etc/sudoers.d/steam
 	echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-use-gamescope
 	${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-use-lightdm
+	${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-only-update
 	${USERNAME} ALL=(ALL) NOPASSWD: /usr/share/chimera/bin/power-tool
 	" >/etc/sudoers.d/chimera
 

@@ -3,6 +3,39 @@
 set -e
 set -x
 
+function download_file() {
+	local url=$1
+	local file=$2
+	local max_retries=5
+	local retry_count=0
+	local base_delay=2
+	local download_success=false
+	
+	while [ $retry_count -lt $max_retries ] && [ "$download_success" = false ]; do
+		if [ $retry_count -gt 0 ]; then
+			# 计算指数退避延迟时间，增加随机抖动
+			local delay=$((base_delay * 2 ** (retry_count - 1) + RANDOM % 2))
+			echo "Retry downloading $url, attempt $retry_count/$max_retries after waiting ${delay}s..."
+			sleep $delay
+		fi
+		
+		if curl -L "$url" -o "$file"; then
+			download_success=true
+			echo "Successfully downloaded $url to $file"
+		else
+			echo "Failed to download $url, retry attempt $retry_count/$max_retries"
+			retry_count=$((retry_count + 1))
+		fi
+	done
+	
+	if [ "$download_success" = false ]; then
+		echo "Failed to download $url after $max_retries attempts"
+		return 1
+	fi
+	
+	return 0
+}
+
 function download_decky_plugin() {
 	local git_api_url="https://api.github.com/repos/$1/releases/latest"
 	local decky_plugin_path=$2
@@ -16,10 +49,31 @@ function download_decky_plugin() {
 		return
 	fi
 
-	download_url=$(curl -s $git_api_url | grep "browser_download_url" | cut -d '"' -f 4 | grep $grep_expression) || true
-	echo "download_url: $download_url"
+	local max_retries=5
+	local retry_count=0
+	local base_delay=2
+	local download_url=""
+
+	while [ $retry_count -lt $max_retries ] && [ -z "$download_url" ]; do
+		if [ $retry_count -gt 0 ]; then
+			# 计算指数退避延迟时间，增加随机抖动
+			local delay=$((base_delay * 2 ** (retry_count - 1) + RANDOM % 2))
+			echo "Retry $retry_count/$max_retries for $git_api_url after waiting ${delay}s..."
+			sleep $delay
+		fi
+
+		download_url=$(curl -s $git_api_url | grep "browser_download_url" | cut -d '"' -f 4 | grep $grep_expression) || true
+		echo "download_url: $download_url"
+
+		if [ -z "$download_url" ]; then
+			echo "Failed to get download URL, retry attempt $retry_count/$max_retries"
+			retry_count=$((retry_count + 1))
+		fi
+	done
+
 	if [ -z "$download_url" ]; then
-		echo "download_url is empty"
+		echo "Failed to get download URL after $max_retries attempts"
+		rm -rf $temp_decky
 		return
 	fi
 
@@ -37,6 +91,58 @@ function download_decky_plugin() {
 	rm -rf $decky_plugin_path/*/{node_modules,.git,.vscode}
 
 	rm -rf $temp_decky
+
+	sleep 5
+}
+
+function download_decky_loader() {
+	local git_api_url="https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases/latest"
+	local decky_path=$1
+	local decky_file=$2
+	local decky_version_file=$3
+
+	# decky
+	homebrew_folder="/home/${USERNAME}/homebrew"
+
+	mkdir -p $decky_path
+
+	local max_retries=5
+	local retry_count=0
+	local base_delay=2
+	local decky_release=""
+
+	while [ $retry_count -lt $max_retries ] && [ -z "$decky_release" ]; do
+		if [ $retry_count -gt 0 ]; then
+			# 计算指数退避延迟时间，增加随机抖动
+			local delay=$((base_delay * 2 ** (retry_count - 1) + RANDOM % 2))
+			echo "Retry $retry_count/$max_retries for decky loader releases API after waiting ${delay}s..."
+			sleep $delay
+		fi
+
+		decky_release=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[])")
+
+		if [ -z "$decky_release" ]; then
+			echo "Failed to get decky release, retry attempt $retry_count/$max_retries"
+			retry_count=$((retry_count + 1))
+		fi
+	done
+
+	if [ -z "$decky_release" ]; then
+		echo "Failed to get decky release after $max_retries attempts"
+		return 1
+	fi
+
+	# 提取版本和下载URL
+	decky_version=$(jq -r '.tag_name' <<<${decky_release})
+	decky_download_url=$(jq -r '.assets[].browser_download_url | select(endswith("PluginLoader"))' <<<${decky_release})
+
+	# 下载文件
+	curl -L $decky_download_url --output $decky_file
+	echo $decky_version >$decky_version_file
+
+	curl -sL https://raw.githubusercontent.com/SteamDeckHomebrew/decky-loader/main/dist/plugin_loader-release.service -o "/etc/systemd/system/plugin_loader.service"
+	sed -i -e "s|\${HOMEBREW_FOLDER}|${homebrew_folder}|" "/etc/systemd/system/plugin_loader.service"
+	ln -sf "/etc/systemd/system/plugin_loader.service" "/etc/systemd/system/multi-user.target.wants/plugin_loader.service"
 }
 
 postinstall_download() {
@@ -54,11 +160,7 @@ postinstall_download() {
 
 	# pre download decky
 	mkdir -p $decky_path
-	DECKY_RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[])")
-	DECKY_VERSION=$(jq -r '.tag_name' <<<${DECKY_RELEASE})
-	DECKY_DOWNLOADURL=$(jq -r '.assets[].browser_download_url | select(endswith("PluginLoader"))' <<<${DECKY_RELEASE})
-	curl -L $DECKY_DOWNLOADURL --output $decky_file
-	echo $DECKY_VERSION >$decky_version_file
+	download_decky_loader $decky_path $decky_file $decky_version_file
 
 	# pre download decky plugins
 	mkdir -p $decky_plugin_path
@@ -138,7 +240,7 @@ postinstall_download() {
 	sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="ys"/g' $zsh_path/.zshrc
 	sed -i 's/plugins=(git)/plugins=(git sudo z fast-syntax-highlighting)/g' $zsh_path/.zshrc
 	cat >>$zsh_path/.zshrc <<-'EOM'
-		
+
 		######## sk-chimeraos functions ########
 		# yazi
 		function y() {
@@ -158,7 +260,7 @@ postinstall_download() {
 		    rm -f -- "$tmp"
 		}
 		######## sk-chimeraos functions end ########
-		
+
 	EOM
 
 	# pre download refind themes
@@ -166,17 +268,10 @@ postinstall_download() {
 	git clone --depth 1 "https://github.com/bobafetthotmail/refind-theme-regular.git" $refind_path/refind-theme-regular
 	rm -rf $refind_path/refind-theme-regular/{.git,.gitignore,src,install.sh,README.md}
 
-	# decky
-	HOMEBREW_FOLDER="/home/${USERNAME}/homebrew"
-
-	curl -sL https://raw.githubusercontent.com/SteamDeckHomebrew/decky-loader/main/dist/plugin_loader-release.service -o "/etc/systemd/system/plugin_loader.service"
-	sed -i -e "s|\${HOMEBREW_FOLDER}|${HOMEBREW_FOLDER}|" "/etc/systemd/system/plugin_loader.service"
-
-	# 强制软链接
+	# enable hhd service
 	ln -sf "/usr/lib/systemd/system/hhd@.service" "/etc/systemd/system/multi-user.target.wants/hhd@${USERNAME}.service"
-	ln -sf "/etc/systemd/system/plugin_loader.service" "/etc/systemd/system/multi-user.target.wants/plugin_loader.service"
 
 	# UniversalAMDFormBrowser
-	curl -sL "https://github.com/DavidS95/Smokeless_UMAF/raw/main/UniversalAMDFormBrowser.zip" -o "$pre_path/UMAF.zip"
-
+	# curl -sL "https://github.com/DavidS95/Smokeless_UMAF/raw/main/UniversalAMDFormBrowser.zip" -o "$pre_path/UMAF.zip"
+	download_file "https://github.com/DavidS95/Smokeless_UMAF/raw/main/UniversalAMDFormBrowser.zip" "$pre_path/UMAF.zip"
 }

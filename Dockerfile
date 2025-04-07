@@ -22,7 +22,6 @@ RUN echo -e "keyserver-options auto-key-retrieve" >> /etc/pacman.d/gnupg/gpg.con
     glib2-devel \
     xcb-util-wm \
     wget \
-    libei \
     pyalpm \
     python-build \
     python-installer \

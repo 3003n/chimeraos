@@ -11,6 +11,10 @@ VALID_BRANCHES=(
   "plasma#stable:kde"
   "plasma-pre#testing:kde"
   "plasma-dev#unstable:kde"
+  "cosmic#stable:cosmic"
+  "cosmic-pre#testing:cosmic"
+  "cinnamon#stable:cinnamon"
+  "cinnamon-pre#testing:cinnamon"
 )
 
 VALID_NV_BRANCHES=(

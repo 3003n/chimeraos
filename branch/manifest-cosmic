@@ -1,0 +1,55 @@
+#! /bin/bash
+
+export POSTCOPY="\
+	cosmic \
+	wallpapers/wallpapers \
+"
+
+export SUB_PACKAGES="\
+	cosmic-applets \
+	cosmic-app-library \
+	cosmic-bg \
+	cosmic-comp \
+	cosmic-files \
+	cosmic-greeter \
+	cosmic-icon-theme \
+	cosmic-launcher \
+	cosmic-notifications \
+	cosmic-osd \
+	cosmic-panel \
+	cosmic-session \
+	cosmic-settings \
+	cosmic-store \
+	cosmic-terminal \
+	cosmic-text-editor \
+	cosmic-player \
+	cosmic-wallpapers \
+	fcitx5-im \
+	fcitx5-chinese-addons \
+	power-profiles-daemon \
+	noto-fonts-cjk \
+	xdg-desktop-portal-cosmic \
+	xdg-user-dirs-gtk \
+"
+
+export SUB_AUR_PACKAGES="\
+"
+
+export SUB_LOCAL_PACKAGES="\
+	ds-inhibit \
+	mangohud-git \
+	msi-ec-dkms-git \
+	rtl88x2bu-dkms \
+	steam-removable-media-git \
+	xonedo-dkms \
+	xonedo-firmware \
+"
+
+export SUB_PACKAGES_TO_DELETE="\
+	gnome-desktop \
+	mutter \
+"
+
+sub_postinstallhook() {
+	:
+}

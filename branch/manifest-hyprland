@@ -1,0 +1,76 @@
+#! /bin/bash
+
+export POSTCOPY="\
+	hyprland \
+	wallpapers/wallpapers \
+"
+
+export SUB_PACKAGES="\
+	brightnessctl \
+	cliphist \
+	dconf-editor \
+	fcitx5-im \
+	fcitx5-chinese-addons \
+	falkon \
+	gnome-calculator \
+	gnome-software \
+	grim \
+	hypridle \
+	hyprland \
+	hyprland-qt-support \
+	hyprlock \
+	hyprpaper \
+	hyprpicker \
+	hyprutils \
+	kitty \
+	kvantum \
+	kvantum-qt5 \
+	mako \
+	network-manager-applet \
+	noto-fonts-cjk \
+	nwg-look \
+	papirus-icon-theme \
+	pavucontrol \
+	polkit-gnome \
+	qt5ct \
+	qt6ct \
+	rofi-wayland \
+	thunar \
+	thunar-archive-plugin \
+	thunar-media-tags-plugin \
+	thunar-volman \
+	tumbler \
+	waybar \
+	xed \
+	xorg-xhost \
+	xdg-desktop-portal-gtk \
+	xdg-desktop-portal-hyprland \
+	wofi \
+	uwsm \
+"
+
+export SUB_AUR_PACKAGES="\
+	adwaita-qt-git \
+	hyprshot \
+	tofi \
+	wlogout-git \
+"
+
+export SUB_LOCAL_PACKAGES="\
+	ds-inhibit \
+	mangohud-git \
+	msi-ec-dkms-git \
+	rtl88x2bu-dkms \
+	steam-removable-media-git \
+	xonedo-dkms \
+	xonedo-firmware \
+"
+
+export SUB_PACKAGES_TO_DELETE="\
+	gnome-desktop \
+	mutter \
+"
+
+sub_postinstallhook() {
+	:
+}
