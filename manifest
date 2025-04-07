@@ -223,7 +223,6 @@ export AUR_PACKAGES="\
 	pikaur \
 	protonup-qt \
 	python-pyclip \
-	python-vdf \
 	r8152-dkms \
 	rtl8812au-dkms-git \
 	rtl8814au-dkms-git \
