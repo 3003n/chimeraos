@@ -19,9 +19,6 @@
 [submodule "aur-pkgs/pikaur"]
 	path = aur-pkgs/pikaur
 	url = https://aur.archlinux.org/pikaur.git
-[submodule "aur-pkgs/python-vdf"]
-	path = aur-pkgs/python-vdf
-	url = https://aur.archlinux.org/python-vdf.git
 [submodule "aur-pkgs/r8152-dkms"]
 	path = aur-pkgs/r8152-dkms
 	url = https://aur.archlinux.org/r8152-dkms.git
