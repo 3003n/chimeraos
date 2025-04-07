@@ -172,3 +172,6 @@
 [submodule "aur-pkgs/wlogout-git"]
 	path = aur-pkgs/wlogout-git
 	url = https://aur.archlinux.org/wlogout-git.git
+[submodule "aur-pkgs/sx"]
+	path = aur-pkgs/sx
+	url = https://aur.archlinux.org/sx.git
