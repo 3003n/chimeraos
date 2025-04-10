@@ -58,6 +58,7 @@ export SUB_PACKAGES_TO_DELETE="\
 "
 
 sub_postinstallhook() {
+	rm -f /etc/skel/Desktop/*.desktop
 	install -Dm755 -t /etc/skel/Desktop/ \
 		/usr/share/applications/{org.chimeraos.session-return,sk-chos-tool}.desktop
 }
