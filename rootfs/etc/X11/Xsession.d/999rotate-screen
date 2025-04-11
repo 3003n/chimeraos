@@ -1,0 +1,11 @@
+#!/bin/bash
+INT_DISPLAYS=$(xrandr | awk '/\<connected\>/ {print $1}' | grep eDP)
+source /etc/sk-chos/screen-rotate
+
+if [ -z "${X11_ROTATION}" ]; then
+    echo "Ignoring anything. Assume normal rotation"
+else
+    for INT_DISPLAY in ${INT_DISPLAYS}; do
+      xrandr --output ${INT_DISPLAY} --rotate ${X11_ROTATION}
+    done
+fi
