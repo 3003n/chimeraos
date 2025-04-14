@@ -157,9 +157,6 @@
 [submodule "aur-pkgs/ibus-autostart"]
 	path = aur-pkgs/ibus-autostart
 	url = https://aur.archlinux.org/ibus-autostart.git
-[submodule "aur-pkgs/adwaita-qt-git"]
-	path = aur-pkgs/adwaita-qt-git
-	url = https://aur.archlinux.org/adwaita-qt-git.git
 [submodule "aur-pkgs/hyprshot"]
 	path = aur-pkgs/hyprshot
 	url = https://aur.archlinux.org/hyprshot.git

@@ -51,7 +51,6 @@ export SUB_PACKAGES="\
 "
 
 export SUB_AUR_PACKAGES="\
-	adwaita-qt-git \
 	hyprshot \
 	tofi \
 	wlogout-git \
