@@ -58,10 +58,10 @@ function parse_branch_conf() {
     BRANCH_FLG="rel"
     ;;
   "testing")
-    BRANCH_FLG="rc"
+    BRANCH_FLG="beta"
     ;;
   "unstable")
-    BRANCH_FLG="beta"
+    BRANCH_FLG="main"
     ;;
   *)
     BRANCH_FLG="rel"
