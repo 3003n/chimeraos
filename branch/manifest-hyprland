@@ -2,6 +2,7 @@
 
 export POSTCOPY="\
 	hyprland \
+	skel \
 	wallpapers/wallpapers \
 "
 

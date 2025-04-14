@@ -2,6 +2,7 @@
 
 export POSTCOPY="\
 	cosmic \
+	skel \
 	wallpapers/wallpapers \
 "
 

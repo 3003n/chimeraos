@@ -2,6 +2,7 @@
 
 export POSTCOPY="\
 	cinnamon \
+	skel \
 	wallpapers/gnome-backgrounds \
 	wallpapers/gnome-backgrounds-cachyos \
 "
