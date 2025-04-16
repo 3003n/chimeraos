@@ -315,29 +315,23 @@ export FILES_TO_DELETE="\
 	/usr/share/gtk-doc \
 	/usr/share/help \
 	/usr/share/man \
+	/usr/share/libalpm/hooks/70-dkms-install.hook \
+	/usr/share/libalpm/hooks/70-dkms-upgrade.hook \
+	/usr/share/libalpm/hooks/71-dkms-remove.hook \
 "
 
 postinstallhook() {
 	# Add sudo permissions
-	sed -i '/%wheel ALL=(ALL:ALL) ALL/s/^# //g' /etc/sudoers
-
 	sed -i "s/Defaults secure_path=/# Defaults secure_path=/g" /etc/sudoers
 
 	# sk chimeraos
-	echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >"/etc/sudoers.d/${USERNAME}"
-	
 	sed -i 's/set mouse=a/set mouse-=a/g' /usr/share/vim/vim*/defaults.vim
 	ln -s -f /usr/bin/vim /usr/bin/vi
 	sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
 	sed -i "s/#SuspendEstimationSec=60min/SuspendEstimationSec=30min/" /etc/systemd/sleep.conf
 
+	# podman
 	echo "unqualified-search-registries = ['docker.io']" >>/etc/containers/registries.conf
-
-	# Remove build tools for slimmer image
-	rm /usr/share/libalpm/hooks/70-dkms-install.hook || true
-	rm /usr/share/libalpm/hooks/70-dkms-upgrade.hook || true
-	rm /usr/share/libalpm/hooks/71-dkms-remove.hook || true
-	# pacman --noconfirm -Rnsdd make gcc dkms ${KERNEL_PACKAGE}-headers retroarch ardour
 
 	remove_packages=(
 		make
