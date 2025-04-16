@@ -1,0 +1,4 @@
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-use-gamescope
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-use-lightdm
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-only-update
+%wheel ALL=(ALL) NOPASSWD: /usr/share/chimera/bin/power-tool

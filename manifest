@@ -320,18 +320,12 @@ export FILES_TO_DELETE="\
 postinstallhook() {
 	# Add sudo permissions
 	sed -i '/%wheel ALL=(ALL:ALL) ALL/s/^# //g' /etc/sudoers
-	echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/dmidecode -t 11
-	" >/etc/sudoers.d/steam
-	echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-use-gamescope
-	${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-use-lightdm
-	${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/chimera-session-only-update
-	${USERNAME} ALL=(ALL) NOPASSWD: /usr/share/chimera/bin/power-tool
-	" >/etc/sudoers.d/chimera
 
 	sed -i "s/Defaults secure_path=/# Defaults secure_path=/g" /etc/sudoers
 
 	# sk chimeraos
 	echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >"/etc/sudoers.d/${USERNAME}"
+	
 	sed -i 's/set mouse=a/set mouse-=a/g' /usr/share/vim/vim*/defaults.vim
 	ln -s -f /usr/bin/vim /usr/bin/vi
 	sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
