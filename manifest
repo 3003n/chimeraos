@@ -343,13 +343,6 @@ postinstallhook() {
 		pacman --noconfirm -Rnsdd "$package" || true
 	done
 
-	remove_only=(
-		"${KERNEL_PACKAGE}-headers"
-	)
-	for package in "${remove_only[@]}"; do
-		pacman --noconfirm -Rdd "$package" || true
-	done
-
 	# clean up desktop shortcuts
 	sed -i -e 's/Name=Steam (Runtime)/Name=Steam/' /usr/share/applications/steam.desktop
 
