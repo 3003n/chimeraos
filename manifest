@@ -337,11 +337,17 @@ postinstallhook() {
 		make
 		cmake
 		gcc
-		"${KERNEL_PACKAGE}-headers"
 		ardour
 		)
 	for package in "${remove_packages[@]}"; do
 		pacman --noconfirm -Rnsdd "$package" || true
+	done
+
+	remove_only=(
+		"${KERNEL_PACKAGE}-headers"
+	)
+	for package in "${remove_only[@]}"; do
+		pacman --noconfirm -Rdd "$package" || true
 	done
 
 	# clean up desktop shortcuts
