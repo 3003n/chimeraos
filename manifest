@@ -181,8 +181,8 @@ export PACKAGES="\
 "
 
 export PACKAGE_OVERRIDES="\
-	https://ns.switchsystem.eu.org/d/vfs/guest/stos/sk-kernel/linux-skchimeraos-6.14.2.skb-5-x86_64.pkg.tar.zst \
-	https://ns.switchsystem.eu.org/d/vfs/guest/stos/sk-kernel/linux-skchimeraos-headers-6.14.2.skb-5-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.2-skb-5/linux-skchimeraos-6.14.2.skb-5-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.2-skb-5/linux-skchimeraos-headers-6.14.2.skb-5-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0.rc1-chos1-2/lib32-mesa-1--25.1.0.rc1.chos1-2-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0.rc1-chos1-2/lib32-opencl-rusticl-mesa-1--25.1.0.rc1.chos1-2-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0.rc1-chos1-2/lib32-vulkan-intel-1--25.1.0.rc1.chos1-2-x86_64.pkg.tar.zst \
