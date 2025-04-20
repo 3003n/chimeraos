@@ -188,7 +188,7 @@ else
 fi
 
 # 分割文件
-split_mb=2000
+split_mb=2020
 split_bytes=$((split_mb * 1024 * 1024))
 file_size=$(stat -c %s ${IMG_FILENAME})
 
