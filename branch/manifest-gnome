@@ -47,7 +47,6 @@ export SUB_LOCAL_PACKAGES="\
 	gnome-shell-extension-hibernate-status-git \
 	gnome-shell-extension-logo-menu \
 	mangohud-git \
-	msi-ec-dkms-git \
 	rtl88x2bu-dkms \
 	steam-removable-media-git \
 	xonedo-dkms \
