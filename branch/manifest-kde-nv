@@ -13,12 +13,7 @@ export POSTCOPY="\
 export SUB_PACKAGES="\
 	$BASE_PACKAGES \
 	$BASE_KDE_PACKAGES \
-	nvidia-open-dkms \
-	opencl-nvidia \
-	lib32-opencl-nvidia \
-	nvidia-utils \
-	lib32-nvidia-utils \
-	nvidia-prime \
+	$NVDIA_PACKAGES \
 "
 
 export SUB_AUR_PACKAGES="\

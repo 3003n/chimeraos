@@ -67,6 +67,17 @@ export EXTRA_PACKAGES="\
 	yazi \
 "
 
+export BASE_PACKAGES="$BASE_PACKAGES $EXTRA_PACKAGES"
+
+export NVDIA_PACKAGES="\
+	nvidia-open-dkms \
+	opencl-nvidia \
+	lib32-opencl-nvidia \
+	nvidia-utils \
+	lib32-nvidia-utils \
+	nvidia-prime \
+"
+
 export BASE_AUR_PACKAGES="\
 	lib32-extest \
 	nbfc-linux \
@@ -81,6 +92,8 @@ export EXTRA_AUR_PACKAGES="\
 	protonup-qt \
 	tsukimi-bin \
 "
+
+export BASE_AUR_PACKAGES="$BASE_AUR_PACKAGES $EXTRA_AUR_PACKAGES"
 
 export BASE_LOCAL_PACKAGES="\
 	ds-inhibit \
