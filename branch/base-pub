@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export BASE_PACKAGES="\
+"
+
+export BASE_LOCAL_PACKAGES="\
+	ds-inhibit \
+	mangohud-git \
+	rtl88x2bu-dkms \
+	steam-removable-media-git \
+	xonedo-dkms \
+	xonedo-firmware \
+"

@@ -1,5 +1,9 @@
 #! /bin/bash
 
+for base in base-*; do
+	source $base
+done
+
 export POSTCOPY="\
 	cosmic \
 	skel \
@@ -37,12 +41,7 @@ export SUB_AUR_PACKAGES="\
 "
 
 export SUB_LOCAL_PACKAGES="\
-	ds-inhibit \
-	mangohud-git \
-	rtl88x2bu-dkms \
-	steam-removable-media-git \
-	xonedo-dkms \
-	xonedo-firmware \
+	$BASE_LOCAL_PACKAGES \
 "
 
 export SUB_PACKAGES_TO_DELETE="\

@@ -1,5 +1,9 @@
 #! /bin/bash
 
+for base in base-*; do
+	source $base
+done
+
 export POSTCOPY="\
 	plasma \
 	skel \
@@ -7,45 +11,7 @@ export POSTCOPY="\
 "
 
 export SUB_PACKAGES="\
-	ark \
-	bluedevil \
-	breeze-gtk \
-	deepin-wallpapers \
-	discover \
-	dolphin \
-	dolphin-plugins \
-	falkon \
-	fcitx5-im \
-	fcitx5-chinese-addons \
-	flatpak-kcm \
-	gwenview \
-	kate \
-	kde-gtk-config \
-	kdeconnect \
-	kdeplasma-addons \
-	kfind \
-	kgamma \
-	kinfocenter \
-	konsole \
-	kpipewire \
-	krdc \
-	krdp \
-	kscreen \
-	ksshaskpass \
-	kwallet-pam \
-	onboard \
-	partitionmanager \
-	plasma-browser-integration \
-	plasma-desktop \
-	plasma-disks \
-	plasma-nm \
-	plasma-pa \
-	plasma-systemmonitor \
-	plasma-thunderbolt \
-	plasma-vault \
-	python-notify2 \
-	xdg-desktop-portal-gtk \
-	xdg-desktop-portal-kde \
+	$BASE_KDE_PACKAGES \
 	nvidia-open-dkms \
 	opencl-nvidia \
 	lib32-opencl-nvidia \
@@ -55,16 +21,11 @@ export SUB_PACKAGES="\
 "
 
 export SUB_AUR_PACKAGES="\
-	plasma6-themes-vapor-steamos \
+	$BASE_KDE_AUR_PACKAGES \
 "
 
 export SUB_LOCAL_PACKAGES="\
-	ds-inhibit \
-	mangohud-git \
-	rtl88x2bu-dkms \
-	steam-removable-media-git \
-	xonedo-dkms \
-	xonedo-firmware \
+	$BASE_LOCAL_PACKAGES \
 "
 
 export SUB_PACKAGES_TO_DELETE="\

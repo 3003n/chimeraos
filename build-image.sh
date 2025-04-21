@@ -84,7 +84,7 @@ mkdir -p rootfs/etc/pacman.d
 cp /etc/pacman.d/mirrorlist rootfs/etc/pacman.d/mirrorlist
 
 # copy files into chroot
-cp -R manifest sub-manifest postinstall all-install.sh rootfs/. ${BUILD_PATH}/
+cp -R manifest sub-manifest base-* postinstall all-install.sh rootfs/. ${BUILD_PATH}/
 
 mkdir ${BUILD_PATH}/local_pkgs
 mkdir ${BUILD_PATH}/aur_pkgs
