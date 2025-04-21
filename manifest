@@ -19,60 +19,37 @@ export PACKAGES="\
 	alsa-firmware \
 	alsa-utils \
 	amd-ucode \
-	antimicrox \
-	aria2 \
 	bash-completion \
-	bat \
-	bluez-utils \
 	broadcom-wl-dkms \
 	bzip2 \
-	cage \
 	cifs-utils \
 	cpupower \
-	cmake \
-	ddcutil \
 	diffutils \
 	dkms \
 	distrobox \
 	dmidecode \
-	evtest \
 	efibootmgr \
-	expect \
-	exfatprogs \
-	fastfetch \
-	fd \
+	evtest \
+	fakeroot \
 	ffmpeg \
 	file \
 	ffmpegthumbnailer \
 	firejail \
 	flatpak \
 	fmt \
-	freerdp \
 	fuse-zip \
 	fuse2 \
 	fwupd \
-	fzf \
-	f2fs-tools \
 	git \
-	gparted \
 	gst-plugin-pipewire \
 	gvfs-smb \
 	gvfs-nfs \
 	gzip \
-	haveged \
 	htop \
-	ibus-libpinyin \
-	ibus-table-chinese \
-	ibus-anthy \
-	ibus-hangul \
-	ibus-rime \
 	intel-gpu-tools \
 	intel-media-driver \
 	intel-ucode \
 	intel-undervolt \
-	imagemagick \
-	jq \
-	lact-libadwaita \
 	less \
 	lib32-curl \
 	lib32-fontconfig \
@@ -81,18 +58,13 @@ export PACKAGES="\
 	lib32-libnm \
 	lib32-libxinerama \
 	lib32-libxcrypt-compat \
-	lib32-libva \
-	lib32-libva-intel-driver \
 	lib32-mangohud \
 	lib32-openal \
 	lib32-pipewire \
 	lib32-systemd \
 	lib32-vulkan-icd-loader \
-	libcec \
 	libcurl-gnutls \
-	libdisplay-info \
 	libidn11 \
-	libva-intel-driver \
 	libxcrypt-compat \
 	libxss \
 	lightdm \
@@ -101,56 +73,32 @@ export PACKAGES="\
 	logrotate \
 	lrzip \
 	lshw \
-	lzip \
 	mesa-demos \
-	mission-center \
 	modemmanager \
-	mpv \
 	nano \
 	networkmanager \
 	nfs-utils \
-	nmon \
 	noto-fonts-emoji \
 	nss-mdns \
-	ntfs-3g \
 	openal \
 	openssh \
-	openrgb \
-	otf-fira-mono \
-	otf-fira-sans \
-	otf-font-awesome \
 	p7zip \
-	patch \
 	pipewire \
 	pipewire-alsa \
 	pipewire-jack \
 	pipewire-pulse \
-	plymouth \
 	podman \
-	podman-compose \
-	poppler \
 	pulsemixer \
 	python \
-	python-pyudev \
-	python-systemd \
 	qtractor \
-	remmina \
-	ripgrep \
 	rsync \
-	screen \
-	scx-scheds \
-	smartmontools \
 	smbclient \
 	sof-firmware \
-	solaar \
 	sshfs \
 	steam \
 	sudo \
-	switcheroo-control \
-	s-tui \
 	tar \
 	tree \
-	ttf-dejavu \
 	ttf-liberation \
 	unace \
 	unrar \
@@ -159,25 +107,17 @@ export PACKAGES="\
 	usbutils \
 	vim \
 	vulkan-icd-loader \
-	v2ray \
 	wavpack \
 	wget \
 	which \
 	wireplumber \
 	wqy-microhei \
-	wlr-randr \
-	xdelta3 \
 	xdg-desktop-portal \
 	xdg-desktop-portal-wlr \
 	xf86-video-amdgpu \
-	xorg-xinit \
 	xorg-server \
-	xorg-server-xvfb \
 	xz \
-	yazi \
 	zip \
-	zoxide \
-	zsh \
 "
 
 export PACKAGE_OVERRIDES="\
@@ -221,16 +161,9 @@ export AUR_PACKAGES="\
 	ibus-pinyin \
 	inputplumber-bin \
 	kanit-font \
-	lib32-extest \
 	linux-firmware-valve \
-	moonlight-qt-axi \
-	nbfc-linux \
 	nintendo-udev \
-	onedrive-abraunegg \
 	pikaur \
-	protonup-qt \
-	python-pyclip \
-	r8152-dkms \
 	rtl8812au-dkms-git \
 	rtl8814au-dkms-git \
 	rtl8821au-dkms-git \
@@ -239,10 +172,7 @@ export AUR_PACKAGES="\
 	sk-chos-tool \
 	steam_notif_daemon \
 	steam-powerbuttond-git \
-	sx \
-	tsukimi-bin \
 	v4l-utils-git \
-	vboard \
 	waydroid-script-git \
 	yay-git \
 	zenergy-dkms-git \

@@ -1,6 +1,85 @@
 #!/bin/bash
 
 export BASE_PACKAGES="\
+	aria2 \
+	bat \
+	bluez-utils \
+	cmake \
+	ddcutil \
+	cage \
+	expect \
+	exfatprogs \
+	fastfetch \
+	fd \
+	freerdp \
+	fzf \
+	f2fs-tools \
+	gparted \
+	haveged \
+	ibus-libpinyin \
+	ibus-table-chinese \
+	ibus-anthy \
+	ibus-hangul \
+	ibus-rime \
+	jq \
+	lib32-libva \
+	lib32-libva-intel-driver \
+	libcec \
+	libdisplay-info \
+	libva-intel-driver \
+	lzip \
+	nmon \
+	ntfs-3g \
+	otf-fira-mono \
+	otf-fira-sans \
+	otf-font-awesome \
+	patch \
+	plymouth \
+	podman-compose \
+	python-pyudev \
+	python-systemd \
+	ripgrep \
+	screen \
+	scx-scheds \
+	smartmontools \
+	switcheroo-control \
+	s-tui \
+	ttf-dejavu \
+	v2ray \
+	wlr-randr \
+	xdelta3 \
+	xorg-xinit \
+	xorg-server-xvfb \
+	zoxide \
+	zsh \
+"
+
+export EXTRA_PACKAGES="\
+	antimicrox \
+	imagemagick \
+	lact-libadwaita \
+	mission-center \
+	mpv \
+	openrgb \
+	poppler \
+	remmina \
+	solaar \
+	yazi \
+"
+
+export BASE_AUR_PACKAGES="\
+	lib32-extest \
+	nbfc-linux \
+	onedrive-abraunegg \
+	python-pyclip \
+	sx \
+	vboard \
+"
+
+export EXTRA_AUR_PACKAGES="\
+	moonlight-qt-axi \
+	protonup-qt \
+	tsukimi-bin \
 "
 
 export BASE_LOCAL_PACKAGES="\

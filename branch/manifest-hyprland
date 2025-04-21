@@ -11,6 +11,7 @@ export POSTCOPY="\
 "
 
 export SUB_PACKAGES="\
+	$BASE_PACKAGES \
 	brightnessctl \
 	cliphist \
 	dconf-editor \
