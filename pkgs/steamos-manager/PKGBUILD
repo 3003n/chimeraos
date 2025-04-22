@@ -19,8 +19,9 @@ optdepends=('jupiter-hw-support: jupiter support'  # Needed for jupiter-get-als-
             'plasma-remotecontrollers: CEC wake support'
             'wakehook: CEC wake support')
 makedepends=('git' 'cargo')
-source=("$pkgname-$pkgver::git+https://gitlab.com/evlaV/$pkgname.git#tag=${_srctag}")
-sha256sums=('ee1e986cfb23c35ddff137ce299f10ba2f2b5a620b5446058a7898b6a7620f5b')
+_commit=93cc90ec3e8d8d7556cc277f50f4c6b2d5b34cd9
+source=("$pkgname-$pkgver::git+https://github.com/honjow/$pkgname.git#commit=${_commit}")
+sha256sums=('SKIP')
 replaces=('ds-inhibit')
 
 prepare() {
