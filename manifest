@@ -207,7 +207,6 @@ export SERVICES="\
 	cec-onboot \
 	cec-onpoweroff \
 	cec-onsleep \
-	ds-inhibit \
 	fstrim.timer \
 	frzr_root-swap-swapfile.swap \
 	haveged \
@@ -220,6 +219,7 @@ export SERVICES="\
 	overlay-root-home \
 	scx_loader \
 	steam-powerbuttond \
+	steamos-manager \
 	sshd \
 	systemd-timesyncd \
 	swapfile \
