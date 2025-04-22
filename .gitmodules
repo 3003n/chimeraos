@@ -169,6 +169,3 @@
 [submodule "aur-pkgs/protonup-qt"]
 	path = aur-pkgs/protonup-qt
 	url = https://aur.archlinux.org/protonup-qt.git
-[submodule "aur-pkgs/powerstation-bin"]
-	path = aur-pkgs/powerstation-bin
-	url = https://aur.archlinux.org/powerstation-bin.git
