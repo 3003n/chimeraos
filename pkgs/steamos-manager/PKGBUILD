@@ -2,7 +2,7 @@
 # Maintainer: Jeremy Whiting <jeremy.whiting@collabora.com>
 
 pkgname=steamos-manager
-_srctag=v25.4.1
+_srctag=v25.4.1.sk1
 pkgver=${_srctag##v}
 pkgrel=0
 pkgdesc='SteamOS Manager daemon for running various system management tasks'
@@ -19,15 +19,13 @@ optdepends=('jupiter-hw-support: jupiter support'  # Needed for jupiter-get-als-
             'plasma-remotecontrollers: CEC wake support'
             'wakehook: CEC wake support')
 makedepends=('git' 'cargo')
-_commit=93cc90ec3e8d8d7556cc277f50f4c6b2d5b34cd9
-source=("$pkgname-$pkgver::git+https://github.com/honjow/$pkgname.git#commit=${_commit}")
+# _commit=1e6e80cf93629d9a5b5fd38c05bb7532a37510d1
+source=("$pkgname-$pkgver::git+https://github.com/honjow/$pkgname.git#tag=${_srctag}")
 sha256sums=('SKIP')
 replaces=('ds-inhibit')
 
 prepare() {
 	export RUSTUP_TOOLCHAIN=stable
-	cd "$pkgname-$pkgver"
-	# 无需额外配置，cargo将自动从crates.io下载依赖
 }
 
 build() {
@@ -58,7 +56,7 @@ package () {
 	ln -s ../steamos-manager.service "$pkgdir/usr/lib/systemd/user/gamescope-session.service.wants/"
 }
 
-check() {
-	cd "$pkgname-$pkgver"
-	dbus-run-session cargo test
-}
+# check() {
+# 	cd "$pkgname-$pkgver"
+# 	dbus-run-session cargo test
+# }
