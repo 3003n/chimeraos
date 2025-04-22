@@ -218,6 +218,7 @@ export SERVICES="\
 	overlay-backgrounds \
 	overlay-fonts \
 	overlay-root-home \
+	powerstation \
 	scx_loader \
 	steam-powerbuttond \
 	steamos-manager \
