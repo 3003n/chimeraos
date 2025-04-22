@@ -1,0 +1,63 @@
+# Maintainer: Vicki Pfau <vi@endrift.com>
+# Maintainer: Jeremy Whiting <jeremy.whiting@collabora.com>
+
+pkgname=steamos-manager
+_srctag=v25.4.1
+pkgver=${_srctag##v}
+pkgrel=0
+pkgdesc='SteamOS Manager daemon for running various system management tasks'
+arch=('x86_64')
+url='https://store.steampowered.com/steamos/'
+license=('MIT')
+depends=('dbus'
+         'systemd'
+         'wireless_tools')  # For iwconfig
+optdepends=('jupiter-hw-support: jupiter support'  # Needed for jupiter-get-als-gain, jupiter-biosupdate, steamos-format-device, steamos-trim-devices
+            'jupiter-dock-updater-bin: jupiter dock updater'  # Needed for jupiter-dock-updater
+            'steamos-customizations-jupiter: jupiter support'  # Needed for steamos-factory-reset-config
+            'steamos-log-submitter: ftrace logging'
+            'plasma-remotecontrollers: CEC wake support'
+            'wakehook: CEC wake support')
+makedepends=('git' 'cargo')
+source=("$pkgname-$pkgver::git+https://gitlab.com/evlaV/$pkgname.git#tag=${_srctag}")
+sha256sums=('ee1e986cfb23c35ddff137ce299f10ba2f2b5a620b5446058a7898b6a7620f5b')
+replaces=('ds-inhibit')
+
+prepare() {
+	export RUSTUP_TOOLCHAIN=stable
+	cd "$pkgname-$pkgver"
+	# 无需额外配置，cargo将自动从crates.io下载依赖
+}
+
+build() {
+	cd "$pkgname-$pkgver"
+	cargo build -r
+}
+
+package () {
+	cd "$pkgname-$pkgver"
+	install -d -m0755 "$pkgdir/usr/share/dbus-1/services/"
+	install -d -m0755 "$pkgdir/usr/share/dbus-1/system-services/"
+	install -d -m0755 "$pkgdir/usr/share/dbus-1/system.d/"
+	install -d -m0755 "$pkgdir/usr/lib/systemd/system/"
+	install -d -m0755 "$pkgdir/usr/lib/systemd/user/gamescope-session.service.wants/"
+
+	install -Ds -m755 "target/release/steamos-manager" "$pkgdir/usr/lib/steamos-manager"
+	install -D -m755 "target/release/steamosctl" "$pkgdir/usr/bin/steamosctl"
+	install -D -m644 -t "$pkgdir/usr/share/steamos-manager/platforms" "data/platforms/"*
+	install -D -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname"
+
+	install -m644 "data/system/com.steampowered.SteamOSManager1.service" "$pkgdir/usr/share/dbus-1/system-services/"
+	install -m644 "data/system/com.steampowered.SteamOSManager1.conf" "$pkgdir/usr/share/dbus-1/system.d/"
+	install -m644 "data/system/steamos-manager.service" "$pkgdir/usr/lib/systemd/system/"
+
+	install -m644 "data/user/com.steampowered.SteamOSManager1.service" "$pkgdir/usr/share/dbus-1/services/"
+	install -m644 "data/user/steamos-manager.service" "$pkgdir/usr/lib/systemd/user/"
+
+	ln -s ../steamos-manager.service "$pkgdir/usr/lib/systemd/user/gamescope-session.service.wants/"
+}
+
+check() {
+	cd "$pkgname-$pkgver"
+	dbus-run-session cargo test
+}
