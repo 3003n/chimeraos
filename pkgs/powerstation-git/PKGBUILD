@@ -1,7 +1,7 @@
 # Maintainer: William Edwards <shadowapex@gmail.com>
 pkgname=powerstation-git
 _pkgbase=powerstation
-pkgver=v0.4.2.r1.ge5ffc67
+pkgver=v0.4.2.r9.g5e0ec6a
 pkgrel=1
 pkgdesc="Open source performance daemon with DBus interface"
 arch=('x86_64')
@@ -11,7 +11,7 @@ depends=('dbus' 'pciutils')
 makedepends=('rust' 'make' 'cmake' 'clang' 'git')
 provides=('powerstation')
 conflicts=('powerstation-bin')
-source=("${_pkgbase}::git+https://github.com/ShadowBlip/${_pkgbase}.git"
+source=("${_pkgbase}::git+https://github.com/honjow/${_pkgbase}.git#branch=dev"
         "0001-fix-ryzenadj-add-error-handling-for-refresh-failures.patch"
 )
 options=(!lto)
@@ -28,11 +28,11 @@ pkgver() {
 prepare() {
   cd "$srcdir/${_pkgbase}"
 
-  local src
-  for src in "${source[@]}"; do
-    [[ $src = *.patch ]] || continue
-    patch -p1 < "${srcdir}"/$src
-  done
+  # local src
+  # for src in "${source[@]}"; do
+  #   [[ $src = *.patch ]] || continue
+  #   patch -p1 < "${srcdir}"/$src
+  # done
 }
 
 build() {
