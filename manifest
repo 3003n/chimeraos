@@ -145,7 +145,7 @@ export AUR_PACKAGES="\
 	ayaneo-platform-dkms-git \
 	ayn-platform-dkms-git \
 	bcm20702a1-firmware \
-	chimeraos-device-quirks-sk-git \
+	chimeraos-device-quirks-sk \
 	downgrade \
 	evdev-keepalive \
 	frzr-sk \

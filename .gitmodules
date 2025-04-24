@@ -106,9 +106,6 @@
 [submodule "aur-pkgs/gnome-shell-extension-bluetooth-battery-meter-git"]
 	path = aur-pkgs/gnome-shell-extension-bluetooth-battery-meter-git
 	url = https://aur.archlinux.org/gnome-shell-extension-bluetooth-battery-meter-git.git
-[submodule "aur-pkgs/chimeraos-device-quirks-sk-git"]
-	path = aur-pkgs/chimeraos-device-quirks-sk-git
-	url = https://aur.archlinux.org/chimeraos-device-quirks-sk-git.git
 [submodule "aur-pkgs/yay-git"]
 	path = aur-pkgs/yay-git
 	url = https://aur.archlinux.org/yay-git.git
@@ -169,3 +166,6 @@
 [submodule "aur-pkgs/protonup-qt"]
 	path = aur-pkgs/protonup-qt
 	url = https://aur.archlinux.org/protonup-qt.git
+[submodule "aur-pkgs/chimeraos-device-quirks-sk"]
+	path = aur-pkgs/chimeraos-device-quirks-sk
+	url = https://aur.archlinux.org/chimeraos-device-quirks-sk.git
