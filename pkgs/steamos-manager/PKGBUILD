@@ -3,7 +3,7 @@
 
 pkgname=steamos-manager
 _srctag=v25.4.1.sk3
-pkgver=v25.4.1.sk3.r2.gd0e6475
+pkgver=25.4.1.sk3.r2.gd0e6475
 pkgrel=1
 pkgdesc='SteamOS Manager daemon for running various system management tasks'
 arch=('x86_64')
@@ -26,7 +26,7 @@ replaces=('ds-inhibit')
 
 pkgver() {
   cd "${pkgname}"
-  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g;s/^v//'
 }
 
 prepare() {
