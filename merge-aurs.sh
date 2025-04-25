@@ -2,7 +2,10 @@
 
 set -e
 
-sub_manifest_paths=(branch/manifest-*)
+cp branch/manifest-* .
+cp branch/base-* .
+
+sub_manifest_paths=(manifest-*)
 
 source ./manifest
 
@@ -19,5 +22,7 @@ json_list=$(echo ${AUR_PACKAGES} | tr -s ' \n' ' ' | jq -R -s -c 'split(" ") | m
 echo ${json_list}
 
 if [ -f "${GITHUB_OUTPUT}" ]; then
-  echo "matrix=${json_list}" >> "${GITHUB_OUTPUT}"
+  echo "matrix=${json_list}" >>"${GITHUB_OUTPUT}"
 fi
+
+rm -f manifest-* base-*
