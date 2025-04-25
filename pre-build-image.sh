@@ -13,6 +13,7 @@ fi
 echo "Merging branch ${BUILD_BRANCH} into rootfs"
 
 cp -f branch/manifest-${BUILD_BRANCH} sub-manifest
+cp -f branch/base-* .
 
 source ./manifest
 source ./sub-manifest

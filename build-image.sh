@@ -84,7 +84,7 @@ mkdir -p rootfs/etc/pacman.d
 cp /etc/pacman.d/mirrorlist rootfs/etc/pacman.d/mirrorlist
 
 # copy files into chroot
-cp -R manifest sub-manifest postinstall all-install.sh rootfs/. ${BUILD_PATH}/
+cp -R manifest sub-manifest base-* postinstall all-install.sh rootfs/. ${BUILD_PATH}/
 
 mkdir ${BUILD_PATH}/local_pkgs
 mkdir ${BUILD_PATH}/aur_pkgs
@@ -188,7 +188,7 @@ else
 fi
 
 # 分割文件
-split_mb=2000
+split_mb=2020
 split_bytes=$((split_mb * 1024 * 1024))
 file_size=$(stat -c %s ${IMG_FILENAME})
 

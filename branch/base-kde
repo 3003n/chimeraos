@@ -1,0 +1,47 @@
+#!/bin/bash
+
+export BASE_KDE_PACKAGES="\
+	ark \
+	bluedevil \
+	breeze-gtk \
+	deepin-wallpapers \
+	discover \
+	dolphin \
+	dolphin-plugins \
+	falkon \
+	fcitx5-im \
+	fcitx5-chinese-addons \
+	flatpak-kcm \
+	gwenview \
+	kate \
+	kde-gtk-config \
+	kdeconnect \
+	kdeplasma-addons \
+	kfind \
+	kgamma \
+	kinfocenter \
+	konsole \
+	kpipewire \
+	krdc \
+	krdp \
+	kscreen \
+	ksshaskpass \
+	kwallet-pam \
+	onboard \
+	partitionmanager \
+	plasma-browser-integration \
+	plasma-desktop \
+	plasma-disks \
+	plasma-nm \
+	plasma-pa \
+	plasma-systemmonitor \
+	plasma-thunderbolt \
+	plasma-vault \
+	python-notify2 \
+	xdg-desktop-portal-gtk \
+	xdg-desktop-portal-kde \
+"
+
+export BASE_KDE_AUR_PACKAGES="\
+	plasma6-themes-vapor-steamos \
+"

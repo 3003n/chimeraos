@@ -1,0 +1,67 @@
+# shellcheck disable=SC2164,SC2154
+# Maintainer: Vicki Pfau <vi@endrift.com>
+# Maintainer: Jeremy Whiting <jeremy.whiting@collabora.com>
+
+pkgname=steamos-manager
+_srctag=v25.4.1.sk3
+pkgver=25.4.1.r14.g99f473d
+pkgrel=1
+pkgdesc='SteamOS Manager daemon for running various system management tasks'
+arch=('x86_64')
+url='https://store.steampowered.com/steamos/'
+license=('MIT')
+depends=('dbus'
+         'systemd'
+         'wireless_tools')  # For iwconfig
+optdepends=('jupiter-hw-support: jupiter support')  # Needed for jupiter-get-als-gain, jupiter-biosupdate, steamos-format-device, steamos-trim-devices
+makedepends=('git' 'cargo')
+# _commit=1e6e80cf93629d9a5b5fd38c05bb7532a37510d1
+source=("$pkgname::git+https://github.com/honjow/$pkgname.git#branch=dev"
+        'support-gamescope-session-steam.patch')
+sha256sums=('SKIP'
+            'd974e606cd74cbacdb8b4d11063dc58a8161d05f549ce637e3e7f80570a31bbc')
+replaces=('ds-inhibit')
+
+pkgver() {
+  cd "${pkgname}"
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g;s/^v//'
+}
+
+prepare() {
+	export RUSTUP_TOOLCHAIN=stable
+	cd "$pkgname"
+	local src
+	for src in "${source[@]}"; do
+		[[ $src = *.patch ]] || continue
+		patch -p1 < "${srcdir}"/$src
+	done
+	cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
+}
+
+build() {
+	cd "$pkgname"
+	cargo build --release --frozen
+}
+
+package () {
+	cd "$pkgname"
+	install -d -m0755 "$pkgdir/usr/share/dbus-1/services/"
+	install -d -m0755 "$pkgdir/usr/share/dbus-1/system-services/"
+	install -d -m0755 "$pkgdir/usr/share/dbus-1/system.d/"
+	install -d -m0755 "$pkgdir/usr/lib/systemd/system/"
+	install -d -m0755 "$pkgdir/usr/lib/systemd/user/gamescope-session.service.wants/"
+
+	install -Ds -m755 "target/release/steamos-manager" "$pkgdir/usr/lib/steamos-manager"
+	install -D -m755 "target/release/steamosctl" "$pkgdir/usr/bin/steamosctl"
+	install -D -m644 -t "$pkgdir/usr/share/steamos-manager/platforms" "data/platforms/"*
+	install -D -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname"
+
+	install -m644 "data/system/com.steampowered.SteamOSManager1.service" "$pkgdir/usr/share/dbus-1/system-services/"
+	install -m644 "data/system/com.steampowered.SteamOSManager1.conf" "$pkgdir/usr/share/dbus-1/system.d/"
+	install -m644 "data/system/steamos-manager.service" "$pkgdir/usr/lib/systemd/system/"
+
+	install -m644 "data/user/com.steampowered.SteamOSManager1.service" "$pkgdir/usr/share/dbus-1/services/"
+	install -m644 "data/user/steamos-manager.service" "$pkgdir/usr/lib/systemd/user/"
+
+	ln -s ../steamos-manager.service "$pkgdir/usr/lib/systemd/user/gamescope-session.service.wants/"
+}

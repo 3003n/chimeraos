@@ -1,5 +1,9 @@
 #! /bin/bash
 
+for base in base-*; do
+	source $base
+done
+
 export POSTCOPY="\
 	cinnamon \
 	wallpapers/gnome-backgrounds \
@@ -7,6 +11,7 @@ export POSTCOPY="\
 "
 
 export SUB_PACKAGES="\
+	$BASE_PACKAGES \
 	cinnamon \
 	cinnamon-session \
 	cinnamon-settings-daemon \
@@ -34,6 +39,7 @@ export SUB_PACKAGES="\
 "
 
 export SUB_AUR_PACKAGES="\
+	$BASE_AUR_PACKAGES \
 	ibus-autostart \
 	mint-themes \
 	mint-y-icons \
@@ -42,13 +48,7 @@ export SUB_AUR_PACKAGES="\
 "
 
 export SUB_LOCAL_PACKAGES="\
-	ds-inhibit \
-	mangohud-git \
-	msi-ec-dkms-git \
-	rtl88x2bu-dkms \
-	steam-removable-media-git \
-	xonedo-dkms \
-	xonedo-firmware \
+	$BASE_LOCAL_PACKAGES \
 "
 
 export SUB_PACKAGES_TO_DELETE="\
@@ -64,4 +64,6 @@ sub_postinstallhook() {
 		echo "export QT_IM_MODULE=ibus"
 		echo "export XMODIFIERS=@im=ibus"
 	} >>/etc/environment
+
+	install -Dm755 -t /etc/skel/Desktop/ /usr/share/applications/{org.chimeraos.session-return,sk-chos-tool}.desktop
 }

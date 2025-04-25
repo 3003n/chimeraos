@@ -1,11 +1,17 @@
 #! /bin/bash
 
+for base in base-*; do
+	source $base
+done
+
 export POSTCOPY="\
 	hyprland \
+	skel \
 	wallpapers/wallpapers \
 "
 
 export SUB_PACKAGES="\
+	$BASE_PACKAGES \
 	brightnessctl \
 	cliphist \
 	dconf-editor \
@@ -50,20 +56,13 @@ export SUB_PACKAGES="\
 "
 
 export SUB_AUR_PACKAGES="\
-	adwaita-qt-git \
 	hyprshot \
 	tofi \
 	wlogout-git \
 "
 
 export SUB_LOCAL_PACKAGES="\
-	ds-inhibit \
-	mangohud-git \
-	msi-ec-dkms-git \
-	rtl88x2bu-dkms \
-	steam-removable-media-git \
-	xonedo-dkms \
-	xonedo-firmware \
+	$BASE_LOCAL_PACKAGES \
 "
 
 export SUB_PACKAGES_TO_DELETE="\

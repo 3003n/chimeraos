@@ -2,100 +2,274 @@
 set -e
 
 BRANCH_PATH="/frzr_root/source"
+BRANCH_CONF="/frzr_root/os-branch.conf"
 REPO="3003n/chimeraos"
 
+LOCAL_LANG_FILE="/etc/locale.conf"
+
+if [[ -f "$LOCAL_LANG_FILE" ]]; then
+  source "$LOCAL_LANG_FILE"
+fi
+
+if [[ -f "$BRANCH_CONF" ]]; then
+  source "$BRANCH_CONF"
+fi
+
+BRANCH_FLG="${BRANCH_PREFIX:-}"
+DESKTOP="${DESKTOP:-}"
+NV_BRANCH_FLG="${NV_BRANCH_PREFIX:-}"
+
 VALID_BRANCHES=(
-  "stable#stable:gnome"
-  "testing#testing:gnome"
-  "unstable#unstable:gnome"
-  "plasma#stable:kde"
-  "plasma-pre#testing:kde"
-  "plasma-dev#unstable:kde"
-  "cosmic#stable:cosmic"
-  "cosmic-pre#testing:cosmic"
-  "cinnamon#stable:cinnamon"
-  "cinnamon-pre#testing:cinnamon"
+  "rel"
+  "beta"
+  "main"
 )
 
-VALID_NV_BRANCHES=(
-  "gnome_nvidia#stable:gnome-nv"
-  "gnome_nvidia-pre#testing:gnome-nv"
-  "gnome_nvidia-dev#unstable:gnome-nv"
-  "plasma_nvidia#stable:kde-nv"
-  "plasma_nvidia-pre#testing:kde-nv"
-  "plasma_nvidia-dev#unstable:kde-nv"
+DESKTOP_LIST=(
+  "gnome"
+  "kde"
+  "hyprland"
+  "cinnamon"
+  "cosmic"
 )
 
-VALID_BRANCHES+=("${VALID_NV_BRANCHES[@]}")
+function parse_branch_conf() {
+  local source_file=$BRANCH_PATH
 
-SHOW_BRANCHES=()
-for b in "${VALID_BRANCHES[@]}"; do
-  SHOW_BRANCHES+=($(echo "$b" | cut -d '#' -f 1))
-done
+  if [[ ! -f "$source_file" ]]; then
+    echo "Error: $source_file not found"
+    exit 1
+  fi
 
-REAL_BRANCHES=()
-for b in "${VALID_BRANCHES[@]}"; do
-  REAL_BRANCHES+=($(echo "$b" | cut -d '#' -f 2))
-done
+  branch_repo=$(sed -n 's/^\(honjow\|3003n\)\/chimeraos://p' "$source_file")
+  if [[ -z "$branch_repo" ]]; then
+    echo "Error: No branch repo found in $source_file"
+    exit 1
+  fi
 
-function get_real_branch() {
-  show_branch="$1"
-  for b in "${VALID_BRANCHES[@]}"; do
-    if [[ "$b" == "${show_branch}#"* ]]; then
-      echo "$(echo "$b" | cut -d '#' -f 2)"
-      return
-    fi
-  done
-  echo "$1"
-}
+  branch_type=$(echo "$branch_repo" | cut -d ':' -f 1)
+  build_type=$(echo "$branch_repo" | cut -d ':' -f 2)
 
-function get_show_branch() {
-  real_branch="$1"
-  for b in "${VALID_BRANCHES[@]}"; do
-    if [[ "$b" == *"#${real_branch}" ]]; then
-      echo "$(echo "$b" | cut -d '#' -f 1)"
-      return
-    fi
-  done
-  echo "$1"
-}
+  build_desktop=$(echo "$build_type" | cut -d '-' -f 1)
+  build_addon=$(echo "$build_type" | cut -d '-' -f 2)
 
-if [[ $# -eq 1 ]]; then
-  case "$1" in
-  "-c")
-    real_branch=$(cat "$BRANCH_PATH" 2>/dev/null | sed -n 's/^\(honjow\|3003n\)\/chimeraos://p')
-    if [[ " ${REAL_BRANCHES[*]} " =~ "$real_branch" ]]; then
-      show_branch=$(get_show_branch "$real_branch")
-      echo "Selected branch: $show_branch, real branch: $real_branch" >&2
-      echo "$real_branch"
-      exit 0
-    else
-      echo >&2 "Warning: Unrecognized currently selected branch name '$real_branch', updates may not succeed."
-      echo "$real_branch"
-      exit 0
-    fi
+  case "$branch_type" in
+  "stable")
+    BRANCH_FLG="rel"
     ;;
-  "-l")
-    for b in "${REAL_BRANCHES[@]}"; do
-      echo "$b"
-    done
-    exit 0
+  "testing")
+    BRANCH_FLG="beta"
+    ;;
+  "unstable")
+    BRANCH_FLG="main"
     ;;
   *)
-    if [[ " ${VALID_BRANCHES[*]} " =~ "$1" ]]; then
-      input_branch=$1
-      real_branch=$(get_real_branch "$input_branch")
-      if [ -z "$real_branch" ]; then
-        real_branch="$input_branch"
-      fi
-      echo "Setting branch to $input_branch, real branch: $real_branch" >&2
-      echo "$REPO:$real_branch" >"$BRANCH_PATH"
-      exit 0
+    BRANCH_FLG="rel"
+    ;;
+  esac
+
+  case "$build_desktop" in
+  "gnome")
+    DESKTOP="gnome"
+    ;;
+  "kde")
+    DESKTOP="kde"
+    ;;
+  "cosmic")
+    DESKTOP="cosmic"
+    ;;
+  "cinnamon")
+    DESKTOP="cinnamon"
+    ;;
+  "hyprland")
+    DESKTOP="hyprland"
+    ;;
+  *)
+    DESKTOP="gnome"
+    ;;
+  esac
+
+  case "$build_addon" in
+  "nv")
+    NV_BRANCH_FLG="1"
+    ;;
+  *)
+    NV_BRANCH_FLG="0"
+    ;;
+  esac
+}
+
+function is_supported_nv_branch() {
+  local desktop="$1"
+
+  case "$desktop" in
+  "gnome")
+    return 0
+    ;;
+  "kde")
+    return 0
+    ;;
+  esac
+
+  return 1
+}
+
+function generate_branch_list() {
+  local branch_type="$1"
+  local desktop="$2"
+  local nv_branch_flg="$3"
+
+  branch_list=("${VALID_BRANCHES[@]}")
+
+  desktop_label=$(generate_desktop_label)
+  for d in "${DESKTOP_LIST[@]}"; do
+    if [[ "$desktop" == "$d" ]]; then
+      branch_list+=("$desktop_label $desktop ✔")
+    else
+      branch_list+=("$desktop_label $d")
+    fi
+  done
+
+  nvidia_label=$(generate_nvidia_label)
+  if [[ "$nv_branch_flg" == "1" ]]; then
+    branch_list+=("$nvidia_label ✔")
+  else
+    branch_list+=("$nvidia_label ✘")
+  fi
+
+  for item in "${branch_list[@]}"; do
+    echo "$item"
+  done
+}
+
+function generate_desktop_label() {
+  case "$LANG" in
+  "zh_CN.UTF-8")
+    echo "桌面:"
+    ;;
+  *)
+    echo "Desktop:"
+    ;;
+  esac
+}
+
+function generate_nvidia_label() {
+  case "$LANG" in
+  "zh_CN.UTF-8")
+    echo "包含 NVIDIA"
+    ;;
+  *)
+    echo "With NVIDIA"
+    ;;
+  esac
+}
+
+function save_branch_conf() {
+  local set_tag="$*"
+
+  case "$set_tag" in
+  *"NVIDIA ✔")
+    NV_BRANCH_FLG="0"
+    ;;
+  *"NVIDIA ✘")
+    NV_BRANCH_FLG="1"
+    ;;
+  *)
+    if [[ "$set_tag" == *"✔" ]]; then
+      return 0
+    else
+      for d in "${DESKTOP_LIST[@]}"; do
+        if [[ "$set_tag" == *"$d"* ]]; then
+          DESKTOP="$d"
+          break
+        fi
+      done
+      for b in "${VALID_BRANCHES[@]}"; do
+        if [[ "$set_tag" == "$b" ]]; then
+          BRANCH_FLG="$b"
+          break
+        fi
+      done
     fi
     ;;
   esac
-fi
 
+  echo "save branch conf"
+  echo "BRANCH_FLG=$BRANCH_FLG"
+  echo "DESKTOP=$DESKTOP"
+  echo "NV_BRANCH_FLG=$NV_BRANCH_FLG"
+
+  (
+    echo "BRANCH_FLG=$BRANCH_FLG"
+    echo "DESKTOP=$DESKTOP"
+    echo "NV_BRANCH_FLG=$NV_BRANCH_FLG"
+  ) >"$BRANCH_CONF"
+}
+
+function get_repo_from_branch_conf() {
+  local branch_flg="$1"
+  local desktop="$2"
+  local nv_branch_flg="$3"
+
+  repo_branch="stable"
+  case "$branch_flg" in
+  "rel")
+    repo_branch="stable"
+    ;;
+  "beta")
+    repo_branch="testing"
+    ;;
+  "main")
+    repo_branch="unstable"
+    ;;
+  *)
+    repo_branch="stable"
+    ;;
+  esac
+
+  repo_addon=""
+  if [[ "$nv_branch_flg" == "1" ]]; then
+    repo_addon="-nv"
+  fi
+
+  if [[ -z "$desktop" ]]; then
+    desktop="gnome"
+  fi
+
+  echo "$REPO:$repo_branch:$desktop$repo_addon"
+}
+
+parse_branch_conf
+
+case "$1" in
+"-c")
+  real_branch=$(sed -n 's/^\(honjow\|3003n\)\/chimeraos://p' "$BRANCH_PATH" 2>/dev/null)
+  if [[ -z "$BRANCH_FLG" && -z "$DESKTOP" ]]; then
+    echo >&2 "Warning: Unrecognized currently selected branch name '$real_branch', updates may not succeed."
+    echo "$real_branch"
+    exit 0
+  fi
+
+  echo "$BRANCH_FLG"
+  ;;
+"-l")
+  mapfile -t show_branch_list < <(generate_branch_list "$BRANCH_FLG" "$DESKTOP" "$NV_BRANCH_FLG")
+  for b in "${show_branch_list[@]}"; do
+    echo "$b"
+  done
+  exit 0
+  ;;
+*)
+  # 所有参数都作为 set_tag 传递给 save_branch_conf
+  save_branch_conf "$@"
+  repo=$(get_repo_from_branch_conf "$BRANCH_FLG" "$DESKTOP" "$NV_BRANCH_FLG")
+  echo "Switching to [$repo]"
+  echo "$repo" >"$BRANCH_PATH"
+  exit 0
+  ;;
+esac
+
+mapfile -t branch_list < <(generate_branch_list "$BRANCH_FLG" "$DESKTOP" "$NV_BRANCH_FLG")
 IFS="|"
-echo "Usage: steamos-select-branch <-${REAL_BRANCHES[*]}>" 1>&2
+echo "Usage: steamos-select-branch <-${branch_list[*]}>" 1>&2
 IFS=" "

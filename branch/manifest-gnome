@@ -1,5 +1,9 @@
 #! /bin/bash
 
+for base in base-*; do
+	source $base
+done
+
 export POSTCOPY="\
 	gnome \
 	wallpapers/gnome-backgrounds \
@@ -7,57 +11,24 @@ export POSTCOPY="\
 "
 
 export SUB_PACKAGES="\
-	dconf-editor \
-	epiphany \
-	gnome-browser-connector \
-	gnome-console \
-	gnome-control-center \
-	gnome-disk-utility \
-	gnome-keyring \
-	gnome-session \
-	gnome-shell \
-	gnome-software \
-	gnome-system-monitor \
-	gnome-terminal \
-	gnome-text-editor \
-	gnome-tweaks \
-	gnome-remote-desktop \
-	gnome-shell-extensions \
-	gnome-shell-extension-appindicator \
-	gnome-shell-extension-desktop-icons-ng \
-	gnome-menus \
-	loupe \
-	nautilus \
-	noto-fonts-cjk \
-	papirus-icon-theme \
-	xdg-desktop-portal-gnome \
-	xdg-user-dirs-gtk \
+	$BASE_PACKAGES \
+	$BASE_GNOME_PACKAGES \
 "
 
 export SUB_AUR_PACKAGES="\
-	gnome-shell-extension-bluetooth-battery-meter-git \
-	gnome-shell-extension-blur-my-shell \
-	gnome-shell-extension-dash-to-dock \
-	gnome-shell-extension-enhanced-osk-git \
-	gnome-shell-extension-screen-autorotate \
+	$BASE_AUR_PACKAGES \
+	$BASE_GNOME_AUR_PACKAGES \
 "
 
 export SUB_LOCAL_PACKAGES="\
-	ds-inhibit \
+	$BASE_LOCAL_PACKAGES \
 	gnome-shell-extension-hibernate-status-git \
 	gnome-shell-extension-logo-menu \
-	mangohud-git \
-	msi-ec-dkms-git \
-	rtl88x2bu-dkms \
-	steam-removable-media-git \
-	xonedo-dkms \
-	xonedo-firmware \
 "
 
 export SUB_PACKAGES_TO_DELETE="\
 "
 
 sub_postinstallhook() {
-	install -Dm755 -t /etc/skel/Desktop/ \
-		/usr/share/applications/{org.chimeraos.session-return,sk-chos-tool}.desktop
+	install -Dm755 -t /etc/skel/Desktop/ /usr/share/applications/{org.chimeraos.session-return,sk-chos-tool}.desktop
 }
