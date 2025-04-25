@@ -4,7 +4,7 @@
 
 pkgname=steamos-manager
 _srctag=v25.4.1.sk3
-pkgver=25.4.1.r6.g7160930
+pkgver=25.4.1.r14.g99f473d
 pkgrel=1
 pkgdesc='SteamOS Manager daemon for running various system management tasks'
 arch=('x86_64')
@@ -16,7 +16,7 @@ depends=('dbus'
 optdepends=('jupiter-hw-support: jupiter support')  # Needed for jupiter-get-als-gain, jupiter-biosupdate, steamos-format-device, steamos-trim-devices
 makedepends=('git' 'cargo')
 # _commit=1e6e80cf93629d9a5b5fd38c05bb7532a37510d1
-source=("$pkgname::git+https://github.com/honjow/$pkgname.git#branch=PowerStation-dev"
+source=("$pkgname::git+https://github.com/honjow/$pkgname.git#branch=dev"
         'support-gamescope-session-steam.patch')
 sha256sums=('SKIP'
             'd974e606cd74cbacdb8b4d11063dc58a8161d05f549ce637e3e7f80570a31bbc')
