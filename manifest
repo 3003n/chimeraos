@@ -83,7 +83,7 @@ export PACKAGES="\
 	openal \
 	openssh \
 	p7zip \
-q	pipewire \
+	pipewire \
 	pipewire-alsa \
 	pipewire-jack \
 	pipewire-pulse \
