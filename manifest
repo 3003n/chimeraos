@@ -224,6 +224,7 @@ export SERVICES="\
 
 export USER_SERVICES="\
 	pipewire \
+	podman \
 	sk-chos-user-daemon \
 	sk-first-setup-daemon \
 	sk-audio-setup \
