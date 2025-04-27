@@ -4,7 +4,7 @@
 
 pkgname=steamos-manager
 _srctag=v25.4.1.sk3
-pkgver=25.4.1.r14.g99f473d
+pkgver=25.4.1.r15.gdaf9d27
 pkgrel=1
 pkgdesc='SteamOS Manager daemon for running various system management tasks'
 arch=('x86_64')
