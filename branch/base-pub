@@ -36,6 +36,7 @@ export BASE_PACKAGES="\
 	patch \
 	plymouth \
 	podman-compose \
+	podman-docker \
 	python-pyudev \
 	python-systemd \
 	ripgrep \
