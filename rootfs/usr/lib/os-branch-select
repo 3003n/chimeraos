@@ -4,6 +4,7 @@ set -e
 BRANCH_PATH="/frzr_root/source"
 BRANCH_CONF="/frzr_root/os-branch.conf"
 REPO="3003n/chimeraos"
+OTHER_SOURCE=""
 
 LOCAL_LANG_FILE="/etc/locale.conf"
 
@@ -37,14 +38,15 @@ function parse_branch_conf() {
   local source_file=$BRANCH_PATH
 
   if [[ ! -f "$source_file" ]]; then
-    echo "Error: $source_file not found"
-    exit 1
+    echo >&2 "Error: $source_file not found"
+    return 1
   fi
 
   branch_repo=$(sed -n 's/^\(honjow\|3003n\)\/chimeraos://p' "$source_file")
   if [[ -z "$branch_repo" ]]; then
-    echo "Error: No branch repo found in $source_file"
-    exit 1
+    echo >&2 "Error: No branch repo found in $source_file"
+    OTHER_SOURCE=$(cat "$source_file")
+    return 1
   fi
 
   branch_type=$(echo "$branch_repo" | cut -d ':' -f 1)
@@ -239,10 +241,15 @@ function get_repo_from_branch_conf() {
   echo "$REPO:$repo_branch:$desktop$repo_addon"
 }
 
-parse_branch_conf
+parse_branch_conf || echo >&2 "Error: Failed to parse branch conf"
 
 case "$1" in
 "-c")
+  if [[ -n "$OTHER_SOURCE" ]]; then
+    echo "$OTHER_SOURCE"
+    exit 0
+  fi
+
   real_branch=$(sed -n 's/^\(honjow\|3003n\)\/chimeraos://p' "$BRANCH_PATH" 2>/dev/null)
   if [[ -z "$BRANCH_FLG" && -z "$DESKTOP" ]]; then
     echo >&2 "Warning: Unrecognized currently selected branch name '$real_branch', updates may not succeed."
@@ -253,6 +260,10 @@ case "$1" in
   echo "$BRANCH_FLG"
   ;;
 "-l")
+  if [[ -n "$OTHER_SOURCE" ]]; then
+    echo "$OTHER_SOURCE"
+  fi
+
   mapfile -t show_branch_list < <(generate_branch_list "$BRANCH_FLG" "$DESKTOP" "$NV_BRANCH_FLG")
   for b in "${show_branch_list[@]}"; do
     echo "$b"
