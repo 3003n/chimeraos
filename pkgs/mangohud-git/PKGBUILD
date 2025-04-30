@@ -2,7 +2,7 @@
 
 _pkgname=MangoHud
 pkgname=mangohud-git
-pkgver=0.8.1.r14.ge906c6b
+pkgver=0.8.1.r51.gdc30950
 pkgrel=1
 pkgdesc="A Vulkan overlay layer for monitoring FPS, temperatures, CPU/GPU load and more"
 url='https://github.com/flightlessmango/MangoHud'
@@ -50,8 +50,8 @@ source=(
     0002-Add-support-for-more-handheld-devices-to-fan-detecti.patch
     )
 sha256sums=('SKIP'
-            '2ca0b5ff21c8f65b3c03d6900de8fb6363d8929ceabd5792371d992377978ad4'
-            '51127b438b43fb7096e8e305811ad88d3eb9bb20a5228aa586475fb0bd72b304')
+            '4f55864af4abfc0b95595512df0989d599d7134714dbb5fcf2d7a7988ecfb574'
+            '47231a0a8867b7831067dbc4ef1b75e2417ba715b6632bebf889de862705d306')
 
 pkgver() {
     cd $_pkgname
