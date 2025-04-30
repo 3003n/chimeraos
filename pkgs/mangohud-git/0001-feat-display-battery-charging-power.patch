@@ -1,6 +1,6 @@
-From dd5e64613b61dd6959e11f0cb6cad4dfe629952d Mon Sep 17 00:00:00 2001
+From 037dadbad1ccf0773cc1d8a037aea8e55c5b63f6 Mon Sep 17 00:00:00 2001
 From: honjow <honjow311@gmail.com>
-Date: Wed, 5 Mar 2025 20:50:35 +0800
+Date: Wed, 30 Apr 2025 22:19:34 +0800
 Subject: [PATCH 1/2] feat: display battery charging power
 
 - Display actual power value during battery charging
@@ -24,10 +24,10 @@ index e5d311b..f4ff2d9 100644
          }
  
 diff --git a/src/hud_elements.cpp b/src/hud_elements.cpp
-index e820908..90790fc 100644
+index b131fbc..8740c2f 100644
 --- a/src/hud_elements.cpp
 +++ b/src/hud_elements.cpp
-@@ -1038,13 +1038,19 @@ void HudElements::battery(){
+@@ -1131,13 +1131,19 @@ void HudElements::battery(){
              if (Battery_Stats.current_watt != 0) {
                  if (HUDElements.params->enabled[OVERLAY_PARAM_ENABLED_battery_watt]){
                      ImguiNextColumnOrNewRow();
@@ -49,5 +49,5 @@ index e820908..90790fc 100644
                  }
                  if (HUDElements.params->enabled[OVERLAY_PARAM_ENABLED_battery_time]) {
 -- 
-2.48.1
+2.49.0
 
