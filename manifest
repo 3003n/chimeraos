@@ -121,8 +121,8 @@ export PACKAGES="\
 "
 
 export PACKAGE_OVERRIDES="\
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.4-3/linux-skchos-6.14.4-3-x86_64.pkg.tar.zst \
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.4-3/linux-skchos-headers-6.14.4-3-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.4-4/linux-skchos-6.14.4-4-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.4-4/linux-skchos-headers-6.14.4-4-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0.rc3-chos1-2/lib32-mesa-1--25.1.0.rc3.chos1-2-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0.rc3-chos1-2/lib32-opencl-rusticl-mesa-1--25.1.0.rc3.chos1-2-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0.rc3-chos1-2/lib32-vulkan-intel-1--25.1.0.rc3.chos1-2-x86_64.pkg.tar.zst \
