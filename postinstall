@@ -190,7 +190,7 @@ postinstall_download() {
 	download_decky_plugin "aarron-lee/DeckyPlumber" $decky_plugin_path
 
 	# honjow/decky-terminal/
-	# download_decky_plugin "honjow/decky-terminal" $decky_plugin_path
+	download_decky_plugin "honjow/decky-terminal" $decky_plugin_path
 
 	# aarron-lee/LegionGoRemapper
 	download_decky_plugin "aarron-lee/LegionGoRemapper" $decky_plugin_path
