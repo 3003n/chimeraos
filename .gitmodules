@@ -82,9 +82,6 @@
 [submodule "aur-pkgs/evdev-keepalive"]
 	path = aur-pkgs/evdev-keepalive
 	url = https://aur.archlinux.org/evdev-keepalive.git
-[submodule "aur-pkgs/ibus-pinyin"]
-	path = aur-pkgs/ibus-pinyin
-	url = https://aur.archlinux.org/ibus-pinyin.git
 [submodule "aur-pkgs/gnome-shell-extension-blur-my-shell"]
 	path = aur-pkgs/gnome-shell-extension-blur-my-shell
 	url = https://aur.archlinux.org/gnome-shell-extension-blur-my-shell.git

@@ -136,6 +136,7 @@ export PACKAGE_OVERRIDES="\
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0.rc3-chos1-2/vulkan-radeon-1--25.1.0.rc3.chos1-2-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
+	https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/ibus-pinyin-1.5.1-2.2-x86_64.pkg.tar.zst \
 "
 
 # Each entry is the clone url (https://aur.archlinux.org/{AUR_PACKAGE}.git)
@@ -158,7 +159,6 @@ export AUR_PACKAGES="\
 	hhd-ui \
 	hhfc-git \
 	hid-msi-claw-dkms-git \
-	ibus-pinyin \
 	inputplumber-bin \
 	kanit-font \
 	linux-firmware-valve \
