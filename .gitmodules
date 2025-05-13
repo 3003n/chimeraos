@@ -166,3 +166,6 @@
 [submodule "aur-pkgs/chimeraos-device-quirks-sk"]
 	path = aur-pkgs/chimeraos-device-quirks-sk
 	url = https://aur.archlinux.org/chimeraos-device-quirks-sk.git
+[submodule "aur-pkgs/davfs2"]
+	path = aur-pkgs/davfs2
+	url = https://aur.archlinux.org/davfs2.git
