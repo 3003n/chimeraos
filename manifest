@@ -42,6 +42,7 @@ export PACKAGES="\
 	fwupd \
 	git \
 	gst-plugin-pipewire \
+	gvfs-dnssd \
 	gvfs-smb \
 	gvfs-nfs \
 	gzip \
