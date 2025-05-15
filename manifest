@@ -138,8 +138,6 @@ export PACKAGE_OVERRIDES="\
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/ibus-pinyin-1.5.1-2.2-x86_64.pkg.tar.zst \
-	https://ns.switchsystem.eu.org/d/vfs/guest/stos/pkgs/libgbinder-1.1.42-1-x86_64.pkg.tar.zst \
-	https://ns.switchsystem.eu.org/d/vfs/guest/stos/pkgs/libglibutil-1.0.79-2-x86_64.pkg.tar.zst \
 "
 
 # Each entry is the clone url (https://aur.archlinux.org/{AUR_PACKAGE}.git)
