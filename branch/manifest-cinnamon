@@ -44,7 +44,6 @@ export SUB_AUR_PACKAGES="\
 	mint-themes \
 	mint-y-icons \
 	xviewer \
-	xplayer \
 "
 
 export SUB_LOCAL_PACKAGES="\
