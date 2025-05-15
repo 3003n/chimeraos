@@ -121,10 +121,10 @@ export PACKAGES="\
 "
 
 export PACKAGE_OVERRIDES="\
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.4-4/linux-skchos-6.14.4-4-x86_64.pkg.tar.zst \
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.4-4/linux-skchos-headers-6.14.4-4-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-git-packages/releases/download/969820e/lib32-mesa-git-25.2.0_devel.204964.969820e7fe9.869876d-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-git-packages/releases/download/969820e/mesa-git-25.2.0_devel.204964.969820e7fe9.869876d-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.6-2/linux-skchos-6.14.6-2-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.6-2/linux-skchos-headers-6.14.6-2-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-git-packages/releases/download/1c57581/lib32-mesa-git-25.2.0_devel.205546.1c575818561.869876d-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-git-packages/releases/download/1c57581/mesa-git-25.2.0_devel.205546.1c575818561.869876d-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://ns.switchsystem.eu.org/d/vfs/guest/stos/pkgs/libgbinder-1.1.42-1-x86_64.pkg.tar.zst \
