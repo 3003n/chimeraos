@@ -127,6 +127,7 @@ export PACKAGE_OVERRIDES="\
 	https://github.com/3003n/mesa-git-packages/releases/download/1c57581/mesa-git-25.2.0_devel.205546.1c575818561.869876d-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
+	https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/ibus-pinyin-1.5.1-2.2-x86_64.pkg.tar.zst \
 "
 
 # Each entry is the clone url (https://aur.archlinux.org/{AUR_PACKAGE}.git)
@@ -149,7 +150,6 @@ export AUR_PACKAGES="\
 	hhd-ui \
 	hhfc-git \
 	hid-msi-claw-dkms-git \
-	ibus-pinyin \
 	inputplumber-bin \
 	kanit-font \
 	linux-firmware-valve \
