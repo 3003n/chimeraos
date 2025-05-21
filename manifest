@@ -1,11 +1,11 @@
 #! /bin/bash
 
-export VERSION="49-6"
+export VERSION="49-7"
 export SYSTEM_DESC="ChimeraOS"
 export SYSTEM_NAME="chimeraos"
 export USERNAME="gamer"
 export SIZE="20000MB"
-export ARCHIVE_DATE="2025/05/17"
+export ARCHIVE_DATE="2025/05/20"
 export WEBSITE="https://chimeraos.org"
 export DOCUMENTATION_URL="https://chimeraos.org/about"
 export BUG_REPORT_URL="https://github.com/ChimeraOS/chimeraos/issues"
@@ -122,8 +122,8 @@ export PACKAGES="\
 "
 
 export PACKAGE_OVERRIDES="\
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.6-5/linux-skchos-6.14.6-5-x86_64.pkg.tar.zst \
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.6-5/linux-skchos-headers-6.14.6-5-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.6-6/linux-skchos-6.14.6-6-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.6-6/linux-skchos-headers-6.14.6-6-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0-chos1-1/lib32-mesa-1--25.1.0.chos1-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0-chos1-1/lib32-opencl-rusticl-mesa-1--25.1.0.chos1-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-chimeraos/releases/download/25.1.0-chos1-1/lib32-vulkan-intel-1--25.1.0.chos1-1-x86_64.pkg.tar.zst \
