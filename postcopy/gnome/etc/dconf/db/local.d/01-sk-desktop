@@ -57,3 +57,18 @@ translate=false
 apps=['bvnc.desktop','bssh.desktop','avahi-discover.desktop','gtk-lshw.desktop','qv4l2.desktop','qvidcap.desktop','vim.desktop']
 name='X-GNOME-Other.directory'
 translate=true
+
+[org/gnome/desktop/app-folders/folders/Development]
+categories=['Development', 'X-Kara']
+name='Development.directory'
+translate=true
+
+[org/gnome/desktop/app-folders/folders/Office]
+categories=['Office']
+name='Office.directory'
+translate=true
+
+[org/gnome/desktop/app-folders/folders/Network]
+categories=['Network']
+name='Network.directory'
+translate=true
