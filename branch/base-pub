@@ -91,6 +91,7 @@ export BASE_AUR_PACKAGES="\
 export EXTRA_AUR_PACKAGES="\
 	moonlight-qt-axi \
 	protonup-qt \
+	protontricks \
 	tsukimi-bin \
 "
 
