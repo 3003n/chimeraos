@@ -262,6 +262,7 @@ postinstallhook() {
 		cmake
 		gcc
 		ardour
+		wine
 		)
 	for package in "${remove_packages[@]}"; do
 		pacman --noconfirm -Rnsdd "$package" || true
