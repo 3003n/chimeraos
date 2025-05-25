@@ -166,3 +166,6 @@
 [submodule "aur-pkgs/protontricks"]
 	path = aur-pkgs/protontricks
 	url = https://aur.archlinux.org/protontricks.git
+[submodule "aur-pkgs/flatseal"]
+	path = aur-pkgs/flatseal
+	url = https://aur.archlinux.org/flatseal.git
