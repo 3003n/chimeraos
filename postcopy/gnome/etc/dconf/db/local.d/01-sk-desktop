@@ -5,7 +5,7 @@ button-layout='appmenu:minimize,maximize,close'
 favorite-apps=['org.gnome.Epiphany.desktop','org.gnome.Nautilus.desktop','org.gnome.Software.desktop','org.chimeraos.session-return.desktop','steam.desktop']
 
 [org/gnome/desktop/app-folders]
-folder-children=['Games','Utilities','Containers','Waydroid','Wine','YaST','Pardus','System','Other']
+folder-children=['Games','Utilities','Containers','Waydroid','Wine','YaST','Pardus','System','Other','Development','Office','Network']
 
 [org/gnome/desktop/app-folders/folders/Utilities]
 apps=['org.gnome.Console.desktop','org.gnome.tweaks.desktop','ca.desrt.dconf-editor.desktop','yafti.desktop','webapp-manager.desktop','tuned-gui.desktop','fish.desktop','tuned-gui.desktop','yelp.desktop','btop.desktop','com.github.tchx84.Flatseal.desktop','io.github.flattool.Warehouse.desktop','it.mijorus.gearlever.desktop','com.mattjakeman.ExtensionManager.desktop','org.gnome.tweaks.desktop','com.github.GradienceTeam.Gradience','io.github.fastrizwaan.WineZGUI.desktop']
