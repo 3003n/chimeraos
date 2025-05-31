@@ -12,7 +12,7 @@ license=('GPL2')
 depends=('gnome-shell')
 makedepends=('unzip')
 # source=("${url}/archive/refs/tags/v${pkgver}_${_tag}.tar.gz")
-_commit="bbbc77836d1bb853f4bbaf683674c3bbae19cf66"
+_commit="89e0e4d84b97e65f0787e195663090f157dd82ae"
 source=("git+${url}#tag=${_commit}")
 sha256sums=('SKIP')
 
