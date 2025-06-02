@@ -105,6 +105,7 @@ export BASE_LOCAL_PACKAGES="\
 	rtl88x2bu-dkms \
 	steam-removable-media-git \
 	steamos-manager \
+	steamos-powerbuttond \
 	xonedo-dkms \
 	xonedo-firmware \
 "
