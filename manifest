@@ -162,7 +162,6 @@ export AUR_PACKAGES="\
 	sk-boot-to-windows \
 	sk-chos-tool \
 	steam_notif_daemon \
-	steam-powerbuttond-git \
 	v4l-utils-git \
 	waydroid-script-git \
 	yay-git \
