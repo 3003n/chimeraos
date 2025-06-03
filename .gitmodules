@@ -166,3 +166,6 @@
 [submodule "aur-pkgs/flatseal"]
 	path = aur-pkgs/flatseal
 	url = https://aur.archlinux.org/flatseal.git
+[submodule "aur-pkgs/aic8800d80-dkms"]
+	path = aur-pkgs/aic8800d80-dkms
+	url = https://aur.archlinux.org/aic8800d80-dkms.git
