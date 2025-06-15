@@ -121,8 +121,8 @@ export PACKAGES="\
 "
 
 export PACKAGE_OVERRIDES="\
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.15.2-2/linux-skchos-6.15.2-2-x86_64.pkg.tar.zst \
-	https://github.com/3003n/linux-chimeraos/releases/download/v6.15.2-2/linux-skchos-headers-6.15.2-2-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.6-9/linux-skchos-6.14.6-9-x86_64.pkg.tar.zst \
+	https://github.com/3003n/linux-chimeraos/releases/download/v6.14.6-9/linux-skchos-headers-6.14.6-9-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-git-packages/releases/download/1c3f238/lib32-mesa-git-25.2.0_devel.206911.1c3f238ce99.d41d8cd-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/mesa-git-packages/releases/download/1c3f238/mesa-git-25.2.0_devel.206911.1c3f238ce99.d41d8cd-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
