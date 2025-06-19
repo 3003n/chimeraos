@@ -187,8 +187,8 @@ else
 	btrfs send -f ${IMG_FILENAME} ${SNAP_PATH}
 fi
 
-# 分割文件
-split_mb=2020
+# 分割文件 1.5G
+split_mb=1536
 split_bytes=$((split_mb * 1024 * 1024))
 file_size=$(stat -c %s ${IMG_FILENAME})
 
