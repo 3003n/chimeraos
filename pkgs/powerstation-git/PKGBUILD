@@ -1,7 +1,7 @@
 # Maintainer: William Edwards <shadowapex@gmail.com>
 pkgname=powerstation-git
 _pkgbase=powerstation
-pkgver=v0.5.0.r6.g1fe4f32
+pkgver=v0.6.1.r5.gec55443
 pkgrel=1
 pkgdesc="Open source performance daemon with DBus interface"
 arch=('x86_64')
