@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2114
 
 set -e
 set -x

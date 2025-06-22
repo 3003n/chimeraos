@@ -1,4 +1,5 @@
 #! /bin/bash
+# shellcheck disable=SC2129
 
 set -e
 set -x
@@ -158,7 +159,8 @@ rm ${BUILD_PATH}/manifest
 # freeze archive date of build to avoid package drift on unlock
 # if no archive date is set
 if [ -z "${ARCHIVE_DATE}" ]; then
-	export TODAY_DATE=$(date +%Y/%m/%d)
+	TODAY_DATE=$(date +%Y/%m/%d)
+	export TODAY_DATE
 	echo "Server=https://archive.archlinux.org/repos/${TODAY_DATE}/\$repo/os/\$arch" > \
 		${BUILD_PATH}/etc/pacman.d/mirrorlist
 fi
@@ -194,7 +196,7 @@ file_size=$(stat -c %s ${IMG_FILENAME})
 
 if [ ${file_size} -gt ${split_bytes} ]; then
 	total_parts=$(((file_size + split_bytes - 1) / split_bytes))
-	img_ext=${IMG_FILENAME#${IMG_FILENAME_WITHOUT_EXT}}
+	img_ext=${IMG_FILENAME#"${IMG_FILENAME_WITHOUT_EXT}"}
 
 	# 临时分割文件（生成 .part000, .part001, ...）
 	split -b ${split_mb}MiB -d -a 3 ${IMG_FILENAME} ${IMG_FILENAME_WITHOUT_EXT}.part
