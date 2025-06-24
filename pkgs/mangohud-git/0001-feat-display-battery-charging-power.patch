@@ -42,7 +42,7 @@ index b131fbc..8740c2f 100644
                      else
                          right_aligned_text(HUDElements.colors.text, HUDElements.ralign_width, "%.1f", Battery_Stats.current_watt);
                      ImGui::SameLine(0,1.0f);
-                     ImGui::PushFont(HUDElements.sw_stats->font1);
+                     ImGui::PushFont(HUDElements.sw_stats->font_small);
 -                    HUDElements.TextColored(HUDElements.colors.text, "W");
 +                    HUDElements.TextColored(HUDElements.colors.text, "%sW", prefix.c_str());
                      ImGui::PopFont();
