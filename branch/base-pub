@@ -103,6 +103,7 @@ export BASE_LOCAL_PACKAGES="\
 	mangohud-git \
 	powerstation-git \
 	rtl88x2bu-dkms \
+	steam-launch-manager \
 	steam-removable-media-git \
 	steamos-manager \
 	steamos-powerbuttond \
