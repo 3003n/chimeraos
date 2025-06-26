@@ -20,6 +20,7 @@ export SUB_AUR_PACKAGES="\
 	$BASE_KDE_AUR_PACKAGES \
 	linuxqq \
 	microsoft-edge-stable-bin \
+	qqmusic-bin \
 "
 
 export SUB_LOCAL_PACKAGES="\

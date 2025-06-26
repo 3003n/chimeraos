@@ -178,3 +178,6 @@
 [submodule "aur-pkgs/microsoft-edge-stable-bin"]
 	path = aur-pkgs/microsoft-edge-stable-bin
 	url = https://aur.archlinux.org/microsoft-edge-stable-bin.git
+[submodule "aur-pkgs/qqmusic-bin"]
+	path = aur-pkgs/qqmusic-bin
+	url = https://aur.archlinux.org/qqmusic-bin.git
