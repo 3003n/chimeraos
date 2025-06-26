@@ -1,3 +1,3 @@
 # Default Desktop Session
-# options: wayland, xorg. if not set, xorg will be used
-# SK_CHOS_SESSION="xorg"
+# options: wayland, xorg. if not set, wayland will be used
+SK_CHOS_SESSION="wayland"
