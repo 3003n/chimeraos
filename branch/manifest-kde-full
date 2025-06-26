@@ -1,0 +1,37 @@
+#! /bin/bash
+
+for base in base-*; do
+	source $base
+done
+
+export POSTCOPY="\
+	plasma \
+	skel \
+	wallpapers/wallpapers \
+"
+
+export SUB_PACKAGES="\
+	$BASE_PACKAGES \
+	$BASE_KDE_PACKAGES \
+"
+
+export SUB_AUR_PACKAGES="\
+	$BASE_AUR_PACKAGES \
+	$BASE_KDE_AUR_PACKAGES \
+	linuxqq \
+	microsoft-edge-stable-bin \
+"
+
+export SUB_LOCAL_PACKAGES="\
+	$BASE_LOCAL_PACKAGES \
+	cursor-extracted \
+"
+
+export SUB_PACKAGES_TO_DELETE="\
+	gnome-desktop \
+	mutter \
+"
+
+sub_postinstallhook() {
+	:
+}

@@ -169,3 +169,12 @@
 [submodule "aur-pkgs/aic8800d80-dkms"]
 	path = aur-pkgs/aic8800d80-dkms
 	url = https://aur.archlinux.org/aic8800d80-dkms.git
+[submodule "aur-pkgs/linuxqq"]
+	path = aur-pkgs/linuxqq
+	url = https://aur.archlinux.org/linuxqq.git
+[submodule "aur-pkgs/noto-fonts-cjk-fontconfig"]
+	path = aur-pkgs/noto-fonts-cjk-fontconfig
+	url = https://aur.archlinux.org/noto-fonts-cjk-fontconfig.git
+[submodule "aur-pkgs/microsoft-edge-stable-bin"]
+	path = aur-pkgs/microsoft-edge-stable-bin
+	url = https://aur.archlinux.org/microsoft-edge-stable-bin.git

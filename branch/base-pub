@@ -82,6 +82,7 @@ export NVDIA_PACKAGES="\
 export BASE_AUR_PACKAGES="\
 	lib32-extest \
 	nbfc-linux \
+	noto-fonts-cjk-fontconfig \
 	onedrive-abraunegg \
 	python-pyclip \
 	sx \
