@@ -1,7 +1,7 @@
 # shellcheck disable=SC2034,SC2148
 # Maintainer: honjow <honjow@gmail.com>
 pkgname=steam-launch-manager
-pkgver=1.20.8868844
+pkgver=1.32.1301753
 pkgrel=1
 pkgdesc="Steam Launch Options Manager - 智能管理 Steam 游戏启动参数，支持前置/后置参数合并和冲突处理"
 arch=('any')
