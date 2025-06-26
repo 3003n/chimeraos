@@ -12,7 +12,7 @@ if [ -f "$DEFAULT_SESSION_CONFIG" ]; then
   source "$DEFAULT_SESSION_CONFIG"
 fi
 
-SK_CHOS_SESSION=${SK_CHOS_SESSION:-"xorg"}
+SK_CHOS_SESSION=${SK_CHOS_SESSION:-"wayland"}
 
 echo "SK_CHOS_SESSION=$SK_CHOS_SESSION" | sudo systemd-cat -t os-session-select
 
@@ -96,14 +96,15 @@ function delay_set_return_session() {
 if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then
   # We found and consumed the oneshot sentinel, proceed to launch plasma
   echo >&2 "$0: Found and removed sentinel file for one-shot desktop, proceeding to launch"
-  if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
-    exec "$CONFIGURED_CHAINED_SESSION"
-  else
-    return_file="$HOME/.config/${RETURN_SESSION_FILE}"
-    return_session=$(cat "$return_file")
-    delay_set_return_session $return_session || true
-    sudo chimera-session-use-lightdm plasmax11
-  fi
+  exec "$CONFIGURED_CHAINED_SESSION"
+  # if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
+  #   exec "$CONFIGURED_CHAINED_SESSION"
+  # else
+  #   return_file="$HOME/.config/${RETURN_SESSION_FILE}"
+  #   return_session=$(cat "$return_file")
+  #   delay_set_return_session $return_session || true
+  #   sudo chimera-session-use-lightdm plasmax11
+  # fi
 
 else
   if CONFIGURED_RETURN_SESSION=$(check_return); then
