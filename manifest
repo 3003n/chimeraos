@@ -219,7 +219,6 @@ export SERVICES="\
 	haveged \
 	hostname-fix \
 	inputplumber \
-	inputplumber-suspend \
 	lightdm \
 	overlay-backgrounds \
 	overlay-fonts \
