@@ -91,8 +91,12 @@ mkdir ${BUILD_PATH}/local_pkgs
 mkdir ${BUILD_PATH}/aur_pkgs
 mkdir ${BUILD_PATH}/override_pkgs
 
+mkdir -p ${BUILD_PATH}/pre-download
+
 cp -rv aur-pkgs/*.pkg.tar* ${BUILD_PATH}/aur_pkgs
 cp -rv pkgs/*.pkg.tar* ${BUILD_PATH}/local_pkgs
+
+cp -rv pre-download/*.tar.gz ${BUILD_PATH}/pre-download
 
 mv ${BUILD_PATH}/extra/*.pkg.tar.zst ${BUILD_PATH}/override_pkgs/ || true
 
