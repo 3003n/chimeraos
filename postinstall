@@ -158,8 +158,6 @@ postinstall_download() {
 	refind_path=$pre_path/refind
 	rime_config_path=$pre_path/rime_config
 
-	current_dir=$(pwd)
-
 	# pre download decky
 	mkdir -p $decky_path
 	download_decky_loader $decky_path $decky_file $decky_version_file
@@ -228,20 +226,17 @@ postinstall_download() {
 	if [ -d $css_hhd_path/handheld-controller-glyphs-sk ]; then
 		rm -rf $css_hhd_path/handheld-controller-glyphs-sk
 	fi
-	cd $current_dir
 	git clone --depth 1 $git_url $css_hhd_path/handheld-controller-glyphs-sk
 	# pre download rime config
 	rime_git_url="https://github.com/iDvel/rime-ice.git"
 	if [ -d $rime_config_path ]; then
 		rm -rf $rime_config_path
 	fi
-	cd $current_dir
 	git clone --depth 1 $rime_git_url $rime_config_path
 
 	# zsh pre download
 	mkdir -p "${zsh_path:?}"
 	rm -rf "${zsh_path:?}"/*
-	cd $current_dir
 	git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git "${zsh_path:?}/ohmyzsh"
 	git clone --depth 1 https://github.com/zdharma-continuum/fast-syntax-highlighting "${zsh_path:?}/ohmyzsh/custom/plugins/fast-syntax-highlighting"
 	cp $zsh_path/ohmyzsh/templates/zshrc.zsh-template $zsh_path/.zshrc
@@ -273,7 +268,6 @@ postinstall_download() {
 
 	# pre download refind themes
 	mkdir -p $refind_path
-	cd $current_dir
 	git clone --depth 1 "https://github.com/bobafetthotmail/refind-theme-regular.git" $refind_path/refind-theme-regular
 	rm -rf $refind_path/refind-theme-regular/{.git,.gitignore,src,install.sh,README.md}
 
