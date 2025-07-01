@@ -123,8 +123,8 @@ export PACKAGES="\
 export PACKAGE_OVERRIDES="\
 	https://github.com/3003n/linux-chimeraos/releases/download/v6.15.3-2/linux-skchos-6.15.3-2-x86_64.pkg.tar.zst \
 	https://github.com/3003n/linux-chimeraos/releases/download/v6.15.3-2/linux-skchos-headers-6.15.3-2-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-git-packages/releases/download/d964b8d/lib32-mesa-git-25.2.0_devel.207460.d964b8d5fa0.d41d8cd-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-git-packages/releases/download/d964b8d/mesa-git-25.2.0_devel.207460.d964b8d5fa0.d41d8cd-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-git-packages/releases/download/d81e5c5/lib32-mesa-git-25.2.0_devel.207876.d81e5c5aa3b.d41d8cd-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-git-packages/releases/download/d81e5c5/mesa-git-25.2.0_devel.207876.d81e5c5aa3b.d41d8cd-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/ibus-pinyin-1.5.1-2.2-x86_64.pkg.tar.zst \
