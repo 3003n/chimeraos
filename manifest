@@ -311,6 +311,8 @@ postinstallhook() {
 
 	# Replace wpctl with a wrapper to work around Steam resetting audio
 	mkdir -p /usr/libexec
-	mv /usr/bin/wpctl /usr/libexec/wpctl
-	mv /usr/bin/wpctl-wrapper /usr/bin/wpctl
+	if [ ! -L /usr/bin/wpctl ]; then
+		mv /usr/bin/wpctl /usr/libexec/wpctl
+		ln -sf /usr/bin/wpctl-wrapper /usr/bin/wpctl
+	fi
 }
