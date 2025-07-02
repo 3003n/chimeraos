@@ -37,9 +37,11 @@ export SUB_PACKAGE_OVERRIDES="\
 "
 
 sub_postinstallhook() {
-	temp_pkg_dir=$(mktemp -d)
-	wget --directory-prefix=$temp_pkg_dir $SUB_PACKAGE_OVERRIDES
+	if [ -n "$SUB_PACKAGE_OVERRIDES" ]; then
+		temp_pkg_dir=$(mktemp -d)
+		wget --directory-prefix=$temp_pkg_dir $SUB_PACKAGE_OVERRIDES
 
-	pacman --noconfirm -U --overwrite='*' $temp_pkg_dir/*.pkg.tar.zst --needed
-	rm -rf $temp_pkg_dir
+		pacman --noconfirm -U --overwrite='*' $temp_pkg_dir/*.pkg.tar.zst --needed
+		rm -rf $temp_pkg_dir
+	fi
 }
