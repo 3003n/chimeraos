@@ -25,6 +25,7 @@ export SUB_AUR_PACKAGES="\
 
 export SUB_LOCAL_PACKAGES="\
 	$BASE_LOCAL_PACKAGES \
+	cursor-extracted \
 "
 
 export SUB_PACKAGES_TO_DELETE="\
@@ -32,9 +33,7 @@ export SUB_PACKAGES_TO_DELETE="\
 	mutter \
 "
 
-export SUB_PACKAGE_OVERRIDES="\
-	https://ns.switchsystem.eu.org/d/vfs/guest/stos/pkgs/cursor-extracted-1.1.6-1-x86_64.pkg.tar.zst \
-"
+export SUB_PACKAGE_OVERRIDES=""
 
 sub_postinstallhook() {
 	if [ -n "$SUB_PACKAGE_OVERRIDES" ]; then
