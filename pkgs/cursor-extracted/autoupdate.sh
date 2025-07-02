@@ -2,7 +2,7 @@
 
 set -e
 
-curl 'https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest' -o latest.json
+curl -L 'https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest' -o latest.json
 
 version="$(grep -Po '"version":"\K[^"]+' latest.json)"
 url="$(grep -Po '"downloadUrl":"\K[^"]+' latest.json)"
