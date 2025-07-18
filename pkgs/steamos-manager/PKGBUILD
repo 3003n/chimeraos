@@ -4,13 +4,15 @@
 
 pkgname=steamos-manager
 # _srctag=v25.4.1.sk3
-pkgver=25.6.0.r26.g2c5d295
+pkgver=25.7.0.r9.gc9153ed
 pkgrel=1
 pkgdesc='SteamOS Manager daemon for running various system management tasks'
 arch=('x86_64')
 url='https://store.steampowered.com/steamos/'
 license=('MIT')
 depends=('dbus'
+		 'libspeechd'
+		 'speech-dispatcher'
          'systemd'
          'wireless_tools')  # For iwconfig
 optdepends=('jupiter-hw-support: jupiter support')  # Needed for jupiter-get-als-gain, jupiter-biosupdate, steamos-format-device, steamos-trim-devices
