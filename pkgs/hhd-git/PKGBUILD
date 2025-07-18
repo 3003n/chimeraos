@@ -22,7 +22,7 @@ license=('MIT')
 makedepends=(
   'git'
   'libusb'
-  'python-'{'build','installer','setuptools','wheel'}
+  'python-'{'build','installer','setuptools','wheel','babel'}
 )
 source=(
   "${_pkgbase}::git+${url}.git"
@@ -56,6 +56,10 @@ pkgver() {
 
 build() {
   cd "${srcdir}/${_pkgbase}"
+
+  pybabel compile -D hhd -d ./i18n
+  pybabel compile -D adjustor -d ./i18n
+  cp -rf ./i18n/* ./src/hhd/i18n
 
   python -m build --wheel --no-isolation
 }
