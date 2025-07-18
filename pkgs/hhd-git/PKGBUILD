@@ -26,14 +26,18 @@ makedepends=(
 )
 source=(
   "${_pkgbase}::git+${url}.git"
+  "0001-fix-powerbutton-for-MSI-Claw-A8.patch"
 )
 sha256sums=(
+  'SKIP'
   'SKIP'
 )
 
 
 prepare() {
   cd "${srcdir}/${_pkgbase}"
+
+  patch -Np1 -i "${srcdir}/0001-fix-powerbutton-for-MSI-Claw-A8.patch"
 
   git log > git.log
 }

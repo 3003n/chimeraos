@@ -1,0 +1,24 @@
+From 0936d07870fbd010e23fa5a1cf9324191d6ebfcc Mon Sep 17 00:00:00 2001
+From: honjow <honjow311@gmail.com>
+Date: Sat, 19 Jul 2025 04:36:32 +0800
+Subject: [PATCH] fix powerbutton for MSI Claw A8
+
+---
+ src/hhd/plugins/powerbutton/const.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/hhd/plugins/powerbutton/const.py b/src/hhd/plugins/powerbutton/const.py
+index 1d822eb..4043e59 100644
+--- a/src/hhd/plugins/powerbutton/const.py
++++ b/src/hhd/plugins/powerbutton/const.py
+@@ -78,7 +78,6 @@ SUPPORTED_DEVICES: Sequence[PowerButtonConfig] = [
+         "MSI Claw A8",
+         "Claw A8 BZ2EM",
+         type="only_press",
+-        phys=["LNXPWRBN"],
+     ),
+ ]
+ 
+-- 
+2.50.1
+
