@@ -18,6 +18,7 @@ fi
 
 BRANCH_FLG="${BRANCH_PREFIX:-}"
 DESKTOP="${DESKTOP:-}"
+REPO_ADDON_FLAG="${REPO_ADDON_PREFIX:-}"
 NV_BRANCH_FLG="${NV_BRANCH_PREFIX:-}"
 
 VALID_BRANCHES=(
@@ -33,6 +34,28 @@ DESKTOP_LIST=(
   "cinnamon"
   "cosmic"
 )
+
+function load_addon_config() {
+  # 如果配置文件中有新格式，优先使用
+  if [[ -n "$REPO_ADDON_FLAG" ]]; then
+    return
+  fi
+  
+  # 兼容旧格式：从 NV_BRANCH_FLG 转换到 REPO_ADDON_FLAG
+  if [[ "$NV_BRANCH_FLG" == "1" ]]; then
+    REPO_ADDON_FLAG="nv"
+  else
+    REPO_ADDON_FLAG=""
+  fi
+}
+
+function sync_ui_from_addon() {
+  if [[ "$REPO_ADDON_FLAG" == "nv" ]]; then
+    NV_BRANCH_FLG="1"
+  else
+    NV_BRANCH_FLG="0"
+  fi
+}
 
 function parse_branch_conf() {
   local source_file=$BRANCH_PATH
@@ -93,10 +116,10 @@ function parse_branch_conf() {
 
   case "$build_addon" in
   "nv")
-    NV_BRANCH_FLG="1"
+    REPO_ADDON_FLAG="nv"
     ;;
   *)
-    NV_BRANCH_FLG="0"
+    REPO_ADDON_FLAG=""
     ;;
   esac
 }
@@ -196,22 +219,29 @@ function save_branch_conf() {
     ;;
   esac
 
+  # 同步到新变量
+  if [[ "$NV_BRANCH_FLG" == "1" ]]; then
+    REPO_ADDON_FLAG="nv"
+  else
+    REPO_ADDON_FLAG=""
+  fi
+
   echo "save branch conf"
   echo "BRANCH_FLG=$BRANCH_FLG"
   echo "DESKTOP=$DESKTOP"
-  echo "NV_BRANCH_FLG=$NV_BRANCH_FLG"
+  echo "REPO_ADDON_FLAG=$REPO_ADDON_FLAG"
 
   (
     echo "BRANCH_FLG=$BRANCH_FLG"
     echo "DESKTOP=$DESKTOP"
-    echo "NV_BRANCH_FLG=$NV_BRANCH_FLG"
+    echo "REPO_ADDON_FLAG=$REPO_ADDON_FLAG"
   ) >"$BRANCH_CONF"
 }
 
 function get_repo_from_branch_conf() {
   local branch_flg="$1"
   local desktop="$2"
-  local nv_branch_flg="$3"
+  local repo_addon_flag="$3"
 
   repo_branch="stable"
   case "$branch_flg" in
@@ -230,8 +260,8 @@ function get_repo_from_branch_conf() {
   esac
 
   repo_addon=""
-  if [[ "$nv_branch_flg" == "1" ]]; then
-    repo_addon="-nv"
+  if [[ -n "$repo_addon_flag" ]]; then
+    repo_addon="-$repo_addon_flag"
   fi
 
   if [[ -z "$desktop" ]]; then
@@ -242,6 +272,10 @@ function get_repo_from_branch_conf() {
 }
 
 parse_branch_conf || echo >&2 "Error: Failed to parse branch conf"
+
+# 处理配置文件兼容性和UI同步
+load_addon_config
+sync_ui_from_addon
 
 case "$1" in
 "-c")
@@ -273,7 +307,7 @@ case "$1" in
 *)
   # 所有参数都作为 set_tag 传递给 save_branch_conf
   save_branch_conf "$@"
-  repo=$(get_repo_from_branch_conf "$BRANCH_FLG" "$DESKTOP" "$NV_BRANCH_FLG")
+  repo=$(get_repo_from_branch_conf "$BRANCH_FLG" "$DESKTOP" "$REPO_ADDON_FLAG")
   echo "Switching to [$repo]"
   echo "$repo" >"$BRANCH_PATH"
   exit 0
