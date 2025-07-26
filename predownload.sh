@@ -213,6 +213,9 @@ all_download() {
 	# xXJSONDeruloXx/Decky-Framegen
 	# download_decky_plugin "xXJSONDeruloXx/Decky-Framegen" $decky_plugin_path "Decky-Framegen.zip"
 
+	# xXJSONDeruloXx/decky-lossless-scaling-vk/releases
+	download_decky_plugin "xXJSONDeruloXx/decky-lossless-scaling-vk" $decky_plugin_path "Lossless.Scaling.zip"
+
 	# pre download css themes
 
 	# pre download hhd css themes
