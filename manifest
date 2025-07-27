@@ -175,6 +175,7 @@ export AUR_PACKAGES="\
 	rtl8814au-dkms-git \
 	rtl8821au-dkms-git \
 	ryzenadj-git \
+	ryzen_smu-dkms-git \
 	sk-boot-to-windows \
 	sk-chos-tool \
 	steam_notif_daemon \

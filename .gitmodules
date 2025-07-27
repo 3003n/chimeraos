@@ -175,3 +175,6 @@
 [submodule "aur-pkgs/qqmusic-bin"]
 	path = aur-pkgs/qqmusic-bin
 	url = https://aur.archlinux.org/qqmusic-bin.git
+[submodule "aur-pkgs/ryzen_smu-dkms-git"]
+	path = aur-pkgs/ryzen_smu-dkms-git
+	url = https://aur.archlinux.org/ryzen_smu-dkms-git.git
