@@ -10,7 +10,7 @@ pkgname=(
   "${_pkgbase}-license${_vcssuffix}"
   "${_pkgbase}-doc${_vcssuffix}"
 )
-pkgver=3.17.10+27.r1802.20250718.d13c507
+pkgver=3.17.10+44.r1819.20250728.5827d9a
 pkgrel=1
 pkgdesc='Handheld Daemon. A tool for managing the quirks of handheld devices. Latest git checkout.'
 arch=(
@@ -57,8 +57,8 @@ pkgver() {
 build() {
   cd "${srcdir}/${_pkgbase}"
 
-  pybabel compile -D hhd -d ./i18n
-  pybabel compile -D adjustor -d ./i18n
+  pybabel compile -D hhd -d ./i18n || true
+  pybabel compile -D adjustor -d ./i18n || true
   cp -rf ./i18n/* ./src/hhd/i18n
 
   python -m build --wheel --no-isolation
