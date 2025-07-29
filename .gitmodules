@@ -178,3 +178,6 @@
 [submodule "aur-pkgs/ryzen_smu-dkms-git"]
 	path = aur-pkgs/ryzen_smu-dkms-git
 	url = https://aur.archlinux.org/ryzen_smu-dkms-git.git
+[submodule "aur-pkgs/hhd"]
+	path = aur-pkgs/hhd
+	url = https://aur.archlinux.org/hhd.git
