@@ -1,8 +1,5 @@
-_cursor_version=1.3.3
-_cursor_url=https://downloads.cursor.com/production/e589175333a2d938c3d944f9bf0993155e655e7f/linux/x64/Cursor-1.3.3-x86_64.AppImage
-
 pkgname=cursor-extracted
-pkgver="${_cursor_version}"
+pkgver=1.3.7
 pkgrel=1
 pkgdesc='Cursor - The AI Code Editor (extracted from Appimage)'
 arch=('x86_64')
@@ -10,14 +7,20 @@ provides=('cursor')
 conflicts=('cursor' 'cursor-bin')
 url='https://www.cursor.com/'
 license=('custom:Proprietary')
-source_x86_64=("cursor-${_cursor_version}.Appimage::${_cursor_url}")
-sha512sums_x86_64=('SKIP')
+# source_x86_64=("cursor-${_cursor_version}.Appimage::${_cursor_url}")
+source=('cursor-download.sh')
+sha512sums=('SKIP')
 noextract=("${source[@]%%::*}")
 options=('!strip' '!debug')
 
+pkgver() {
+	./cursor-download.sh version
+}
+
 prepare() {
-	chmod +x "${srcdir}/cursor-${_cursor_version}.Appimage"
-	"${srcdir}/cursor-${_cursor_version}.Appimage" --appimage-extract >/dev/null
+	./cursor-download.sh download
+	chmod +x "${srcdir}/cursor-${pkgver}.Appimage"
+	"${srcdir}/cursor-${pkgver}.Appimage" --appimage-extract >/dev/null
 	sed 's@AppRun@/usr/bin/cursor@g' -i "${srcdir}/squashfs-root/cursor.desktop"
 	sed 's@co.anysphere.cursor@cursor@g' -i "${srcdir}/squashfs-root/cursor.desktop" 
 }
