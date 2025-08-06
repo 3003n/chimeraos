@@ -181,3 +181,6 @@
 [submodule "aur-pkgs/hhd"]
 	path = aur-pkgs/hhd
 	url = https://aur.archlinux.org/hhd.git
+[submodule "aur-pkgs/mint-themes"]
+	path = aur-pkgs/mint-themes
+	url = https://aur.archlinux.org/mint-themes.git
