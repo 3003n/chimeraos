@@ -1,0 +1,75 @@
+# 这个文件需要放在 3003n/chimeraos 仓库的 .github/workflows/ 目录下
+# 文件名建议: notify-sk-api-info.yml
+
+name: Notify SK-API-Info on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify-sk-api-info:
+    runs-on: ubuntu-latest
+    if: github.repository == '3003n/chimeraos'
+    
+    steps:
+      - name: Extract release information
+        id: release_info
+        run: |
+          echo "tag_name=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          echo "release_id=${{ github.event.release.id }}" >> $GITHUB_OUTPUT
+          echo "release_url=${{ github.event.release.html_url }}" >> $GITHUB_OUTPUT
+          echo "author=${{ github.event.release.author.login }}" >> $GITHUB_OUTPUT
+          
+          # 统计 assets 数量
+          assets_count=$(echo '${{ toJson(github.event.release.assets) }}' | jq '. | length')
+          echo "assets_count=$assets_count" >> $GITHUB_OUTPUT
+          
+          # 统计 checksum 文件数量
+          checksum_count=$(echo '${{ toJson(github.event.release.assets) }}' | jq '[.[] | select(.name | startswith("sha256sum-"))] | length')
+          echo "checksum_count=$checksum_count" >> $GITHUB_OUTPUT
+      
+      - name: Log release information
+        run: |
+          echo "🎉 新的 ChimeraOS release 发布!"
+          echo "📦 版本: ${{ steps.release_info.outputs.tag_name }}"
+          echo "🔗 链接: ${{ steps.release_info.outputs.release_url }}"
+          echo "👤 发布者: ${{ steps.release_info.outputs.author }}"
+          echo "📁 Assets 总数: ${{ steps.release_info.outputs.assets_count }}"
+          echo "🔢 Checksum 文件数: ${{ steps.release_info.outputs.checksum_count }}"
+      
+      - name: Trigger SK-API-Info sync
+        run: |
+          # 触发 sk-api-info 仓库的同步
+          curl -L -X POST \
+            -H "Authorization: Bearer ${{ secrets.PAT_SK_API_INFO }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/repos/honjow/sk-api-info/dispatches \
+            -d "{
+              \"event_type\": \"chimeraos_release\",
+              \"client_payload\": {
+                \"tag\": \"${{ steps.release_info.outputs.tag_name }}\",
+                \"release_id\": \"${{ steps.release_info.outputs.release_id }}\",
+                \"release_url\": \"${{ steps.release_info.outputs.release_url }}\",
+                \"author\": \"${{ steps.release_info.outputs.author }}\",
+                \"assets_count\": ${{ steps.release_info.outputs.assets_count }},
+                \"checksum_count\": ${{ steps.release_info.outputs.checksum_count }},
+                \"triggered_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+                \"source_repo\": \"3003n/chimeraos\"
+              }
+            }"
+      
+      - name: Notify completion
+        if: success()
+        run: |
+          echo "✅ 成功触发 sk-api-info 仓库同步"
+          echo "🔄 sk-api-info 将在几秒钟内开始处理版本 ${{ steps.release_info.outputs.tag_name }}"
+      
+      - name: Handle failure
+        if: failure()
+        run: |
+          echo "❌ 触发 sk-api-info 同步失败"
+          echo "请检查 PAT_SK_API_INFO secret 是否正确配置"
+          echo "或者手动触发 sk-api-info 仓库的同步 workflow"
