@@ -1,6 +1,3 @@
-# 这个文件需要放在 3003n/chimeraos 仓库的 .github/workflows/ 目录下
-# 文件名建议: notify-sk-api-info.yml
-
 name: Notify SK-API-Info on Release
 
 on:
