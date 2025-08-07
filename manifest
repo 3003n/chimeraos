@@ -124,23 +124,23 @@ export PACKAGES="\
 export PACKAGE_OVERRIDES="\
 	https://github.com/3003n/linux-chimeraos/releases/download/v6.15.6-15/linux-skchos-6.15.6-15-x86_64.pkg.tar.zst \
 	https://github.com/3003n/linux-chimeraos/releases/download/v6.15.6-15/linux-skchos-headers-6.15.6-15-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/lib32-mesa-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/lib32-opencl-mesa-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/lib32-vulkan-intel-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/lib32-vulkan-mesa-layers-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/lib32-vulkan-nouveau-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/lib32-vulkan-radeon-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/lib32-vulkan-swrast-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/lib32-vulkan-virtio-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/mesa-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/mesa-docs-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/opencl-mesa-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/vulkan-intel-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/vulkan-mesa-layers-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/vulkan-nouveau-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/vulkan-radeon-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/vulkan-swrast-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.2.0-sk1-1/vulkan-virtio-1--25.2.0.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-mesa-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-opencl-mesa-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-intel-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-mesa-layers-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-nouveau-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-radeon-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-swrast-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-virtio-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/mesa-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/mesa-docs-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/opencl-mesa-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-intel-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-mesa-layers-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-nouveau-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-radeon-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-swrast-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
+	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-virtio-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/ibus-pinyin-1.5.1-2.2-x86_64.pkg.tar.zst \
