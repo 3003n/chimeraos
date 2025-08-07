@@ -1,3 +1,6 @@
+# 这个文件需要放在 3003n/chimeraos 仓库的 .github/workflows/ 目录下
+# 文件名建议: notify-sk-api-info.yml
+
 name: Notify SK-API-Info on Release
 
 on:
@@ -10,6 +13,61 @@ jobs:
     if: github.repository == '3003n/chimeraos'
     
     steps:
+      - name: Wait for all assets upload completion
+        run: |
+          echo "⏰ 等待所有文件上传完成..."
+          release_id="${{ github.event.release.id }}"
+          max_wait=900         # 最多等待 15 分钟
+          wait_time=0
+          check_interval=20    # 每 20 秒检查一次
+          required_stable=2    # 需要连续稳定的次数
+          stable_count=0       # 当前连续稳定次数（计数器）
+          last_asset_count=0
+          
+          while [ $wait_time -lt $max_wait ]; do
+            echo "🔍 检查 release assets (已等待 ${wait_time}s)..."
+            
+            # 获取当前 release 的 assets 信息
+            assets_response=$(curl -s -L \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/3003n/chimeraos/releases/${release_id}")
+            
+            # 获取所有 assets 数量和总大小
+            current_asset_count=$(echo "$assets_response" | jq '.assets | length')
+            total_size=$(echo "$assets_response" | jq '[.assets[].size] | add // 0')
+            checksum_count=$(echo "$assets_response" | jq '[.assets[] | select(.name | startswith("sha256sum-"))] | length')
+            
+            echo "📁 当前文件数: $current_asset_count, checksum 文件: $checksum_count, 总大小: $total_size bytes"
+            
+            # 检查文件数量是否稳定（连续 3 次检查数量不变）
+            if [ "$current_asset_count" -eq "$last_asset_count" ]; then
+              stable_count=$((stable_count + 1))
+              echo "📊 文件数量稳定 $stable_count 次"
+            else
+              stable_count=0
+              echo "📈 文件数量变化: $last_asset_count -> $current_asset_count"
+            fi
+            
+            last_asset_count=$current_asset_count
+            
+            # 如果达到要求的连续稳定次数，且有 checksum 文件，认为上传完成
+            if [ $stable_count -ge $required_stable ] && [ $checksum_count -gt 0 ]; then
+              echo "✅ 文件上传已稳定，认为上传完成！"
+              break
+            fi
+            
+            echo "⏳ 文件上传可能仍在进行，${check_interval}s 后重试..."
+            sleep $check_interval
+            wait_time=$((wait_time + check_interval))
+          done
+          
+          if [ $wait_time -ge $max_wait ]; then
+            echo "⚠️  等待超时，但仍会尝试触发同步（可能文件仍在上传）"
+          else
+            echo "🎉 所有文件上传检查完成！"
+          fi
+          
       - name: Extract release information
         id: release_info
         run: |
