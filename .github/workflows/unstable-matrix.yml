@@ -126,3 +126,4 @@ jobs:
     uses: ./.github/workflows/build-system-image-matrix.yml
     with:
       postfix: "[UNSTABLE]"
+    secrets: inherit

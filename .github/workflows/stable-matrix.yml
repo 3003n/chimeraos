@@ -166,3 +166,4 @@ jobs:
       - pkgbuild
     name: Build ChimeraOS STABLE image matrix
     uses: ./.github/workflows/build-system-image-matrix.yml
+    secrets: inherit
