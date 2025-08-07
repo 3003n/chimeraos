@@ -1,0 +1,56 @@
+name: Test Release Trigger
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-release-trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Create non-draft release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.PAT_SK_API_INFO }}
+          tag_name: trigger-test-${{ github.run_number }}
+          name: Trigger Test Release ${{ github.run_number }}
+          draft: false
+          prerelease: true
+          body: |
+            🧪 This is a test release to verify if notify-sk-api-info.yml gets triggered.
+            
+            Expected behavior:
+            - This release should trigger the notify-sk-api-info.yml workflow
+            - That workflow should call the sk-api-info repository dispatch API
+            
+            Test run: ${{ github.run_number }}
+            Commit: ${{ github.sha }}
+      
+      - name: Wait for potential trigger
+        run: |
+          echo "✅ Non-draft release created successfully!"
+          echo "🔗 Release URL: ${{ steps.create_release.outputs.url }}"
+          echo "📦 Release ID: ${{ steps.create_release.outputs.id }}"
+          echo ""
+          echo "🕐 Waiting 30 seconds to allow notify-sk-api-info.yml to trigger..."
+          sleep 30
+          echo "⏰ Wait complete. Check the Actions tab to see if notify-sk-api-info.yml was triggered."
+      
+      - name: Cleanup - Delete test release
+        run: |
+          echo "🧹 Cleaning up test release..."
+          curl -X DELETE \
+               -H "Authorization: Bearer ${{ secrets.PAT_SK_API_INFO }}" \
+               -H "Accept: application/vnd.github+json" \
+               https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.id }}
+          
+          echo "🧹 Deleting test tag..."
+          curl -X DELETE \
+               -H "Authorization: Bearer ${{ secrets.PAT_SK_API_INFO }}" \
+               -H "Accept: application/vnd.github+json" \
+               https://api.github.com/repos/${{ github.repository }}/git/refs/tags/trigger-test-${{ github.run_number }} || true
+          
+          echo "✅ Cleanup complete!"
