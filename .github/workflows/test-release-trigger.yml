@@ -2,6 +2,11 @@ name: Test Release Trigger
 
 on:
   workflow_dispatch:
+    inputs:
+      cleanup:
+        description: 'Auto-cleanup test release after creation'
+        type: boolean
+        default: true
 
 jobs:
   test-release-trigger:
@@ -40,6 +45,7 @@ jobs:
           echo "⏰ Wait complete. Check the Actions tab to see if notify-sk-api-info.yml was triggered."
       
       - name: Cleanup - Delete test release
+        if: ${{ inputs.cleanup }}
         run: |
           echo "🧹 Cleaning up test release..."
           curl -X DELETE \
@@ -54,3 +60,10 @@ jobs:
                https://api.github.com/repos/${{ github.repository }}/git/refs/tags/trigger-test-${{ github.run_number }} || true
           
           echo "✅ Cleanup complete!"
+      
+      - name: Keep test release
+        if: ${{ !inputs.cleanup }}
+        run: |
+          echo "📌 Test release preserved for manual inspection"
+          echo "🔗 Release URL: ${{ steps.create_release.outputs.url }}"
+          echo "⚠️  Remember to manually delete this test release later"
