@@ -193,7 +193,7 @@ all_download() {
 	download_decky_plugin "YukiCoco/ToMoon" $decky_plugin_path "tomoon.*\.zip"
 
 	# chenx-dust/DeckyClash
-	download_decky_plugin "chenx-dust/DeckyClash" $decky_plugin_path "DeckyClash.zip"
+	download_decky_plugin "chenx-dust/DeckyClash" $decky_plugin_path "DeckyClash-full.zip"
 
 	# GPD-WinControl
 	download_decky_plugin "honjow/GPD-WinControl" $decky_plugin_path
@@ -214,7 +214,7 @@ all_download() {
 	download_decky_plugin "aarron-lee/LegionGoRemapper" $decky_plugin_path
 
 	# xXJSONDeruloXx/Decky-Framegen
-	# download_decky_plugin "xXJSONDeruloXx/Decky-Framegen" $decky_plugin_path "Decky-Framegen.zip"
+	download_decky_plugin "xXJSONDeruloXx/Decky-Framegen" $decky_plugin_path "Framegen.zip"
 
 	# xXJSONDeruloXx/decky-lossless-scaling-vk/releases
 	download_decky_plugin "xXJSONDeruloXx/decky-lossless-scaling-vk" $decky_plugin_path "Lossless.Scaling.zip"
