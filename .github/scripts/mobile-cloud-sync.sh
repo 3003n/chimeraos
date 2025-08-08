@@ -20,19 +20,19 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 log_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
+    echo -e "${BLUE}ℹ️  $1${NC}" >&2
 }
 
 log_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    echo -e "${GREEN}✅ $1${NC}" >&2
 }
 
 log_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
+    echo -e "${YELLOW}⚠️  $1${NC}" >&2
 }
 
 log_error() {
-    echo -e "${RED}❌ $1${NC}"
+    echo -e "${RED}❌ $1${NC}" >&2
 }
 
 # 检查API响应是否为有效JSON
@@ -640,6 +640,7 @@ main() {
     echo "================================================"
     
     # 获取release信息
+    log_info "调试: 传入的tag_name参数: '$tag_name'"
     local release_tag=$(get_release_info "$tag_name" "$github_token")
     
     # 获取下载链接
