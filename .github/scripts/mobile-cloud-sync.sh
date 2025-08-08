@@ -40,9 +40,18 @@ check_api_response() {
     local response="$1"
     local operation="$2"
     
+    log_info "调试: $operation 原始响应: '$response'"
+    log_info "调试: 响应长度: ${#response} 字符"
+    
+    if [ -z "$response" ]; then
+        log_error "$operation API响应为空"
+        return 1
+    fi
+    
     if ! echo "$response" | jq . > /dev/null 2>&1; then
-        log_error "$operation API响应不是有效JSON: $response"
-        log_error "可能的原因: Alist服务异常或网络问题"
+        log_error "$operation API响应不是有效JSON"
+        log_error "原始响应内容: '$response'"
+        log_error "响应的十六进制: $(echo "$response" | xxd -l 100)"
         return 1
     fi
     return 0
@@ -148,29 +157,49 @@ get_alist_token() {
     local admin_password="$1"
     
     log_info "获取管理员Token..."
+    log_info "调试: 使用密码: $admin_password"
+    log_info "调试: 尝试连接: $ALIST_URL/api/auth/login"
     
-    local response=$(curl -s -X POST "$ALIST_URL/api/auth/login" \
+    # 先测试基本连通性
+    local ping_result=$(curl -s -w "%{http_code}" -o /dev/null "$ALIST_URL/ping" || echo "000")
+    log_info "调试: ping测试状态码: $ping_result"
+    
+    local response=$(curl -s -w "HTTP_CODE:%{http_code}" -X POST "$ALIST_URL/api/auth/login" \
         -H "Content-Type: application/json" \
         -d "{
             \"username\": \"admin\",
             \"password\": \"$admin_password\"
         }")
     
-    # 检查响应是否为有效JSON
-    if ! check_api_response "$response" "登录"; then
+    # 分离HTTP状态码和响应体
+    local http_code=$(echo "$response" | grep -o "HTTP_CODE:[0-9]*" | cut -d: -f2)
+    local response_body=$(echo "$response" | sed 's/HTTP_CODE:[0-9]*$//')
+    
+    log_info "调试: HTTP状态码: $http_code"
+    log_info "调试: 响应体: '$response_body'"
+    
+    if [ "$http_code" != "200" ]; then
+        log_error "HTTP请求失败，状态码: $http_code"
         log_error "Alist可能未正确启动，检查容器状态："
         docker logs temp-alist --tail 20
         exit 1
     fi
     
-    local token=$(echo "$response" | jq -r '.data.token // empty')
+    # 检查响应是否为有效JSON
+    if ! check_api_response "$response_body" "登录"; then
+        log_error "Alist可能未正确启动，检查容器状态："
+        docker logs temp-alist --tail 20
+        exit 1
+    fi
+    
+    local token=$(echo "$response_body" | jq -r '.data.token // empty')
     
     if [ -n "$token" ] && [ "$token" != "null" ]; then
         log_success "Token获取成功"
         echo "$token"
     else
-        log_error "Token获取失败: $response"
-        local error_msg=$(echo "$response" | jq -r '.message // "未知错误"')
+        log_error "Token获取失败: $response_body"
+        local error_msg=$(echo "$response_body" | jq -r '.message // "未知错误"')
         log_error "错误信息: $error_msg"
         exit 1
     fi
@@ -182,13 +211,14 @@ mount_mobile_cloud() {
     local mobile_authorization="$2"
     
     log_info "挂载移动云盘..."
+    log_info "调试: 使用token: ${alist_token:0:20}..."
     
     if [ -z "$mobile_authorization" ]; then
         log_error "未找到移动云盘认证信息"
         exit 1
     fi
     
-    local mount_response=$(curl -s -X POST "$ALIST_URL/api/admin/storage/create" \
+    local mount_response=$(curl -s -w "HTTP_CODE:%{http_code}" -X POST "$ALIST_URL/api/admin/storage/create" \
         -H "Authorization: $alist_token" \
         -H "Content-Type: application/json" \
         -d @- << EOF
@@ -202,17 +232,29 @@ mount_mobile_cloud() {
 EOF
     )
     
-    # 检查响应是否为有效JSON
-    if ! check_api_response "$mount_response" "挂载移动云盘"; then
+    # 分离HTTP状态码和响应体
+    local http_code=$(echo "$mount_response" | grep -o "HTTP_CODE:[0-9]*" | cut -d: -f2)
+    local response_body=$(echo "$mount_response" | sed 's/HTTP_CODE:[0-9]*$//')
+    
+    log_info "调试: 挂载HTTP状态码: $http_code"
+    
+    if [ "$http_code" != "200" ]; then
+        log_error "挂载HTTP请求失败，状态码: $http_code"
+        log_error "响应内容: $response_body"
         exit 1
     fi
     
-    if echo "$mount_response" | jq -e '.code == 200' > /dev/null; then
-        local storage_id=$(echo "$mount_response" | jq -r '.data.id')
+    # 检查响应是否为有效JSON
+    if ! check_api_response "$response_body" "挂载移动云盘"; then
+        exit 1
+    fi
+    
+    if echo "$response_body" | jq -e '.code == 200' > /dev/null; then
+        local storage_id=$(echo "$response_body" | jq -r '.data.id')
         log_success "移动云盘挂载成功 (ID: $storage_id)"
         echo "$storage_id"
     else
-        log_error "移动云盘挂载失败: $(echo "$mount_response" | jq -r '.message // "未知错误"')"
+        log_error "移动云盘挂载失败: $(echo "$response_body" | jq -r '.message // "未知错误"')"
         exit 1
     fi
 }
