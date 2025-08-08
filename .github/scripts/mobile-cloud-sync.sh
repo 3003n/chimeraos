@@ -190,10 +190,17 @@ deploy_alist() {
         fi
     done
     
-    # 获取管理员密码
-    local admin_info=$(docker exec temp-alist ./alist admin random)
-    local admin_password=$(echo "$admin_info" | grep -oP 'password: \K\S+' || echo "$admin_info" | awk '/password/{print $NF}')
+    # 设置固定管理员密码
+    local admin_password="temp123456"
+    log_info "设置管理员密码..."
     
+    docker exec temp-alist ./alist admin set "$admin_password"
+    if [ $? -ne 0 ]; then
+        log_error "设置管理员密码失败"
+        exit 1
+    fi
+    
+    log_success "管理员密码设置成功"
     echo "$admin_password"
 }
 
