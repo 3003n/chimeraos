@@ -8,9 +8,27 @@ set -e
 ALIST_URL="http://localhost:5244"
 STORAGE_MOUNT_PATH="/移动云盘"
 TARGET_FOLDER="Public/img"  # 目标文件夹路径
-FILE_PREFIX="chimeraos-"    # 只下载此前缀的文件
+
+# 文件过滤规则 - 支持多种规则类型
+# 格式: "type:pattern" 多个规则用逗号分隔
+# 类型:
+#   prefix:xxx    - 前缀匹配
+#   suffix:xxx    - 后缀匹配
+#   contains:xxx  - 包含匹配
+#   regex:xxx     - 正则表达式匹配
+#   size_min:xxx  - 最小文件大小 (MB)
+#   size_max:xxx  - 最大文件大小 (MB)
+#   exclude:xxx   - 排除规则 (支持 prefix/suffix/contains/regex)
+#
+# 示例配置:
+#   "prefix:chimeraos-"                          # 只下载chimeraos-开头的文件
+#   "prefix:chimeraos-,exclude:suffix:.txt"     # 下载chimeraos-开头但排除.txt文件
+#   "suffix:.img.xz,size_min:100"               # 下载.img.xz结尾且大于100MB的文件
+#   "contains:kde,exclude:contains:nv"          # 包含kde但不包含nv的文件
+#   "regex:.*-(kde|gnome)\..*"                  # 正则匹配包含kde或gnome的文件
+FILE_FILTER_RULES="prefix:chimeraos-,exclude:contains:hyprland,exclude:contains:cosmic,exclude:contains:cinnamon"
 TIMEOUT_SECONDS=1800
-CHECK_INTERVAL=15
+CHECK_INTERVAL=5
 
 # 颜色输出
 RED='\033[0;31m'
@@ -113,6 +131,101 @@ get_release_info() {
     fi
 }
 
+# 文件过滤函数
+filter_file() {
+    local filename="$1"
+    local filesize="$2"  # 字节为单位
+    local rules="$3"
+    
+    # 如果没有规则，默认通过
+    if [ -z "$rules" ]; then
+        return 0
+    fi
+    
+    local size_mb=$((filesize / 1024 / 1024))
+    local should_include=1  # 默认包含
+    local has_include_rule=0  # 是否有包含规则
+    
+    # 分割规则
+    local IFS=','
+    for rule in $rules; do
+        local rule_type=$(echo "$rule" | cut -d: -f1)
+        local rule_pattern=$(echo "$rule" | cut -d: -f2-)
+        
+        case "$rule_type" in
+            "prefix")
+                has_include_rule=1
+                if [[ "$filename" == "$rule_pattern"* ]]; then
+                    should_include=0
+                fi
+                ;;
+            "suffix")
+                has_include_rule=1
+                if [[ "$filename" == *"$rule_pattern" ]]; then
+                    should_include=0
+                fi
+                ;;
+            "contains")
+                has_include_rule=1
+                if [[ "$filename" == *"$rule_pattern"* ]]; then
+                    should_include=0
+                fi
+                ;;
+            "regex")
+                has_include_rule=1
+                if echo "$filename" | grep -qE "$rule_pattern"; then
+                    should_include=0
+                fi
+                ;;
+            "size_min")
+                if [ "$size_mb" -lt "$rule_pattern" ]; then
+                    return 1  # 文件太小，排除
+                fi
+                ;;
+            "size_max")
+                if [ "$size_mb" -gt "$rule_pattern" ]; then
+                    return 1  # 文件太大，排除
+                fi
+                ;;
+            "exclude")
+                # 排除规则，支持子类型
+                local exclude_type=$(echo "$rule_pattern" | cut -d: -f1)
+                local exclude_pattern=$(echo "$rule_pattern" | cut -d: -f2-)
+                
+                case "$exclude_type" in
+                    "prefix")
+                        if [[ "$filename" == "$exclude_pattern"* ]]; then
+                            return 1  # 排除
+                        fi
+                        ;;
+                    "suffix")
+                        if [[ "$filename" == *"$exclude_pattern" ]]; then
+                            return 1  # 排除
+                        fi
+                        ;;
+                    "contains")
+                        if [[ "$filename" == *"$exclude_pattern"* ]]; then
+                            return 1  # 排除
+                        fi
+                        ;;
+                    "regex")
+                        if echo "$filename" | grep -qE "$exclude_pattern"; then
+                            return 1  # 排除
+                        fi
+                        ;;
+                esac
+                ;;
+        esac
+    done
+    
+    # 如果有包含规则但没匹配到，则排除
+    if [ "$has_include_rule" -eq 1 ] && [ "$should_include" -eq 1 ]; then
+        return 1
+    fi
+    
+    return 0
+}
+
 # 获取下载链接
 get_download_urls() {
     local tag_name="$1"
@@ -143,22 +256,34 @@ get_download_urls() {
         fi
     done
     
-    # 提取下载链接和文件信息，只保留指定前缀的文件
-    echo "$release_response" | jq -r --arg prefix "$FILE_PREFIX" '.assets[] | select(.name | startswith($prefix)) | "\(.browser_download_url)|\(.name)|\(.size)"' > "$output_file"
+    # 提取下载链接和文件信息，使用新的过滤系统
+    echo "$release_response" | jq -r '.assets[] | "\(.browser_download_url)|\(.name)|\(.size)"' | while IFS='|' read -r url name size; do
+        if [ -n "$url" ] && filter_file "$name" "$size" "$FILE_FILTER_RULES"; then
+            echo "$url|$name|$size"
+        fi
+    done > "$output_file"
     
     local file_count=$(cat "$output_file" | wc -l)
     
     # 检查是否找到了匹配的文件
     if [ "$file_count" -eq 0 ]; then
-        log_warning "未找到任何 $FILE_PREFIX 开头的文件"
-        log_info "该release可能不包含ChimeraOS镜像文件，跳过同步"
+        log_warning "未找到符合过滤规则的文件"
+        log_info "过滤规则: $FILE_FILTER_RULES"
+        log_info "该release可能不包含符合条件的文件，跳过同步"
         return 1
     fi
     
-    local total_size=$(echo "$release_response" | jq --arg prefix "$FILE_PREFIX" '[.assets[] | select(.name | startswith($prefix)) | .size] | add // 0')
+    # 计算总大小
+    local total_size=0
+    while IFS='|' read -r url name size; do
+        if [ -n "$size" ]; then
+            total_size=$((total_size + size))
+        fi
+    done < "$output_file"
     local total_size_gb=$((total_size / 1024 / 1024 / 1024))
     
-    log_success "找到 $file_count 个 $FILE_PREFIX 开头的文件，总大小: ${total_size_gb}GB"
+    log_success "找到 $file_count 个符合过滤规则的文件，总大小: ${total_size_gb}GB"
+    log_info "过滤规则: $FILE_FILTER_RULES"
     
     # 显示文件列表
     log_info "文件列表:"
@@ -598,7 +723,7 @@ upload_files() {
     echo "  ✅ 成功: $success_count"
     echo "  ❌ 失败: $fail_count"
     echo "  📁 总计: $total_files"
-    echo "  🎯 过滤规则: 只下载 $FILE_PREFIX 开头的文件"
+    echo "  🎯 过滤规则: $FILE_FILTER_RULES"
     
     # 返回成功文件数
     echo "$success_count"
@@ -629,7 +754,7 @@ verify_upload() {
                 if [ -n "$file" ]; then
                     local file_info=$(echo "$result" | jq -r --arg name "$file" \
                         '.data.content[] | select(.name == $name) | "大小: \(.size) bytes, 修改时间: \(.modified)"')
-                    echo "  📄 $file - $file_info"
+                    echo "  📄 $file - $file_info" >&2
                 fi
             done
         fi
@@ -724,7 +849,7 @@ main() {
     log_success "📱 目标: 中国移动云盘"
     log_success "📁 路径: $target_path"
     log_success "📊 成功文件数: $final_count"
-    log_success "🎯 文件过滤: 只同步 $FILE_PREFIX 开头的文件"
+    log_success "🎯 文件过滤: $FILE_FILTER_RULES"
     echo "🇨🇳 国内用户现在可以通过移动云盘快速下载了！"
 }
 
