@@ -367,6 +367,7 @@ check_existing_files() {
     local alist_token="$1"
     local target_path="$2"
     local force_sync="$3"
+    local download_list_file="$4"
     
     log_info "检查已存在的文件..."
     
@@ -396,20 +397,38 @@ check_existing_files() {
         local existing_files=$(echo "$response_body" | jq -r '.data.content[]?.name // empty')
         local existing_count=$(echo "$existing_files" | wc -w)
         
-        log_info "已存在 $existing_count 个文件"
+        log_info "云盘中已存在 $existing_count 个文件"
         
-        if [ "$existing_count" -gt 0 ] && [ "$force_sync" != "true" ]; then
-            log_warning "目标目录已有文件，且未启用强制同步"
-            echo "$existing_files" | while read -r file; do
+        # 获取要同步的文件列表
+        local sync_files=""
+        if [ -f "$download_list_file" ]; then
+            sync_files=$(awk -F'|' '{print $2}' "$download_list_file" | tr '\n' ' ')
+        fi
+        
+        # 检查要同步的文件是否已存在
+        local conflicted_files=""
+        if [ -n "$sync_files" ] && [ "$existing_count" -gt 0 ]; then
+            for sync_file in $sync_files; do
+                if echo "$existing_files" | grep -q "^$sync_file$"; then
+                    conflicted_files="$conflicted_files $sync_file"
+                fi
+            done
+        fi
+        
+        local conflict_count=$(echo "$conflicted_files" | wc -w)
+        
+        if [ "$conflict_count" -gt 0 ] && [ "$force_sync" != "true" ]; then
+            log_warning "检测到 $conflict_count 个文件已存在，且未启用强制同步"
+            for file in $conflicted_files; do
                 echo "  📄 $file"
             done
             echo "如需重新同步，请启用 force_sync 参数"
             return 1
         fi
         
-        if [ "$force_sync" = "true" ] && [ "$existing_count" -gt 0 ]; then
-            log_info "强制同步模式，清理已存在的文件..."
-            echo "$existing_files" | while read -r file; do
+        if [ "$force_sync" = "true" ] && [ "$conflict_count" -gt 0 ]; then
+            log_info "强制同步模式，清理冲突的文件..."
+            for file in $conflicted_files; do
                 if [ -n "$file" ]; then
                     echo "删除: $file"
                     curl -s -X POST "$ALIST_URL/api/fs/remove" \
@@ -418,7 +437,11 @@ check_existing_files() {
                         -d "{\"names\":[\"$target_path/$file\"]}" > /dev/null
                 fi
             done
-            log_success "文件清理完成"
+            log_success "已清理冲突文件"
+        fi
+        
+        if [ "$conflict_count" -eq 0 ] && [ "$existing_count" -gt 0 ]; then
+            log_info "云盘中的文件与当前同步任务无冲突，继续执行"
         fi
     fi
     
@@ -680,7 +703,7 @@ main() {
     local target_path=$(create_target_directory "$alist_token" "$release_tag")
     
     # 检查已存在文件
-    if ! check_existing_files "$alist_token" "$target_path" "$force_sync"; then
+    if ! check_existing_files "$alist_token" "$target_path" "$force_sync" "/tmp/download_list.txt"; then
         cleanup "$alist_token" "$storage_id"
         log_warning "同步已跳过"
         return 0
