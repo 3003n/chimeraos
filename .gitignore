@@ -7,3 +7,5 @@ rootfs/etc/makepkg.conf
 ./*.patch
 ./*.diff
 .history
+
+test_*.sh

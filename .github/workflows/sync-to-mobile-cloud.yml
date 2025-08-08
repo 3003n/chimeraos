@@ -1,0 +1,65 @@
+name: Sync to Mobile Cloud
+
+on:
+  # 自动触发：当release创建workflow完成时
+  workflow_run:
+    workflows: ["Build ChimeraOS image matrix"]
+    types: [completed]
+    
+  # 手动触发：支持指定tag参数
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: '要同步的Release标签 (留空则处理最新版本)'
+        required: false
+        type: string
+      force_sync:
+        description: '强制重新同步 (即使已存在)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  sync-to-mobile-cloud:
+    runs-on: ubuntu-latest
+    # 只在源workflow成功时运行，或者是手动触发
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free up disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+          
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - name: Run mobile cloud sync script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MOBILE_CLOUD_AUTHORIZATION: ${{ secrets.MOBILE_CLOUD_AUTHORIZATION }}
+        run: |
+          # 检查必需的环境变量
+          if [ -z "$MOBILE_CLOUD_AUTHORIZATION" ]; then
+            echo "❌ 未找到移动云盘认证信息"
+            echo "请在仓库Secrets中设置 MOBILE_CLOUD_AUTHORIZATION"
+            exit 1
+          fi
+          
+          # 确定参数
+          TAG_NAME="${{ inputs.tag_name }}"
+          FORCE_SYNC="${{ inputs.force_sync }}"
+          
+          # 运行同步脚本
+          ./.github/scripts/mobile-cloud-sync.sh "$TAG_NAME" "$FORCE_SYNC" "$GITHUB_TOKEN" "$MOBILE_CLOUD_AUTHORIZATION"
