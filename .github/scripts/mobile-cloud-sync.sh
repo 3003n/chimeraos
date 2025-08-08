@@ -99,6 +99,14 @@ get_download_urls() {
     echo "$release_response" | jq -r --arg prefix "$FILE_PREFIX" '.assets[] | select(.name | startswith($prefix)) | "\(.browser_download_url)|\(.name)|\(.size)"' > "$output_file"
     
     local file_count=$(cat "$output_file" | wc -l)
+    
+    # 检查是否找到了匹配的文件
+    if [ "$file_count" -eq 0 ]; then
+        log_warning "未找到任何 $FILE_PREFIX 开头的文件"
+        log_info "该release可能不包含ChimeraOS镜像文件，跳过同步"
+        return 1
+    fi
+    
     local total_size=$(echo "$release_response" | jq --arg prefix "$FILE_PREFIX" '[.assets[] | select(.name | startswith($prefix)) | .size] | add // 0')
     local total_size_gb=$((total_size / 1024 / 1024 / 1024))
     
@@ -598,7 +606,10 @@ main() {
     local release_tag=$(get_release_info "$tag_name" "$github_token")
     
     # 获取下载链接
-    get_download_urls "$release_tag" "$github_token" "/tmp/download_list.txt"
+    if ! get_download_urls "$release_tag" "$github_token" "/tmp/download_list.txt"; then
+        log_warning "没有需要同步的文件，退出"
+        return 0
+    fi
     
     # 部署Alist
     local admin_password=$(deploy_alist)
