@@ -268,16 +268,33 @@ create_target_directory() {
     
     log_info "创建目标目录: $target_path"
     
-    local mkdir_response=$(curl -s -X POST "$ALIST_URL/api/fs/mkdir" \
+    local mkdir_response=$(curl -s -w "HTTP_CODE:%{http_code}" -X POST "$ALIST_URL/api/fs/mkdir" \
         -H "Authorization: $alist_token" \
         -H "Content-Type: application/json" \
         -d "{\"path\": \"$target_path\"}")
     
-    if echo "$mkdir_response" | jq -e '.code == 200' > /dev/null || echo "$mkdir_response" | jq -r '.message' | grep -q "already exists"; then
+    # 分离HTTP状态码和响应体
+    local http_code=$(echo "$mkdir_response" | grep -o "HTTP_CODE:[0-9]*" | cut -d: -f2)
+    local response_body=$(echo "$mkdir_response" | sed 's/HTTP_CODE:[0-9]*$//')
+    
+    log_info "调试: 创建目录HTTP状态码: $http_code"
+    log_info "调试: 创建目录响应: '$response_body'"
+    
+    if [ "$http_code" != "200" ]; then
+        log_error "创建目录HTTP请求失败，状态码: $http_code"
+        log_error "响应内容: $response_body"
+        exit 1
+    fi
+    
+    if ! check_api_response "$response_body" "创建目录"; then
+        exit 1
+    fi
+    
+    if echo "$response_body" | jq -e '.code == 200' > /dev/null || echo "$response_body" | jq -r '.message' | grep -q "already exists"; then
         log_success "目标目录准备完成"
         echo "$target_path"
     else
-        log_error "目标目录创建失败: $(echo "$mkdir_response" | jq -r '.message // "未知错误"')"
+        log_error "目标目录创建失败: $(echo "$response_body" | jq -r '.message // "未知错误"')"
         exit 1
     fi
 }
@@ -290,13 +307,30 @@ check_existing_files() {
     
     log_info "检查已存在的文件..."
     
-    local list_response=$(curl -s -X POST "$ALIST_URL/api/fs/list" \
+    local list_response=$(curl -s -w "HTTP_CODE:%{http_code}" -X POST "$ALIST_URL/api/fs/list" \
         -H "Authorization: $alist_token" \
         -H "Content-Type: application/json" \
         -d "{\"path\": \"$target_path\"}")
     
-    if echo "$list_response" | jq -e '.code == 200' > /dev/null; then
-        local existing_files=$(echo "$list_response" | jq -r '.data.content[]?.name // empty')
+    # 分离HTTP状态码和响应体
+    local http_code=$(echo "$list_response" | grep -o "HTTP_CODE:[0-9]*" | cut -d: -f2)
+    local response_body=$(echo "$list_response" | sed 's/HTTP_CODE:[0-9]*$//')
+    
+    log_info "调试: 列出文件HTTP状态码: $http_code"
+    log_info "调试: 列出文件响应: '$response_body'"
+    
+    if [ "$http_code" != "200" ]; then
+        log_error "列出文件HTTP请求失败，状态码: $http_code"
+        log_error "响应内容: $response_body"
+        exit 1
+    fi
+    
+    if ! check_api_response "$response_body" "列出文件"; then
+        exit 1
+    fi
+    
+    if echo "$response_body" | jq -e '.code == 200' > /dev/null; then
+        local existing_files=$(echo "$response_body" | jq -r '.data.content[]?.name // empty')
         local existing_count=$(echo "$existing_files" | wc -w)
         
         log_info "已存在 $existing_count 个文件"
