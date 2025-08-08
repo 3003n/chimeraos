@@ -35,6 +35,19 @@ log_error() {
     echo -e "${RED}❌ $1${NC}"
 }
 
+# 检查API响应是否为有效JSON
+check_api_response() {
+    local response="$1"
+    local operation="$2"
+    
+    if ! echo "$response" | jq . > /dev/null 2>&1; then
+        log_error "$operation API响应不是有效JSON: $response"
+        log_error "可能的原因: Alist服务异常或网络问题"
+        return 1
+    fi
+    return 0
+}
+
 # 获取release信息
 get_release_info() {
     local tag_name="$1"
@@ -109,12 +122,18 @@ deploy_alist() {
     # 等待启动完成
     log_info "等待Alist启动..."
     for i in {1..30}; do
-        if curl -s "$ALIST_URL/ping" > /dev/null; then
+        if curl -s "$ALIST_URL/ping" > /dev/null 2>&1; then
             log_success "Alist服务启动成功"
             break
         fi
         echo "⏳ 等待服务启动... ($i/30)"
         sleep 3
+        
+        if [ $i -eq 30 ]; then
+            log_error "Alist启动超时"
+            docker logs temp-alist
+            exit 1
+        fi
     done
     
     # 获取管理员密码
@@ -137,13 +156,22 @@ get_alist_token() {
             \"password\": \"$admin_password\"
         }")
     
-    local token=$(echo "$response" | jq -r '.data.token')
+    # 检查响应是否为有效JSON
+    if ! check_api_response "$response" "登录"; then
+        log_error "Alist可能未正确启动，检查容器状态："
+        docker logs temp-alist --tail 20
+        exit 1
+    fi
     
-    if [ "$token" != "null" ] && [ -n "$token" ]; then
+    local token=$(echo "$response" | jq -r '.data.token // empty')
+    
+    if [ -n "$token" ] && [ "$token" != "null" ]; then
         log_success "Token获取成功"
         echo "$token"
     else
         log_error "Token获取失败: $response"
+        local error_msg=$(echo "$response" | jq -r '.message // "未知错误"')
+        log_error "错误信息: $error_msg"
         exit 1
     fi
 }
@@ -173,6 +201,11 @@ mount_mobile_cloud() {
 }
 EOF
     )
+    
+    # 检查响应是否为有效JSON
+    if ! check_api_response "$mount_response" "挂载移动云盘"; then
+        exit 1
+    fi
     
     if echo "$mount_response" | jq -e '.code == 200' > /dev/null; then
         local storage_id=$(echo "$mount_response" | jq -r '.data.id')
@@ -466,8 +499,11 @@ cleanup() {
     docker stop temp-alist || true
     docker rm temp-alist || true
     
-    # 清理临时文件
-    rm -rf /tmp/alist-data /tmp/download_list.txt || true
+    # 清理临时文件（使用sudo处理权限问题）
+    if [ -d "/tmp/alist-data" ]; then
+        sudo rm -rf /tmp/alist-data || rm -rf /tmp/alist-data || log_warning "无法删除 /tmp/alist-data，可能需要手动清理"
+    fi
+    rm -f /tmp/download_list.txt || true
     
     log_success "清理完成"
 }
