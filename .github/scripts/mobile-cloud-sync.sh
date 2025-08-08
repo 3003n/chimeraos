@@ -62,19 +62,38 @@ get_release_info() {
     local tag_name="$1"
     local github_token="$2"
     
+    # 检查GitHub仓库环境变量
+    if [ -z "$GITHUB_REPOSITORY" ]; then
+        log_warning "GITHUB_REPOSITORY环境变量未设置，使用默认值"
+        export GITHUB_REPOSITORY="ChimeraOS/chimeraos"
+    fi
+    
     log_info "获取release信息..."
+    log_info "仓库: $GITHUB_REPOSITORY"
     
     if [ -n "$tag_name" ]; then
         log_info "指定标签: $tag_name"
         echo "$tag_name"
     else
         log_info "获取最新release..."
-        local latest_tag=$(curl -s -H "Authorization: Bearer $github_token" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest" | \
-            jq -r '.tag_name')
+        log_info "调试: 请求最新release URL: https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest"
+        
+        local latest_response=$(curl -s -H "Authorization: Bearer $github_token" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest")
+        
+        log_info "调试: 最新release API响应长度: ${#latest_response} 字符"
+        
+        # 检查API响应
+        if ! echo "$latest_response" | jq . > /dev/null 2>&1; then
+            log_error "最新release API响应不是有效JSON: $latest_response"
+            exit 1
+        fi
+        
+        local latest_tag=$(echo "$latest_response" | jq -r '.tag_name')
         
         if [ "$latest_tag" = "null" ] || [ -z "$latest_tag" ]; then
             log_error "未找到有效的release"
+            log_error "API响应: $latest_response"
             exit 1
         fi
         
@@ -92,8 +111,26 @@ get_download_urls() {
     log_info "获取下载链接列表..."
     
     # 获取release详细信息
+    log_info "调试: 请求URL: https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$tag_name"
     local release_response=$(curl -s -H "Authorization: Bearer $github_token" \
         "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$tag_name")
+    
+    log_info "调试: Release API响应长度: ${#release_response} 字符"
+    
+    # 检查API响应是否有效
+    if ! echo "$release_response" | jq . > /dev/null 2>&1; then
+        log_error "Release API响应不是有效JSON: $release_response"
+        exit 1
+    fi
+    
+    # 显示所有assets用于调试
+    local all_assets=$(echo "$release_response" | jq -r '.assets[]?.name // empty')
+    log_info "调试: 该release的所有文件:"
+    echo "$all_assets" | while read -r asset; do
+        if [ -n "$asset" ]; then
+            echo "  📄 $asset"
+        fi
+    done
     
     # 提取下载链接和文件信息，只保留指定前缀的文件
     echo "$release_response" | jq -r --arg prefix "$FILE_PREFIX" '.assets[] | select(.name | startswith($prefix)) | "\(.browser_download_url)|\(.name)|\(.size)"' > "$output_file"
