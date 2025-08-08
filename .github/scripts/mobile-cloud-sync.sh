@@ -57,28 +57,10 @@ check_api_response() {
     return 0
 }
 
-# 执行函数并只返回纯净输出，所有日志重定向到stderr
-exec_with_clean_output() {
-    local func_name="$1"
-    shift
-    
-    # 临时重定向stdout到stderr，保存原始stdout
-    exec 3>&1 1>&2
-    
-    # 执行函数
-    local result=$($func_name "$@" 2>&1)
-    local exit_code=$?
-    
-    # 恢复stdout
-    exec 1>&3 3>&-
-    
-    # 输出结果到stdout
-    echo "$result"
-    return $exit_code
-}
 
-# 获取release信息 (内部函数，带调试输出)
-_get_release_info() {
+
+# 获取release信息
+get_release_info() {
     local tag_name="$1"
     local github_token="$2"
     
@@ -120,11 +102,6 @@ _get_release_info() {
         log_success "最新release: $latest_tag"
         echo "$latest_tag"
     fi
-}
-
-# 获取release信息 (公共接口)
-get_release_info() {
-    exec_with_clean_output _get_release_info "$@"
 }
 
 # 获取下载链接
@@ -184,8 +161,8 @@ get_download_urls() {
     done < "$output_file"
 }
 
-# 部署Alist (内部函数)
-_deploy_alist() {
+# 部署Alist
+deploy_alist() {
     log_info "部署临时Alist服务..."
     
     # 创建临时目录
@@ -227,11 +204,6 @@ _deploy_alist() {
     
     log_success "管理员密码设置成功"
     echo "$admin_password"
-}
-
-# 部署Alist (公共接口)
-deploy_alist() {
-    exec_with_clean_output _deploy_alist "$@"
 }
 
 # 获取Alist token
