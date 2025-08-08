@@ -57,8 +57,28 @@ check_api_response() {
     return 0
 }
 
-# 获取release信息
-get_release_info() {
+# 执行函数并只返回纯净输出，所有日志重定向到stderr
+exec_with_clean_output() {
+    local func_name="$1"
+    shift
+    
+    # 临时重定向stdout到stderr，保存原始stdout
+    exec 3>&1 1>&2
+    
+    # 执行函数
+    local result=$($func_name "$@" 2>&1)
+    local exit_code=$?
+    
+    # 恢复stdout
+    exec 1>&3 3>&-
+    
+    # 输出结果到stdout
+    echo "$result"
+    return $exit_code
+}
+
+# 获取release信息 (内部函数，带调试输出)
+_get_release_info() {
     local tag_name="$1"
     local github_token="$2"
     
@@ -102,6 +122,11 @@ get_release_info() {
     fi
 }
 
+# 获取release信息 (公共接口)
+get_release_info() {
+    exec_with_clean_output _get_release_info "$@"
+}
+
 # 获取下载链接
 get_download_urls() {
     local tag_name="$1"
@@ -128,7 +153,7 @@ get_download_urls() {
     log_info "调试: 该release的所有文件:"
     echo "$all_assets" | while read -r asset; do
         if [ -n "$asset" ]; then
-            echo "  📄 $asset"
+            echo "  📄 $asset" >&2
         fi
     done
     
@@ -154,13 +179,13 @@ get_download_urls() {
     while IFS='|' read -r url name size; do
         if [ -n "$url" ]; then
             local size_mb=$((size / 1024 / 1024))
-            echo "  📄 $name (${size_mb}MB)"
+            echo "  📄 $name (${size_mb}MB)" >&2
         fi
     done < "$output_file"
 }
 
-# 部署Alist
-deploy_alist() {
+# 部署Alist (内部函数)
+_deploy_alist() {
     log_info "部署临时Alist服务..."
     
     # 创建临时目录
@@ -171,7 +196,7 @@ deploy_alist() {
         --name=temp-alist \
         -p 5244:5244 \
         -v /tmp/alist-data:/opt/alist/data \
-        xhofe/alist:latest
+        xhofe/alist:latest >/dev/null
     
     # 等待启动完成
     log_info "等待Alist启动..."
@@ -180,7 +205,7 @@ deploy_alist() {
             log_success "Alist服务启动成功"
             break
         fi
-        echo "⏳ 等待服务启动... ($i/30)"
+        log_info "等待服务启动... ($i/30)"
         sleep 3
         
         if [ $i -eq 30 ]; then
@@ -194,7 +219,7 @@ deploy_alist() {
     local admin_password="temp123456"
     log_info "设置管理员密码..."
     
-    docker exec temp-alist ./alist admin set "$admin_password" > /dev/null 2>&1
+    docker exec temp-alist ./alist admin set "$admin_password" >/dev/null 2>&1
     if [ $? -ne 0 ]; then
         log_error "设置管理员密码失败"
         exit 1
@@ -202,6 +227,11 @@ deploy_alist() {
     
     log_success "管理员密码设置成功"
     echo "$admin_password"
+}
+
+# 部署Alist (公共接口)
+deploy_alist() {
+    exec_with_clean_output _deploy_alist "$@"
 }
 
 # 获取Alist token
