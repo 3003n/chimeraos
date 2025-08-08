@@ -1,5 +1,5 @@
 pkgname=cursor-extracted
-pkgver=1.4.2
+pkgver=1.4.3
 pkgrel=1
 pkgdesc='Cursor - The AI Code Editor (extracted from Appimage)'
 arch=('x86_64')
@@ -7,18 +7,18 @@ provides=('cursor')
 conflicts=('cursor' 'cursor-bin')
 url='https://www.cursor.com/'
 license=('custom:Proprietary')
-source=('git+https://gitee.com/honjow/sk-chos-scripts.git')
+source=('cursor-download.sh')
 sha512sums=('SKIP')
 options=('!strip' '!debug')
 
 pkgver() {
-	cd "${srcdir}/sk-chos-scripts"
+	# cd "${srcdir}/sk-chos-scripts"
 	./cursor-download.sh version
 }
 
 prepare() {
-	cd "${srcdir}/sk-chos-scripts"
-	cp cursor-download.sh "${srcdir}"
+	# cd "${srcdir}/sk-chos-scripts"
+	# cp cursor-download.sh "${srcdir}"
 	cd "${srcdir}"
 	./cursor-download.sh download
 	chmod +x "${srcdir}/cursor-${pkgver}.Appimage"
