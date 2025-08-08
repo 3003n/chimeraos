@@ -77,26 +77,35 @@ get_release_info() {
         log_info "指定标签: $tag_name"
         echo "$tag_name"
     else
-        log_info "获取最新release..."
-        log_info "调试: 请求最新release URL: https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest"
+        log_info "获取最新release (包括prerelease)..."
+        log_info "调试: 请求releases列表 URL: https://api.github.com/repos/$GITHUB_REPOSITORY/releases"
         
-        local latest_response=$(curl -s -H "Authorization: Bearer $github_token" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest")
+        local releases_response=$(curl -s -H "Authorization: Bearer $github_token" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/releases?per_page=10")
         
-        log_info "调试: 最新release API响应长度: ${#latest_response} 字符"
+        log_info "调试: releases API响应长度: ${#releases_response} 字符"
         
         # 检查API响应
-        if ! echo "$latest_response" | jq . > /dev/null 2>&1; then
-            log_error "最新release API响应不是有效JSON: $latest_response"
+        if ! echo "$releases_response" | jq . > /dev/null 2>&1; then
+            log_error "releases API响应不是有效JSON: $releases_response"
             exit 1
         fi
         
-        local latest_tag=$(echo "$latest_response" | jq -r '.tag_name')
+        # 获取第一个release（最新的，包括prerelease）
+        local latest_tag=$(echo "$releases_response" | jq -r '.[0].tag_name')
         
         if [ "$latest_tag" = "null" ] || [ -z "$latest_tag" ]; then
             log_error "未找到有效的release"
-            log_error "API响应: $latest_response"
+            log_error "API响应: $releases_response"
             exit 1
+        fi
+        
+        # 检查是否为prerelease
+        local is_prerelease=$(echo "$releases_response" | jq -r '.[0].prerelease')
+        if [ "$is_prerelease" = "true" ]; then
+            log_info "检测到prerelease: $latest_tag"
+        else
+            log_info "检测到正式release: $latest_tag"
         fi
         
         log_success "最新release: $latest_tag"
