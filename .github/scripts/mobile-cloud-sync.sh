@@ -1213,10 +1213,10 @@ upload_files_batch() {
         #     echo "📋 调试：已完成的传输任务:" >&2
         #     cat "$transfer_done_file" >&2
         # fi
-        # if [ -s "$transfer_undone_file" ]; then
-        #     echo "📋 调试：进行中的传输任务:" >&2
-        #     cat "$transfer_undone_file" >&2
-        # fi
+        if [ -s "$transfer_undone_file" ]; then
+            echo "📋 调试：进行中的传输任务:" >&2
+            cat "$transfer_undone_file" >&2
+        fi
         
         # 显示表格
         echo "" >&2

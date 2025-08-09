@@ -86,12 +86,12 @@ jobs:
           FORCE_SYNC: ${{ inputs.force_sync == true && 'true' || 'false' }}
         run: |
           # 调试：显示原始输入值
-          echo "🐛 调试信息："
-          echo "  inputs.table_language: '${{ inputs.table_language }}'"
-          echo "  inputs.use_emoji: '${{ inputs.use_emoji }}'"
-          echo "  inputs.force_sync: '${{ inputs.force_sync }}'"
-          echo "  inputs.use_batch_download: '${{ inputs.use_batch_download }}'"
-          echo ""
+          # echo "🐛 调试信息："
+          # echo "  inputs.table_language: '${{ inputs.table_language }}'"
+          # echo "  inputs.use_emoji: '${{ inputs.use_emoji }}'"
+          # echo "  inputs.force_sync: '${{ inputs.force_sync }}'"
+          # echo "  inputs.use_batch_download: '${{ inputs.use_batch_download }}'"
+          # echo ""
           
           # 检查必需的环境变量
           if [ -z "$MOBILE_CLOUD_AUTHORIZATION" ]; then
