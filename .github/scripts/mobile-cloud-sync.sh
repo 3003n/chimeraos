@@ -1203,11 +1203,11 @@ upload_files_batch() {
         
         curl -s -X GET "$ALIST_URL/api/admin/task/offline_download_transfer/undone" \
             -H "Authorization: $alist_token" | \
-            jq -r '.data[]? | select(.name | contains("'$target_path'")) | "\(.name)|\(.state)|\(.progress)"' > "$transfer_undone_file"
+            jq -r '.data[]? | "\(.name)|\(.state)|\(.progress)"' > "$transfer_undone_file"
         
         curl -s -X GET "$ALIST_URL/api/admin/task/offline_download_transfer/done" \
             -H "Authorization: $alist_token" | \
-            jq -r '.data[]? | select(.name | contains("'$target_path'")) | "\(.name)|\(.state)|\(.progress)"' > "$transfer_done_file"
+            jq -r '.data[]? | "\(.name)|\(.state)|\(.progress)"' > "$transfer_done_file"
         
         # 调试：显示传输任务信息
         if [ -s "$transfer_done_file" ]; then
@@ -1238,20 +1238,33 @@ upload_files_batch() {
         done
         
         local filename_col_width=$((current_max_width + 4))
-        local status_col_width=16
         
-        printf "%s | %-${status_col_width}s | %s\n" \
+        # 计算状态列的实际宽度
+        local download_status_width=$(get_display_width "$(get_text "download_status")")
+        local transfer_status_width=$(get_display_width "$(get_text "transfer_status")")
+        
+        # 确保状态列至少能容纳状态文本
+        local min_download_width=16
+        local min_transfer_width=16
+        if [ $download_status_width -gt $min_download_width ]; then
+            min_download_width=$download_status_width
+        fi
+        if [ $transfer_status_width -gt $min_transfer_width ]; then
+            min_transfer_width=$transfer_status_width
+        fi
+        
+        printf "%s | %s | %s\n" \
             "$(pad_to_width "$(get_text "filename")" $filename_col_width)" \
-            "$(get_text "download_status")" \
-            "$(get_text "transfer_status")" >&2
+            "$(pad_to_width "$(get_text "download_status")" $min_download_width)" \
+            "$(pad_to_width "$(get_text "transfer_status")" $min_transfer_width)" >&2
         
-        # 分隔线
+        # 分隔线 - 使用实际列宽
         local sep_line=""
         for i in $(seq 1 $filename_col_width); do sep_line="${sep_line}-"; done
         sep_line="${sep_line}-|-"
-        for i in $(seq 1 $status_col_width); do sep_line="${sep_line}-"; done
+        for i in $(seq 1 $min_download_width); do sep_line="${sep_line}-"; done
         sep_line="${sep_line}-|-"
-        for i in $(seq 1 $status_col_width); do sep_line="${sep_line}-"; done
+        for i in $(seq 1 $min_transfer_width); do sep_line="${sep_line}-"; done
         echo "$sep_line" >&2
         
         # 调试：显示我们要匹配的文件名
@@ -1286,32 +1299,42 @@ upload_files_batch() {
                 fi
             fi
             
-            # 检查传输状态
-            if grep -q "$filename" "$transfer_undone_file"; then
-                local transfer_state=$(grep "$filename" "$transfer_undone_file" | cut -d'|' -f2)
-                local transfer_progress=$(grep "$filename" "$transfer_undone_file" | cut -d'|' -f3)
-                local formatted_progress=$(printf "%.1f" "${transfer_progress:-0}")
-                
-                if [ "$transfer_state" = "1" ]; then
-                    transfer_status="$(get_text "transferring") ${formatted_progress}%"
-                else
-                    transfer_status="$(get_text "waiting_transfer")"
+            # 检查传输状态 - 使用更灵活的匹配
+            local transfer_found=false
+            if [ -s "$transfer_undone_file" ]; then
+                local transfer_line=$(grep "/$filename" "$transfer_undone_file" | head -1)
+                if [ -n "$transfer_line" ]; then
+                    transfer_found=true
+                    local transfer_state=$(echo "$transfer_line" | cut -d'|' -f2)
+                    local transfer_progress=$(echo "$transfer_line" | cut -d'|' -f3)
+                    local formatted_progress=$(printf "%.1f" "${transfer_progress:-0}")
+                    
+                    if [ "$transfer_state" = "1" ]; then
+                        transfer_status="$(get_text "transferring") ${formatted_progress}%"
+                    else
+                        transfer_status="$(get_text "waiting_transfer")"
+                    fi
                 fi
-            elif grep -q "$filename" "$transfer_done_file"; then
-                local transfer_state=$(grep "$filename" "$transfer_done_file" | cut -d'|' -f2)
-                if [ "$transfer_state" = "2" ]; then
-                    transfer_status="$(get_text "transfer_complete")"
-                    completed_count=$((completed_count + 1))
-                else
-                    transfer_status="$(get_text "transfer_failed")"
+            fi
+            
+            if [ "$transfer_found" = false ] && [ -s "$transfer_done_file" ]; then
+                local transfer_line=$(grep "/$filename" "$transfer_done_file" | head -1)
+                if [ -n "$transfer_line" ]; then
+                    local transfer_state=$(echo "$transfer_line" | cut -d'|' -f2)
+                    if [ "$transfer_state" = "2" ]; then
+                        transfer_status="$(get_text "transfer_complete")"
+                        completed_count=$((completed_count + 1))
+                    else
+                        transfer_status="$(get_text "transfer_failed")"
+                    fi
                 fi
             fi
             
             # 显示文件状态行
-            printf "%-${filename_col_width}s | %-${status_col_width}s | %s\n" \
+            printf "%s | %s | %s\n" \
                 "$(pad_to_width "$filename" $filename_col_width)" \
-                "$download_status" \
-                "$transfer_status" >&2
+                "$(pad_to_width "$download_status" $min_download_width)" \
+                "$(pad_to_width "$transfer_status" $min_transfer_width)" >&2
         done
         
         echo "" >&2
