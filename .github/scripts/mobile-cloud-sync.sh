@@ -622,6 +622,7 @@ monitor_download_task() {
     
     local max_wait=$TIMEOUT_SECONDS
     local wait_time=0
+    local download_completed=false
     
     while [ $wait_time -lt $max_wait ]; do
         # 检查未完成的任务
@@ -639,11 +640,13 @@ monitor_download_task() {
         if [ -n "$current_undone" ]; then
             local progress=$(echo "$undone_tasks" | jq -r --arg filename "$filename" \
                 '.data[]? | select(.name | contains($filename)) | .progress // 0')
+            # 格式化百分比为1位小数
+            local formatted_progress=$(printf "%.1f" "$progress")
             
             if [ "$current_undone" = "0" ]; then
-                log_progress "等待任务开始... (${progress}%)"
+                log_progress "等待任务开始... (${formatted_progress}%)"
             elif [ "$current_undone" = "1" ]; then
-                log_progress "正在下载到Alist... (${progress}%)"
+                log_progress "正在下载到Alist... (${formatted_progress}%)"
             fi
         else
             # 检查是否在已完成列表中
@@ -652,7 +655,11 @@ monitor_download_task() {
             
             if [ -n "$current_done" ]; then
                 if [ "$current_done" = "2" ]; then
-                    log_progress "下载到Alist完成，检查传输到云盘..."
+                    # 只在第一次检测到下载完成时输出消息
+                    if [ "$download_completed" = false ]; then
+                        log_progress "下载到Alist完成，检查传输到云盘..."
+                        download_completed=true
+                    fi
                     
                     # 检查传输任务
                     local transfer_undone=$(curl -s -X GET "$ALIST_URL/api/admin/task/offline_download_transfer/undone" \
@@ -667,7 +674,9 @@ monitor_download_task() {
                     if [ -n "$transfer_active" ]; then
                         local transfer_progress=$(echo "$transfer_undone" | jq -r --arg filename "$filename" \
                             '.data[]? | select(.name | contains($filename)) | .progress // 0')
-                        log_progress "正在传输到云盘... (${transfer_progress}%)"
+                        # 格式化百分比为1位小数
+                        local formatted_progress=$(printf "%.1f" "$transfer_progress")
+                        log_progress "正在传输到云盘... (${formatted_progress}%)"
                         # 继续等待传输完成
                     else
                         # 检查传输是否已完成
