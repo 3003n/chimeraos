@@ -1210,14 +1210,14 @@ upload_files_batch() {
             jq -r '.data[]? | "\(.name)|\(.state)|\(.progress)"' > "$transfer_done_file"
         
         # 调试：显示传输任务信息
-        if [ -s "$transfer_done_file" ]; then
-            echo "📋 调试：已完成的传输任务:" >&2
-            cat "$transfer_done_file" >&2
-        fi
-        if [ -s "$transfer_undone_file" ]; then
-            echo "📋 调试：进行中的传输任务:" >&2
-            cat "$transfer_undone_file" >&2
-        fi
+        # if [ -s "$transfer_done_file" ]; then
+        #     echo "📋 调试：已完成的传输任务:" >&2
+        #     cat "$transfer_done_file" >&2
+        # fi
+        # if [ -s "$transfer_undone_file" ]; then
+        #     echo "📋 调试：进行中的传输任务:" >&2
+        #     cat "$transfer_undone_file" >&2
+        # fi
         
         # 显示表格
         echo "" >&2
@@ -1268,10 +1268,10 @@ upload_files_batch() {
         echo "$sep_line" >&2
         
         # 调试：显示我们要匹配的文件名
-        echo "📋 调试：要匹配的文件名:" >&2
-        for f in $filenames; do
-            echo "  - $f" >&2
-        done
+        # echo "📋 调试：要匹配的文件名:" >&2
+        # for f in $filenames; do
+        #     echo "  - $f" >&2
+        # done
         
         # 显示每个文件的状态
         local completed_count=0
