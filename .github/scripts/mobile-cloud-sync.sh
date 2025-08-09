@@ -69,8 +69,8 @@ check_api_response() {
     local response="$1"
     local operation="$2"
     
-    log_info "调试: $operation 原始响应: '$response'"
-    log_info "调试: 响应长度: ${#response} 字符"
+    # log_info "调试: $operation 原始响应: '$response'"
+    # log_info "调试: 响应长度: ${#response} 字符"
     
     if [ -z "$response" ]; then
         log_error "$operation API响应为空"
@@ -546,20 +546,51 @@ check_existing_files() {
         if [ -n "$sync_files" ] && [ "$existing_count" -gt 0 ]; then
             for sync_file in $sync_files; do
                 if echo "$existing_files" | grep -q "^$sync_file$"; then
-                    conflicted_files="$conflicted_files $sync_file"
+                    if [ -z "$conflicted_files" ]; then
+                        conflicted_files="$sync_file"
+                    else
+                        conflicted_files="$conflicted_files $sync_file"
+                    fi
                 fi
             done
         fi
         
         local conflict_count=$(echo "$conflicted_files" | wc -w)
+        local total_sync_files=$(echo "$sync_files" | wc -w)
         
         if [ "$conflict_count" -gt 0 ] && [ "$force_sync" != "true" ]; then
-            log_warning "检测到 $conflict_count 个文件已存在，且未启用强制同步"
+            log_warning "检测到 $conflict_count 个文件已存在，将跳过这些文件"
             for file in $conflicted_files; do
                 echo "  📄 $file"
             done
-            echo "如需重新同步，请启用 force_sync 参数"
-            return 1
+            
+            # 如果所有文件都冲突，则完全跳过
+            if [ "$conflict_count" -eq "$total_sync_files" ]; then
+                echo "所有文件都已存在，如需重新同步，请启用 force_sync 参数"
+                return 1
+            fi
+            
+            # 从下载列表中移除冲突文件
+            local temp_file="/tmp/download_list_filtered.txt"
+            true > "$temp_file"
+            while IFS='|' read -r url filename filesize; do
+                local is_conflicted=false
+                for conflicted_file in $conflicted_files; do
+                    if [ "$filename" = "$conflicted_file" ]; then
+                        is_conflicted=true
+                        break
+                    fi
+                done
+                if [ "$is_conflicted" = false ]; then
+                    echo "$url|$filename|$filesize" >> "$temp_file"
+                fi
+            done < "$download_list_file"
+            
+            # 替换原文件
+            mv "$temp_file" "$download_list_file"
+            
+            local remaining_count=$((total_sync_files - conflict_count))
+            log_info "将继续同步剩余的 $remaining_count 个新文件"
         fi
         
         if [ "$force_sync" = "true" ] && [ "$conflict_count" -gt 0 ]; then
