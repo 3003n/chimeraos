@@ -23,14 +23,14 @@ ALIST_URL="http://localhost:5244"
 STORAGE_MOUNT_PATH="/移动云盘"
 TARGET_FOLDER="Public/img"  # 目标文件夹路径
 
-# 下载模式配置
-USE_BATCH_DOWNLOAD=true  # true: 多线程批量下载, false: 单文件下载
-BATCH_DOWNLOAD_THREADS=3   # 批量下载线程数
-BATCH_TRANSFER_THREADS=3   # 批量传输线程数
+# 下载模式配置 - 优先使用环境变量，否则使用默认值
+USE_BATCH_DOWNLOAD="${USE_BATCH_DOWNLOAD:-true}"  # true: 多线程批量下载, false: 单文件下载
+BATCH_DOWNLOAD_THREADS="${BATCH_DOWNLOAD_THREADS:-3}"   # 批量下载线程数
+BATCH_TRANSFER_THREADS="${BATCH_TRANSFER_THREADS:-3}"   # 批量传输线程数
 
-# 表格显示配置
-TABLE_LANGUAGE="zh"      # 表格语言: zh(中文) 或 en(英文)
-USE_EMOJI=true           # 是否在状态中显示emoji
+# 表格显示配置 - 优先使用环境变量，否则使用默认值
+TABLE_LANGUAGE="${TABLE_LANGUAGE:-zh}"      # 表格语言: zh(中文) 或 en(英文)
+USE_EMOJI="${USE_EMOJI:-true}"           # 是否在状态中显示emoji
 
 # 文件过滤规则 - 支持多种规则类型
 # 格式: "type:pattern" 多个规则用逗号分隔
