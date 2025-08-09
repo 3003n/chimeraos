@@ -516,8 +516,8 @@ check_existing_files() {
     local http_code=$(echo "$list_response" | grep -o "HTTP_CODE:[0-9]*" | cut -d: -f2)
     local response_body=$(echo "$list_response" | sed 's/HTTP_CODE:[0-9]*$//')
     
-    log_info "调试: 列出文件HTTP状态码: $http_code"
-    log_info "调试: 列出文件响应: '$response_body'"
+    # log_info "调试: 列出文件HTTP状态码: $http_code"
+    # log_info "调试: 列出文件响应: '$response_body'"
     
     if [ "$http_code" != "200" ]; then
         log_error "列出文件HTTP请求失败，状态码: $http_code"
@@ -643,7 +643,7 @@ monitor_download_task() {
             if [ "$current_undone" = "0" ]; then
                 log_progress "等待任务开始... (${progress}%)"
             elif [ "$current_undone" = "1" ]; then
-                log_progress "正在下载到云盘... (${progress}%)"
+                log_progress "正在下载到Alist... (${progress}%)"
             fi
         else
             # 检查是否在已完成列表中
@@ -652,8 +652,43 @@ monitor_download_task() {
             
             if [ -n "$current_done" ]; then
                 if [ "$current_done" = "2" ]; then
-                    echo "success"
-                    return 0
+                    log_progress "下载到Alist完成，检查传输到云盘..."
+                    
+                    # 检查传输任务
+                    local transfer_undone=$(curl -s -X GET "$ALIST_URL/api/admin/task/offline_download_transfer/undone" \
+                        -H "Authorization: $alist_token")
+                    local transfer_done=$(curl -s -X GET "$ALIST_URL/api/admin/task/offline_download_transfer/done" \
+                        -H "Authorization: $alist_token")
+                    
+                    # 检查是否有进行中的传输任务
+                    local transfer_active=$(echo "$transfer_undone" | jq -r --arg filename "$filename" \
+                        '.data[]? | select(.name | contains($filename)) | .state')
+                    
+                    if [ -n "$transfer_active" ]; then
+                        local transfer_progress=$(echo "$transfer_undone" | jq -r --arg filename "$filename" \
+                            '.data[]? | select(.name | contains($filename)) | .progress // 0')
+                        log_progress "正在传输到云盘... (${transfer_progress}%)"
+                        # 继续等待传输完成
+                    else
+                        # 检查传输是否已完成
+                        local transfer_completed=$(echo "$transfer_done" | jq -r --arg filename "$filename" \
+                            '.data[]? | select(.name | contains($filename)) | .state')
+                        
+                        if [ -n "$transfer_completed" ]; then
+                            if [ "$transfer_completed" = "2" ]; then
+                                echo "success"
+                                return 0
+                            else
+                                local transfer_error=$(echo "$transfer_done" | jq -r --arg filename "$filename" \
+                                    '.data[]? | select(.name | contains($filename)) | .error // "传输失败"')
+                                echo "failed:$transfer_error"
+                                return 1
+                            fi
+                        else
+                            # 可能传输任务还没有开始，继续等待
+                            log_progress "等待传输任务开始..."
+                        fi
+                    fi
                 elif [ "$current_done" = "7" ]; then
                     local error_msg=$(echo "$done_tasks" | jq -r --arg filename "$filename" \
                         '.data[]? | select(.name | contains($filename)) | .error // "未知错误"')
@@ -775,8 +810,21 @@ upload_files() {
 verify_upload() {
     local alist_token="$1"
     local target_path="$2"
+    local download_list_file="$3"
     
-    log_info "验证上传结果..."
+    log_info "验证本次上传的文件..."
+    
+    # 获取本次上传的文件列表
+    local expected_files=""
+    if [ -f "$download_list_file" ]; then
+        expected_files=$(awk -F'|' '{print $2}' "$download_list_file")
+    fi
+    
+    if [ -z "$expected_files" ]; then
+        log_warning "没有需要验证的文件"
+        echo "0"
+        return 0
+    fi
     
     local result=$(curl -s -X POST "$ALIST_URL/api/fs/list" \
         -H "Authorization: $alist_token" \
@@ -784,24 +832,50 @@ verify_upload() {
         -d "{\"path\": \"$target_path\"}")
     
     if echo "$result" | jq -e '.code == 200' > /dev/null; then
-        local uploaded_files=$(echo "$result" | jq -r '.data.content[]?.name // empty')
-        local uploaded_count=$(echo "$uploaded_files" | wc -w)
+        local verified_count=0
+        local failed_files=""
         
         log_success "目标目录: $target_path"
-        log_success "上传完成文件数: $uploaded_count"
         
-        if [ "$uploaded_count" -gt 0 ]; then
-            log_info "上传的文件:"
-            echo "$uploaded_files" | while read -r file; do
-                if [ -n "$file" ]; then
-                    local file_info=$(echo "$result" | jq -r --arg name "$file" \
+        # 使用for循环避免子shell问题
+        for expected_file in $expected_files; do
+            if [ -n "$expected_file" ]; then
+                local file_exists=$(echo "$result" | jq -r --arg name "$expected_file" \
+                    '.data.content[] | select(.name == $name) | .name // empty')
+                
+                if [ -n "$file_exists" ]; then
+                    local file_info=$(echo "$result" | jq -r --arg name "$expected_file" \
                         '.data.content[] | select(.name == $name) | "大小: \(.size) bytes, 修改时间: \(.modified)"')
-                    echo "  📄 $file - $file_info" >&2
+                    
+                    # 检查是否是最近5分钟内的文件（说明是刚上传的）
+                    local modified_time=$(echo "$result" | jq -r --arg name "$expected_file" \
+                        '.data.content[] | select(.name == $name) | .modified')
+                    local current_time=$(date -u +"%Y-%m-%dT%H:%M:%S")
+                    
+                    echo "  ✅ $expected_file - $file_info" >&2
+                    verified_count=$((verified_count + 1))
+                else
+                    echo "  ❌ $expected_file - 文件未找到！" >&2
+                    if [ -z "$failed_files" ]; then
+                        failed_files="$expected_file"
+                    else
+                        failed_files="$failed_files $expected_file"
+                    fi
                 fi
+            fi
+        done
+        
+        local expected_count=$(echo "$expected_files" | wc -w)
+        log_success "验证完成: $verified_count/$expected_count 个文件成功上传"
+        
+        if [ -n "$failed_files" ]; then
+            log_error "以下文件上传失败:"
+            for failed_file in $failed_files; do
+                echo "  📄 $failed_file" >&2
             done
         fi
         
-        echo "$uploaded_count"
+        echo "$verified_count"
     else
         log_error "无法获取上传结果: $(echo "$result" | jq -r '.message // "未知错误"')"
         echo "0"
@@ -880,7 +954,7 @@ main() {
     local success_count=$(upload_files "$alist_token" "$target_path" "/tmp/download_list.txt")
     
     # 验证结果
-    local final_count=$(verify_upload "$alist_token" "$target_path")
+    local final_count=$(verify_upload "$alist_token" "$target_path" "/tmp/download_list.txt")
     
     # 清理资源
     cleanup "$alist_token" "$storage_id"
