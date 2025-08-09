@@ -78,13 +78,21 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MOBILE_CLOUD_AUTHORIZATION: ${{ secrets.MOBILE_CLOUD_AUTHORIZATION }}
           # 下载模式配置环境变量
-          USE_BATCH_DOWNLOAD: ${{ inputs.use_batch_download || true }}
+          USE_BATCH_DOWNLOAD: ${{ inputs.use_batch_download == true && 'true' || 'false' }}
           BATCH_DOWNLOAD_THREADS: ${{ inputs.download_threads || '3' }}
           BATCH_TRANSFER_THREADS: ${{ inputs.transfer_threads || '3' }}
           TABLE_LANGUAGE: ${{ inputs.table_language || 'zh' }}
-          USE_EMOJI: ${{ inputs.use_emoji || true }}
-          FORCE_SYNC: ${{ inputs.force_sync || false }}
+          USE_EMOJI: ${{ inputs.use_emoji == true && 'true' || 'false' }}
+          FORCE_SYNC: ${{ inputs.force_sync == true && 'true' || 'false' }}
         run: |
+          # 调试：显示原始输入值
+          echo "🐛 调试信息："
+          echo "  inputs.table_language: '${{ inputs.table_language }}'"
+          echo "  inputs.use_emoji: '${{ inputs.use_emoji }}'"
+          echo "  inputs.force_sync: '${{ inputs.force_sync }}'"
+          echo "  inputs.use_batch_download: '${{ inputs.use_batch_download }}'"
+          echo ""
+          
           # 检查必需的环境变量
           if [ -z "$MOBILE_CLOUD_AUTHORIZATION" ]; then
             echo "❌ 未找到移动云盘认证信息"

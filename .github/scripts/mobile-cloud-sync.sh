@@ -1555,12 +1555,13 @@ main() {
 }
 
 # 检查必需参数
-if [ $# -lt 4 ]; then
-    echo "Usage: $0 <tag_name> <force_sync> <github_token> <mobile_authorization>"
+if [ $# -lt 3 ]; then
+    echo "Usage: $0 <tag_name> <github_token> <mobile_authorization>"
     echo "  tag_name: Release标签 (留空使用最新)"
-    echo "  force_sync: 强制重新同步 (true/false)"
     echo "  github_token: GitHub Token"
     echo "  mobile_authorization: 移动云盘认证"
+    echo ""
+    echo "Note: force_sync, batch_download等配置现在通过环境变量传递"
     exit 1
 fi
 
