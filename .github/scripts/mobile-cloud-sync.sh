@@ -1209,17 +1209,39 @@ upload_files_batch() {
             -H "Authorization: $alist_token" | \
             jq -r '.data[]? | select(.name | contains("'$target_path'")) | "\(.name)|\(.state)|\(.progress)"' > "$transfer_done_file"
         
+        # 调试：显示传输任务信息
+        if [ -s "$transfer_done_file" ]; then
+            echo "📋 调试：已完成的传输任务:" >&2
+            cat "$transfer_done_file" >&2
+        fi
+        if [ -s "$transfer_undone_file" ]; then
+            echo "📋 调试：进行中的传输任务:" >&2
+            cat "$transfer_undone_file" >&2
+        fi
+        
         # 显示表格
         echo "" >&2
         echo "📋 批量下载进度监控 [$(get_timestamp)]" >&2
         echo "" >&2
         
-        # 表格头部
-        local filename_col_width=$((max_filename_len + 2))
+        # 重新计算当前循环中的最大文件名宽度
+        local current_max_width=$(get_display_width "$(get_text "filename")")  # 表头宽度
+        
+        # 检查所有文件名的宽度
+        for filename in $filenames; do
+            if [ -n "$filename" ]; then
+                local name_width=$(get_display_width "$filename")
+                if [ $name_width -gt $current_max_width ]; then
+                    current_max_width=$name_width
+                fi
+            fi
+        done
+        
+        local filename_col_width=$((current_max_width + 4))
         local status_col_width=16
         
-        printf "%-${filename_col_width}s | %-${status_col_width}s | %s\n" \
-            "$(get_text "filename")" \
+        printf "%s | %-${status_col_width}s | %s\n" \
+            "$(pad_to_width "$(get_text "filename")" $filename_col_width)" \
             "$(get_text "download_status")" \
             "$(get_text "transfer_status")" >&2
         
@@ -1231,6 +1253,12 @@ upload_files_batch() {
         sep_line="${sep_line}-|-"
         for i in $(seq 1 $status_col_width); do sep_line="${sep_line}-"; done
         echo "$sep_line" >&2
+        
+        # 调试：显示我们要匹配的文件名
+        echo "📋 调试：要匹配的文件名:" >&2
+        for f in $filenames; do
+            echo "  - $f" >&2
+        done
         
         # 显示每个文件的状态
         local completed_count=0
