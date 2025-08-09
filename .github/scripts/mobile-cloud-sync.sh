@@ -23,14 +23,13 @@ ALIST_URL="http://localhost:5244"
 STORAGE_MOUNT_PATH="/移动云盘"
 TARGET_FOLDER="Public/img"  # 目标文件夹路径
 
-# 下载模式配置 - 优先使用环境变量，否则使用默认值
+# 配置变量 - 优先使用环境变量，否则使用默认值
 USE_BATCH_DOWNLOAD="${USE_BATCH_DOWNLOAD:-true}"  # true: 多线程批量下载, false: 单文件下载
 BATCH_DOWNLOAD_THREADS="${BATCH_DOWNLOAD_THREADS:-3}"   # 批量下载线程数
 BATCH_TRANSFER_THREADS="${BATCH_TRANSFER_THREADS:-3}"   # 批量传输线程数
-
-# 表格显示配置 - 优先使用环境变量，否则使用默认值
 TABLE_LANGUAGE="${TABLE_LANGUAGE:-zh}"      # 表格语言: zh(中文) 或 en(英文)
 USE_EMOJI="${USE_EMOJI:-true}"           # 是否在状态中显示emoji
+FORCE_SYNC="${FORCE_SYNC:-false}"       # 强制同步模式
 
 # 文件过滤规则 - 支持多种规则类型
 # 格式: "type:pattern" 多个规则用逗号分隔
@@ -858,7 +857,7 @@ check_existing_files() {
         local conflict_count=$(echo "$conflicted_files" | wc -w)
         local total_sync_files=$(echo "$sync_files" | wc -w)
         
-        if [ "$conflict_count" -gt 0 ] && [ "$force_sync" != "true" ]; then
+        if [ "$conflict_count" -gt 0 ] && [ "$FORCE_SYNC" != "true" ]; then
             log_warning "检测到 $conflict_count 个文件已存在，将跳过这些文件"
             for file in $conflicted_files; do
                 echo "  📄 $file"
@@ -893,7 +892,7 @@ check_existing_files() {
             log_info "将继续同步剩余的 $remaining_count 个新文件"
         fi
         
-        if [ "$force_sync" = "true" ] && [ "$conflict_count" -gt 0 ]; then
+        if [ "$FORCE_SYNC" = "true" ] && [ "$conflict_count" -gt 0 ]; then
             log_info "强制同步模式，清理冲突的文件..."
             for file in $conflicted_files; do
                 if [ -n "$file" ]; then
@@ -1479,9 +1478,10 @@ cleanup() {
 # 主函数
 main() {
     local tag_name="$1"
-    local force_sync="$2"
-    local github_token="$3"
-    local mobile_authorization="$4"
+    local github_token="$2"
+    local mobile_authorization="$3"
+    
+    # force_sync现在通过环境变量传递，在文件开头已经处理
     
     echo "🚀 ChimeraOS移动云盘同步开始"
     echo "================================================"
@@ -1519,7 +1519,7 @@ main() {
     local target_path=$(create_target_directory "$alist_token" "$release_tag")
     
     # 检查已存在文件
-    if ! check_existing_files "$alist_token" "$target_path" "$force_sync" "/tmp/download_list.txt"; then
+    if ! check_existing_files "$alist_token" "$target_path" "$FORCE_SYNC" "/tmp/download_list.txt"; then
         cleanup "$alist_token" "$storage_id"
         log_warning "同步已跳过"
         return 0
@@ -1565,4 +1565,4 @@ if [ $# -lt 4 ]; then
 fi
 
 # 执行主函数
-main "$1" "$2" "$3" "$4"
+main "$1" "$2" "$3"

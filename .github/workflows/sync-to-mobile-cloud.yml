@@ -78,11 +78,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MOBILE_CLOUD_AUTHORIZATION: ${{ secrets.MOBILE_CLOUD_AUTHORIZATION }}
           # 下载模式配置环境变量
-          USE_BATCH_DOWNLOAD: ${{ inputs.use_batch_download || 'true' }}
+          USE_BATCH_DOWNLOAD: ${{ inputs.use_batch_download || true }}
           BATCH_DOWNLOAD_THREADS: ${{ inputs.download_threads || '3' }}
           BATCH_TRANSFER_THREADS: ${{ inputs.transfer_threads || '3' }}
           TABLE_LANGUAGE: ${{ inputs.table_language || 'zh' }}
-          USE_EMOJI: ${{ inputs.use_emoji || 'true' }}
+          USE_EMOJI: ${{ inputs.use_emoji || true }}
+          FORCE_SYNC: ${{ inputs.force_sync || false }}
         run: |
           # 检查必需的环境变量
           if [ -z "$MOBILE_CLOUD_AUTHORIZATION" ]; then
@@ -93,7 +94,6 @@ jobs:
           
           # 确定参数
           TAG_NAME="${{ inputs.tag_name }}"
-          FORCE_SYNC="${{ inputs.force_sync }}"
           
           # 显示配置
           echo "🔧 同步配置:"
@@ -107,4 +107,4 @@ jobs:
           echo ""
           
           # 运行同步脚本
-          ./.github/scripts/mobile-cloud-sync.sh "$TAG_NAME" "$FORCE_SYNC" "$GITHUB_TOKEN" "$MOBILE_CLOUD_AUTHORIZATION"
+          ./.github/scripts/mobile-cloud-sync.sh "$TAG_NAME" "$GITHUB_TOKEN" "$MOBILE_CLOUD_AUTHORIZATION"
