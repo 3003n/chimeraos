@@ -35,22 +35,33 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+GRAY='\033[0;37m'
 NC='\033[0m' # No Color
 
+# 获取当前时间戳
+get_timestamp() {
+    date '+%H:%M:%S'
+}
+
 log_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}" >&2
+    echo -e "${GRAY}[$(get_timestamp)]${NC} ${BLUE}ℹ️  $1${NC}" >&2
 }
 
 log_success() {
-    echo -e "${GREEN}✅ $1${NC}" >&2
+    echo -e "${GRAY}[$(get_timestamp)]${NC} ${GREEN}✅ $1${NC}" >&2
 }
 
 log_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}" >&2
+    echo -e "${GRAY}[$(get_timestamp)]${NC} ${YELLOW}⚠️  $1${NC}" >&2
 }
 
 log_error() {
-    echo -e "${RED}❌ $1${NC}" >&2
+    echo -e "${GRAY}[$(get_timestamp)]${NC} ${RED}❌ $1${NC}" >&2
+}
+
+# 进度日志 (带时间戳)
+log_progress() {
+    echo -e "${GRAY}[$(get_timestamp)]${NC} ${BLUE}⏳ $1${NC}" >&2
 }
 
 # 检查API响应是否为有效JSON
@@ -599,9 +610,9 @@ monitor_download_task() {
                 '.data[]? | select(.name | contains($filename)) | .progress // 0')
             
             if [ "$current_undone" = "0" ]; then
-                echo "⏳ 等待开始... (${progress}%)"
+                log_progress "等待任务开始... (${progress}%)"
             elif [ "$current_undone" = "1" ]; then
-                echo "⏳ 下载进行中... (${progress}%)"
+                log_progress "正在下载到云盘... (${progress}%)"
             fi
         else
             # 检查是否在已完成列表中
@@ -654,7 +665,7 @@ upload_files() {
         local size_mb=$((filesize / 1024 / 1024))
         
         echo ""
-        log_info "[$file_index/$total_files] 开始下载: $filename (${size_mb}MB)"
+        log_info "[$file_index/$total_files] 处理文件: $filename (${size_mb}MB)"
         
         # 检查runner剩余空间
         local available_space=$(df /tmp --output=avail | tail -1)
@@ -670,7 +681,7 @@ upload_files() {
         fi
         
         # 添加离线下载任务
-        log_info "提交下载任务..."
+        log_info "提交离线下载任务到Alist..."
         local download_response=$(curl -s -X POST "$ALIST_URL/api/fs/add_offline_download" \
             -H "Authorization: $alist_token" \
             -H "Content-Type: application/json" \
@@ -682,7 +693,7 @@ upload_files() {
             }")
         
         if echo "$download_response" | jq -e '.code == 200' > /dev/null; then
-            log_success "下载任务提交成功"
+            log_success "离线下载任务已提交，开始传输到云盘"
         else
             log_error "下载任务提交失败: $(echo "$download_response" | jq -r '.message // "未知错误"')"
             fail_count=$((fail_count + 1))
@@ -708,7 +719,7 @@ upload_files() {
                 fail_count=$((fail_count + 1))
                 ;;
             *)
-                log_warning "[$file_index] $filename 结束，状态: $result"
+                log_warning "[$file_index] $filename 下载未完成，最终状态: $result"
                 fail_count=$((fail_count + 1))
                 ;;
         esac
