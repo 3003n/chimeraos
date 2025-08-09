@@ -1,6 +1,20 @@
 #!/bin/bash
 # shellcheck disable=SC2155
 # mobile-cloud-sync.sh - ChimeraOS移动云盘同步脚本
+#
+# 支持两种下载模式:
+# 1. 多线程批量下载（默认）: USE_BATCH_DOWNLOAD=true
+#    - 同时提交所有文件，并行下载传输
+#    - 实时表格显示进度，支持中英文和emoji
+#    - 动态配置和恢复Alist线程数
+# 2. 单文件下载: USE_BATCH_DOWNLOAD=false  
+#    - 逐个文件下载，兼容原有逻辑
+#
+# 可配置项:
+# - TABLE_LANGUAGE: "zh"(中文) 或 "en"(英文)
+# - USE_EMOJI: true(显示emoji) 或 false(纯文本)
+# - BATCH_DOWNLOAD_THREADS: 下载线程数
+# - BATCH_TRANSFER_THREADS: 传输线程数
 
 set -e
 
@@ -8,6 +22,15 @@ set -e
 ALIST_URL="http://localhost:5244"
 STORAGE_MOUNT_PATH="/移动云盘"
 TARGET_FOLDER="Public/img"  # 目标文件夹路径
+
+# 下载模式配置
+USE_BATCH_DOWNLOAD=true  # true: 多线程批量下载, false: 单文件下载
+BATCH_DOWNLOAD_THREADS=3   # 批量下载线程数
+BATCH_TRANSFER_THREADS=3   # 批量传输线程数
+
+# 表格显示配置
+TABLE_LANGUAGE="zh"      # 表格语言: zh(中文) 或 en(英文)
+USE_EMOJI=true           # 是否在状态中显示emoji
 
 # 文件过滤规则 - 支持多种规则类型
 # 格式: "type:pattern" 多个规则用逗号分隔
@@ -62,6 +85,156 @@ log_error() {
 # 进度日志 (带时间戳)
 log_progress() {
     echo -e "${GRAY}[$(get_timestamp)]${NC} ${BLUE}⏳ $1${NC}" >&2
+}
+
+# 计算字符串的显示宽度（使用wcswidth思路）
+get_display_width() {
+    local text="$1"
+    
+    # 使用python计算显示宽度（如果可用）
+    if command -v python3 >/dev/null 2>&1; then
+        python3 -c "
+import sys
+import unicodedata
+
+def display_width(s):
+    width = 0
+    for char in s:
+        if unicodedata.east_asian_width(char) in ('F', 'W'):
+            width += 2  # 全角字符
+        elif unicodedata.category(char).startswith('M'):
+            width += 0  # 合成字符（不占显示宽度）
+        else:
+            width += 1  # 半角字符
+    return width
+
+print(display_width('$text'))
+" 2>/dev/null
+    else
+        # 降级方案：简单的字节数分析
+        local char_count=$(echo -n "$text" | wc -m)
+        local byte_count=$(echo -n "$text" | wc -c)
+        
+        # 如果字节数是字符数的2倍以上，很可能包含较多中文
+        if [ $byte_count -gt $((char_count * 2)) ]; then
+            # 估算：大多数是中文，按1.8倍计算
+            echo $((char_count * 18 / 10))
+        elif [ $byte_count -gt $((char_count + char_count / 3)) ]; then
+            # 估算：部分中文，按1.4倍计算
+            echo $((char_count * 14 / 10))
+        else
+            # 主要是ASCII
+            echo $char_count
+        fi
+    fi
+}
+
+# 生成指定长度的空格，用于对齐
+pad_to_width() {
+    local text="$1"
+    local target_width="$2"
+    local display_width
+    display_width=$(get_display_width "$text")
+    local padding=$((target_width - display_width))
+    
+    if [ $padding -gt 0 ]; then
+        printf "%s%*s" "$text" $padding ""
+    else
+        printf "%s" "$text"
+    fi
+}
+
+# 获取本地化文本（支持中英文和emoji）
+get_text() {
+    local key="$1"
+    
+    if [ "$USE_EMOJI" = "true" ]; then
+        # emoji版本
+        case "$TABLE_LANGUAGE" in
+            "zh")
+                case "$key" in
+                    "filename") echo "📁 文件名" ;;
+                    "download_status") echo "⬇️ 下载状态" ;;
+                    "transfer_status") echo "☁️ 传输状态" ;;
+                    "progress") echo "📊 进度" ;;
+                    "waiting_download") echo "⏳ 等待下载" ;;
+                    "downloading") echo "⬇️ 下载中" ;;
+                    "download_complete") echo "✅ 下载完成" ;;
+                    "download_failed") echo "❌ 下载失败" ;;
+                    "waiting_transfer") echo "⏳ 等待传输" ;;
+                    "transferring") echo "☁️ 传输中" ;;
+                    "transfer_complete") echo "✅ 传输完成" ;;
+                    "transfer_failed") echo "❌ 传输失败" ;;
+                    "not_started") echo "⭕ 未开始" ;;
+                    "unknown") echo "❓ 未知" ;;
+                    *) echo "$key" ;;
+                esac
+                ;;
+            "en")
+                case "$key" in
+                    "filename") echo "📁 Filename" ;;
+                    "download_status") echo "⬇️ Download" ;;
+                    "transfer_status") echo "☁️ Transfer" ;;
+                    "progress") echo "📊 Progress" ;;
+                    "waiting_download") echo "⏳ Waiting" ;;
+                    "downloading") echo "⬇️ Pulling" ;;
+                    "download_complete") echo "✅ Complete" ;;
+                    "download_failed") echo "❌ Failed" ;;
+                    "waiting_transfer") echo "⏳ Queued" ;;
+                    "transferring") echo "☁️ Pushing" ;;
+                    "transfer_complete") echo "✅ Stored" ;;
+                    "transfer_failed") echo "❌ Error" ;;
+                    "not_started") echo "⭕ Pending" ;;
+                    "unknown") echo "❓ Unknown" ;;
+                    *) echo "$key" ;;
+                esac
+                ;;
+            *) echo "$key" ;;
+        esac
+    else
+        # 纯文本版本
+        case "$TABLE_LANGUAGE" in
+            "zh")
+                case "$key" in
+                    "filename") echo "文件名" ;;
+                    "download_status") echo "下载状态" ;;
+                    "transfer_status") echo "传输状态" ;;
+                    "progress") echo "进度" ;;
+                    "waiting_download") echo "等待下载" ;;
+                    "downloading") echo "下载中" ;;
+                    "download_complete") echo "下载完成" ;;
+                    "download_failed") echo "下载失败" ;;
+                    "waiting_transfer") echo "等待传输" ;;
+                    "transferring") echo "传输中" ;;
+                    "transfer_complete") echo "传输完成" ;;
+                    "transfer_failed") echo "传输失败" ;;
+                    "not_started") echo "未开始" ;;
+                    "unknown") echo "未知" ;;
+                    *) echo "$key" ;;
+                esac
+                ;;
+            "en")
+                case "$key" in
+                    "filename") echo "Filename" ;;
+                    "download_status") echo "Download" ;;
+                    "transfer_status") echo "Transfer" ;;
+                    "progress") echo "Progress" ;;
+                    "waiting_download") echo "Waiting" ;;
+                    "downloading") echo "Pulling" ;;
+                    "download_complete") echo "Complete" ;;
+                    "download_failed") echo "Failed" ;;
+                    "waiting_transfer") echo "Queued" ;;
+                    "transferring") echo "Pushing" ;;
+                    "transfer_complete") echo "Stored" ;;
+                    "transfer_failed") echo "Error" ;;
+                    "not_started") echo "Pending" ;;
+                    "unknown") echo "Unknown" ;;
+                    *) echo "$key" ;;
+                esac
+                ;;
+            *) echo "$key" ;;
+        esac
+    fi
 }
 
 # 检查API响应是否为有效JSON
@@ -458,6 +631,133 @@ EOF
     fi
 }
 
+# 配置Alist线程数
+configure_alist_threads() {
+    local alist_token="$1"
+    local download_threads="$2"
+    local transfer_threads="$3"
+    
+    if [ "$USE_BATCH_DOWNLOAD" != "true" ]; then
+        log_info "单文件下载模式，跳过线程配置"
+        return 0
+    fi
+    
+    log_info "配置Alist线程数 (下载:$download_threads, 传输:$transfer_threads)..."
+    
+    # 获取当前配置
+    local current_config=$(curl -s -X GET "$ALIST_URL/api/admin/setting/list" \
+        -H "Authorization: $alist_token")
+    
+    if ! echo "$current_config" | jq -e '.code == 200' > /dev/null; then
+        log_warning "无法获取当前配置，跳过线程设置"
+        return 0
+    fi
+    
+    # 保存原始配置
+    local offline_threads=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_task_threads_num") | .value')
+    local offline_type=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_task_threads_num") | .type')
+    local offline_help=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_task_threads_num") | .help')
+    local offline_group=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_task_threads_num") | .group')
+    local offline_flag=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_task_threads_num") | .flag')
+    
+    local transfer_threads_orig=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_transfer_task_threads_num") | .value')
+    local transfer_type=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_transfer_task_threads_num") | .type')
+    local transfer_help=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_transfer_task_threads_num") | .help')
+    local transfer_group=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_transfer_task_threads_num") | .group')
+    local transfer_flag=$(echo "$current_config" | jq -r '.data[] | select(.key == "offline_download_transfer_task_threads_num") | .flag')
+    
+    # 保存原始配置供后续恢复使用
+    echo "offline_threads=$offline_threads" > /tmp/alist_original_threads.env
+    echo "offline_type=$offline_type" >> /tmp/alist_original_threads.env
+    echo "offline_help=$offline_help" >> /tmp/alist_original_threads.env
+    echo "offline_group=$offline_group" >> /tmp/alist_original_threads.env
+    echo "offline_flag=$offline_flag" >> /tmp/alist_original_threads.env
+    echo "transfer_threads_orig=$transfer_threads_orig" >> /tmp/alist_original_threads.env
+    echo "transfer_type=$transfer_type" >> /tmp/alist_original_threads.env
+    echo "transfer_help=$transfer_help" >> /tmp/alist_original_threads.env
+    echo "transfer_group=$transfer_group" >> /tmp/alist_original_threads.env
+    echo "transfer_flag=$transfer_flag" >> /tmp/alist_original_threads.env
+    
+    # 设置新的线程数
+    local set_offline_response=$(curl -s -X POST "$ALIST_URL/api/admin/setting/save" \
+        -H "Authorization: $alist_token" \
+        -H "Content-Type: application/json" \
+        -d "[{
+            \"key\": \"offline_download_task_threads_num\", 
+            \"value\": \"$download_threads\",
+            \"type\": \"$offline_type\",
+            \"help\": \"$offline_help\",
+            \"group\": $offline_group,
+            \"flag\": $offline_flag
+        }]")
+    
+    local set_transfer_response=$(curl -s -X POST "$ALIST_URL/api/admin/setting/save" \
+        -H "Authorization: $alist_token" \
+        -H "Content-Type: application/json" \
+        -d "[{
+            \"key\": \"offline_download_transfer_task_threads_num\", 
+            \"value\": \"$transfer_threads\",
+            \"type\": \"$transfer_type\",
+            \"help\": \"$transfer_help\",
+            \"group\": $transfer_group,
+            \"flag\": $transfer_flag
+        }]")
+    
+    if echo "$set_offline_response" | jq -e '.code == 200' > /dev/null && \
+       echo "$set_transfer_response" | jq -e '.code == 200' > /dev/null; then
+        log_success "线程数配置成功 (下载:$download_threads, 传输:$transfer_threads)"
+    else
+        log_warning "线程数配置可能失败，但继续执行"
+    fi
+}
+
+# 恢复原始线程数
+restore_alist_threads() {
+    local alist_token="$1"
+    
+    if [ "$USE_BATCH_DOWNLOAD" != "true" ] || [ ! -f "/tmp/alist_original_threads.env" ]; then
+        return 0
+    fi
+    
+    log_info "恢复原始线程配置..."
+    
+    # 加载原始配置
+    source /tmp/alist_original_threads.env
+    
+    # 恢复原始线程数
+    if [ -n "$offline_threads" ]; then
+        curl -s -X POST "$ALIST_URL/api/admin/setting/save" \
+            -H "Authorization: $alist_token" \
+            -H "Content-Type: application/json" \
+            -d "[{
+                \"key\": \"offline_download_task_threads_num\", 
+                \"value\": \"$offline_threads\",
+                \"type\": \"$offline_type\",
+                \"help\": \"$offline_help\",
+                \"group\": $offline_group,
+                \"flag\": $offline_flag
+            }]" > /dev/null
+    fi
+    
+    if [ -n "$transfer_threads_orig" ]; then
+        curl -s -X POST "$ALIST_URL/api/admin/setting/save" \
+            -H "Authorization: $alist_token" \
+            -H "Content-Type: application/json" \
+            -d "[{
+                \"key\": \"offline_download_transfer_task_threads_num\", 
+                \"value\": \"$transfer_threads_orig\",
+                \"type\": \"$transfer_type\",
+                \"help\": \"$transfer_help\",
+                \"group\": $transfer_group,
+                \"flag\": $transfer_flag
+            }]" > /dev/null
+    fi
+    
+    # 清理临时文件
+    rm -f /tmp/alist_original_threads.env
+    log_success "原始线程配置已恢复"
+}
+
 # 创建目标目录
 create_target_directory() {
     local alist_token="$1"
@@ -815,6 +1115,207 @@ upload_files() {
     echo "$success_count"
 }
 
+# 批量上传文件到移动云盘（多线程）
+upload_files_batch() {
+    local alist_token="$1"
+    local target_path="$2"
+    local download_list_file="$3"
+    
+    log_info "开始批量上传文件到移动云盘（多线程模式）..."
+    
+    local total_files=$(cat "$download_list_file" | wc -l)
+    if [ "$total_files" -eq 0 ]; then
+        log_warning "没有文件需要上传"
+        echo "0"
+        return 0
+    fi
+    
+    # 准备所有URL
+    local urls=""
+    local filenames=""
+    local max_filename_len=8  # 最小文件名列宽
+    
+    while IFS='|' read -r download_url filename filesize; do
+        if [ -n "$download_url" ]; then
+            if [ -z "$urls" ]; then
+                urls="\"$download_url\""
+                filenames="$filename"
+            else
+                urls="$urls,\"$download_url\""
+                filenames="$filenames $filename"
+            fi
+            
+            # 计算最大文件名宽度
+            local name_width=$(get_display_width "$filename")
+            if [ $name_width -gt $max_filename_len ]; then
+                max_filename_len=$name_width
+            fi
+        fi
+    done < "$download_list_file"
+    
+    if [ -z "$urls" ]; then
+        log_warning "没有有效的下载URL"
+        echo "0"
+        return 0
+    fi
+    
+    log_info "提交 $total_files 个文件的批量下载任务..."
+    
+    # 提交批量离线下载任务
+    local batch_response=$(curl -s -X POST "$ALIST_URL/api/fs/add_offline_download" \
+        -H "Authorization: $alist_token" \
+        -H "Content-Type: application/json" \
+        -d "{
+            \"path\": \"$target_path\",
+            \"urls\": [$urls],
+            \"tool\": \"SimpleHttp\",
+            \"delete_policy\": \"delete_on_upload_succeed\"
+        }")
+    
+    if ! echo "$batch_response" | jq -e '.code == 200' > /dev/null; then
+        log_error "批量下载任务提交失败: $(echo "$batch_response" | jq -r '.message // "未知错误"')"
+        echo "0"
+        return 1
+    fi
+    
+    log_success "批量下载任务已提交，开始监控进度..."
+    
+    # 动态表格监控
+    local max_wait=1800  # 30分钟超时
+    local wait_time=0
+    local check_interval=3
+    
+    # 创建临时文件用于存储任务状态
+    local undone_file="/tmp/undone_tasks.txt"
+    local done_file="/tmp/done_tasks.txt"
+    local transfer_undone_file="/tmp/transfer_undone.txt"
+    local transfer_done_file="/tmp/transfer_done.txt"
+    
+    while [ $wait_time -lt $max_wait ]; do
+        # 获取任务状态
+        curl -s -X GET "$ALIST_URL/api/admin/task/offline_download/undone" \
+            -H "Authorization: $alist_token" | \
+            jq -r '.data[]? | select(.name | contains("'$target_path'")) | "\(.name)|\(.state)|\(.progress)"' > "$undone_file"
+        
+        curl -s -X GET "$ALIST_URL/api/admin/task/offline_download/done" \
+            -H "Authorization: $alist_token" | \
+            jq -r '.data[]? | select(.name | contains("'$target_path'")) | "\(.name)|\(.state)|\(.progress)"' > "$done_file"
+        
+        curl -s -X GET "$ALIST_URL/api/admin/task/offline_download_transfer/undone" \
+            -H "Authorization: $alist_token" | \
+            jq -r '.data[]? | select(.name | contains("'$target_path'")) | "\(.name)|\(.state)|\(.progress)"' > "$transfer_undone_file"
+        
+        curl -s -X GET "$ALIST_URL/api/admin/task/offline_download_transfer/done" \
+            -H "Authorization: $alist_token" | \
+            jq -r '.data[]? | select(.name | contains("'$target_path'")) | "\(.name)|\(.state)|\(.progress)"' > "$transfer_done_file"
+        
+        # 显示表格
+        echo "" >&2
+        echo "📋 批量下载进度监控 [$(get_timestamp)]" >&2
+        echo "" >&2
+        
+        # 表格头部
+        local filename_col_width=$((max_filename_len + 2))
+        local status_col_width=16
+        
+        printf "%-${filename_col_width}s | %-${status_col_width}s | %s\n" \
+            "$(get_text "filename")" \
+            "$(get_text "download_status")" \
+            "$(get_text "transfer_status")" >&2
+        
+        # 分隔线
+        local sep_line=""
+        for i in $(seq 1 $filename_col_width); do sep_line="${sep_line}-"; done
+        sep_line="${sep_line}-|-"
+        for i in $(seq 1 $status_col_width); do sep_line="${sep_line}-"; done
+        sep_line="${sep_line}-|-"
+        for i in $(seq 1 $status_col_width); do sep_line="${sep_line}-"; done
+        echo "$sep_line" >&2
+        
+        # 显示每个文件的状态
+        local completed_count=0
+        for filename in $filenames; do
+            local download_status="$(get_text "waiting_download")"
+            local transfer_status="$(get_text "waiting_transfer")"
+            
+            # 检查下载状态
+            if grep -q "$filename" "$undone_file"; then
+                local task_state=$(grep "$filename" "$undone_file" | cut -d'|' -f2)
+                local task_progress=$(grep "$filename" "$undone_file" | cut -d'|' -f3)
+                local formatted_progress=$(printf "%.1f" "${task_progress:-0}")
+                
+                if [ "$task_state" = "1" ]; then
+                    download_status="$(get_text "downloading") ${formatted_progress}%"
+                else
+                    download_status="$(get_text "waiting_download")"
+                fi
+            elif grep -q "$filename" "$done_file"; then
+                local task_state=$(grep "$filename" "$done_file" | cut -d'|' -f2)
+                if [ "$task_state" = "2" ]; then
+                    download_status="$(get_text "download_complete")"
+                else
+                    download_status="$(get_text "download_failed")"
+                fi
+            fi
+            
+            # 检查传输状态
+            if grep -q "$filename" "$transfer_undone_file"; then
+                local transfer_state=$(grep "$filename" "$transfer_undone_file" | cut -d'|' -f2)
+                local transfer_progress=$(grep "$filename" "$transfer_undone_file" | cut -d'|' -f3)
+                local formatted_progress=$(printf "%.1f" "${transfer_progress:-0}")
+                
+                if [ "$transfer_state" = "1" ]; then
+                    transfer_status="$(get_text "transferring") ${formatted_progress}%"
+                else
+                    transfer_status="$(get_text "waiting_transfer")"
+                fi
+            elif grep -q "$filename" "$transfer_done_file"; then
+                local transfer_state=$(grep "$filename" "$transfer_done_file" | cut -d'|' -f2)
+                if [ "$transfer_state" = "2" ]; then
+                    transfer_status="$(get_text "transfer_complete")"
+                    completed_count=$((completed_count + 1))
+                else
+                    transfer_status="$(get_text "transfer_failed")"
+                fi
+            fi
+            
+            # 显示文件状态行
+            printf "%-${filename_col_width}s | %-${status_col_width}s | %s\n" \
+                "$(pad_to_width "$filename" $filename_col_width)" \
+                "$download_status" \
+                "$transfer_status" >&2
+        done
+        
+        echo "" >&2
+        echo "📊 进度统计: $completed_count/$total_files 已完成" >&2
+        
+        # 检查是否全部完成
+        if [ $completed_count -eq $total_files ]; then
+            echo "" >&2
+            log_success "所有文件批量下载完成！"
+            break
+        fi
+        
+        sleep $check_interval
+        wait_time=$((wait_time + check_interval))
+        
+        # 清屏准备下次显示
+        if [ $wait_time -lt $max_wait ]; then
+            for i in $(seq 1 $((total_files + 8))); do echo -ne "\033[A\033[K" >&2; done
+        fi
+    done
+    
+    # 清理临时文件
+    rm -f "$undone_file" "$done_file" "$transfer_undone_file" "$transfer_done_file"
+    
+    if [ $wait_time -ge $max_wait ]; then
+        log_warning "批量下载监控超时"
+        echo "$completed_count"
+    else
+        echo "$completed_count"
+    fi
+}
+
 # 验证上传结果
 verify_upload() {
     local alist_token="$1"
@@ -898,6 +1399,9 @@ cleanup() {
     
     log_info "清理临时资源..."
     
+    # 恢复原始线程配置
+    restore_alist_threads "$alist_token"
+    
     # 删除移动云盘存储
     if [ -n "$storage_id" ]; then
         log_info "删除临时存储..."
@@ -916,6 +1420,7 @@ cleanup() {
         sudo rm -rf /tmp/alist-data || rm -rf /tmp/alist-data || log_warning "无法删除 /tmp/alist-data，可能需要手动清理"
     fi
     rm -f /tmp/download_list.txt || true
+    rm -f /tmp/undone_tasks.txt /tmp/done_tasks.txt /tmp/transfer_undone.txt /tmp/transfer_done.txt || true
     
     log_success "清理完成"
 }
@@ -929,6 +1434,13 @@ main() {
     
     echo "🚀 ChimeraOS移动云盘同步开始"
     echo "================================================"
+    
+    # 显示下载模式
+    if [ "$USE_BATCH_DOWNLOAD" = "true" ]; then
+        log_info "使用多线程批量下载模式 (下载:${BATCH_DOWNLOAD_THREADS}线程, 传输:${BATCH_TRANSFER_THREADS}线程)"
+    else
+        log_info "使用单文件下载模式"
+    fi
     
     # 获取release信息
     log_info "调试: 传入的tag_name参数: '$tag_name'"
@@ -949,6 +1461,9 @@ main() {
     # 挂载移动云盘
     local storage_id=$(mount_mobile_cloud "$alist_token" "$mobile_authorization")
     
+    # 配置线程数（仅在批量模式下）
+    configure_alist_threads "$alist_token" "$BATCH_DOWNLOAD_THREADS" "$BATCH_TRANSFER_THREADS"
+    
     # 创建目标目录
     local target_path=$(create_target_directory "$alist_token" "$release_tag")
     
@@ -959,8 +1474,13 @@ main() {
         return 0
     fi
     
-    # 上传文件
-    local success_count=$(upload_files "$alist_token" "$target_path" "/tmp/download_list.txt")
+    # 上传文件（根据配置选择模式）
+    local success_count
+    if [ "$USE_BATCH_DOWNLOAD" = "true" ]; then
+        success_count=$(upload_files_batch "$alist_token" "$target_path" "/tmp/download_list.txt")
+    else
+        success_count=$(upload_files "$alist_token" "$target_path" "/tmp/download_list.txt")
+    fi
     
     # 验证结果
     local final_count=$(verify_upload "$alist_token" "$target_path" "/tmp/download_list.txt")
@@ -975,6 +1495,11 @@ main() {
     log_success "📁 路径: $target_path"
     log_success "📊 成功文件数: $final_count"
     log_success "🎯 文件过滤: $FILE_FILTER_RULES"
+    if [ "$USE_BATCH_DOWNLOAD" = "true" ]; then
+        log_success "⚡ 下载模式: 多线程批量 (${BATCH_DOWNLOAD_THREADS}+${BATCH_TRANSFER_THREADS}线程)"
+    else
+        log_success "📝 下载模式: 单文件下载"
+    fi
     echo "🇨🇳 国内用户现在可以通过移动云盘快速下载了！"
 }
 
