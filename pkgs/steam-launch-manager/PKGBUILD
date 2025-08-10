@@ -1,7 +1,7 @@
 # shellcheck disable=SC2034,SC2148
 # Maintainer: honjow <honjow@gmail.com>
 pkgname=steam-launch-manager
-pkgver=1.35.2b29ad6
+pkgver=1.36.f11b6b7
 pkgrel=1
 pkgdesc="Steam Launch Options Manager - 智能管理 Steam 游戏启动参数，支持前置/后置参数合并和冲突处理"
 arch=('any')
@@ -29,9 +29,7 @@ package() {
     cd "$srcdir/$pkgname"
     
     # 安装主要可执行文件
-    install -Dm755 "src/bin/steam-launch-manager" "$pkgdir/usr/bin/steam-launch-manager"
-    install -Dm755 "src/bin/steam-config-gen" "$pkgdir/usr/bin/steam-config-gen"
-    install -Dm755 "src/bin/steam-wrapper" "$pkgdir/usr/bin/steam-wrapper"
+    install -Dm755 -t "$pkgdir/usr/bin" "src/bin/"*
     
     # 安装数据文件
     install -Dm644 "src/data/games-db.yaml" "$pkgdir/usr/share/$pkgname/data/games-db.yaml"
