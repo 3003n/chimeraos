@@ -25,8 +25,8 @@ TARGET_FOLDER="Public/img"  # 目标文件夹路径
 
 # 配置变量 - 优先使用环境变量，否则使用默认值
 USE_BATCH_DOWNLOAD="${USE_BATCH_DOWNLOAD:-true}"  # true: 多线程批量下载, false: 单文件下载
-BATCH_DOWNLOAD_THREADS="${BATCH_DOWNLOAD_THREADS:-3}"   # 批量下载线程数
-BATCH_TRANSFER_THREADS="${BATCH_TRANSFER_THREADS:-3}"   # 批量传输线程数
+BATCH_DOWNLOAD_THREADS="${BATCH_DOWNLOAD_THREADS:-5}"   # 批量下载线程数
+BATCH_TRANSFER_THREADS="${BATCH_TRANSFER_THREADS:-5}"   # 批量传输线程数
 TABLE_LANGUAGE="${TABLE_LANGUAGE:-zh}"      # 表格语言: zh(中文) 或 en(英文)
 USE_EMOJI="${USE_EMOJI:-true}"           # 是否在状态中显示emoji
 FORCE_SYNC="${FORCE_SYNC:-false}"       # 强制同步模式
