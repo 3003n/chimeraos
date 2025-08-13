@@ -13,7 +13,28 @@ export BUG_REPORT_URL="https://github.com/ChimeraOS/chimeraos/issues"
 export KERNEL_PACKAGE="linux-skchos"
 export KERNEL_PACKAGE_ORIGIN="local"
 
+MESA_PACKAGE="\
+	lib32-mesa \
+	lib32-opencl-mesa \
+	lib32-vulkan-intel \
+	lib32-vulkan-mesa-layers \
+	lib32-vulkan-nouveau \
+	lib32-vulkan-radeon \
+	lib32-vulkan-swrast \
+	lib32-vulkan-virtio \
+	mesa \
+	mesa-docs \
+	opencl-mesa \
+	vulkan-intel \
+	vulkan-mesa-layers \
+	vulkan-nouveau \
+	vulkan-radeon \
+	vulkan-swrast \
+	vulkan-virtio \
+"
+
 export PACKAGES="\
+	$MESA_PACKAGE \
 	accountsservice \
 	acpi_call-dkms \
 	alsa-firmware \
@@ -124,23 +145,6 @@ export PACKAGES="\
 export PACKAGE_OVERRIDES="\
 	https://github.com/3003n/linux-chimeraos/releases/download/v6.15.9-1/linux-skchos-6.15.9-1-x86_64.pkg.tar.zst \
 	https://github.com/3003n/linux-chimeraos/releases/download/v6.15.9-1/linux-skchos-headers-6.15.9-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-mesa-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-opencl-mesa-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-intel-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-mesa-layers-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-nouveau-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-radeon-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-swrast-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/lib32-vulkan-virtio-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/mesa-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/mesa-docs-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/opencl-mesa-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-intel-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-mesa-layers-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-nouveau-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-radeon-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-swrast-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
-	https://github.com/3003n/mesa-sk/releases/download/25.1.7-sk1-1/vulkan-virtio-1--25.1.7.sk1-1-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/l/libibus/libibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://archive.archlinux.org/packages/i/ibus/ibus-1.5.30-3-x86_64.pkg.tar.zst \
 	https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/ibus-pinyin-1.5.1-2.2-x86_64.pkg.tar.zst \
