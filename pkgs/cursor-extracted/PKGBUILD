@@ -1,5 +1,5 @@
 pkgname=cursor-extracted
-pkgver=1.4.3
+pkgver=1.4.5
 pkgrel=1
 pkgdesc='Cursor - The AI Code Editor (extracted from Appimage)'
 arch=('x86_64')
@@ -19,10 +19,12 @@ pkgver() {
 prepare() {
 	# cd "${srcdir}/sk-chos-scripts"
 	# cp cursor-download.sh "${srcdir}"
+	version=$(./cursor-download.sh version)
+	echo "version: ${version}"
 	cd "${srcdir}"
 	./cursor-download.sh download
-	chmod +x "${srcdir}/cursor-${pkgver}.Appimage"
-	"${srcdir}/cursor-${pkgver}.Appimage" --appimage-extract >/dev/null
+	chmod +x "${srcdir}/cursor-${version}.Appimage"
+	"${srcdir}/cursor-${version}.Appimage" --appimage-extract >/dev/null
 	sed 's@AppRun@/usr/bin/cursor@g' -i "${srcdir}/squashfs-root/cursor.desktop"
 	sed 's@co.anysphere.cursor@cursor@g' -i "${srcdir}/squashfs-root/cursor.desktop" 
 }
