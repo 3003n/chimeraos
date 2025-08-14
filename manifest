@@ -99,6 +99,7 @@ export PACKAGES="\
 	modemmanager \
 	nano \
 	networkmanager \
+	networkd-dispatcher \
 	nfs-utils \
 	noto-fonts-emoji \
 	nss-mdns \
@@ -227,6 +228,7 @@ export SERVICES="\
 	hostname-fix \
 	inputplumber \
 	lightdm \
+	networkd-dispatcher \
 	overlay-backgrounds \
 	overlay-fonts \
 	overlay-root-home \
