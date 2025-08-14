@@ -115,6 +115,7 @@ export PACKAGES="\
 	python \
 	qtractor \
 	rsync \
+	shfmt \
 	smbclient \
 	sof-firmware \
 	sshfs \
