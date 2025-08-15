@@ -99,7 +99,6 @@ export PACKAGES="\
 	modemmanager \
 	nano \
 	networkmanager \
-	networkd-dispatcher \
 	nfs-utils \
 	noto-fonts-emoji \
 	nss-mdns \
@@ -178,6 +177,7 @@ export AUR_PACKAGES="\
 	inputplumber-bin \
 	kanit-font \
 	linux-firmware-valve \
+	networkd-dispatcher \
 	nintendo-udev \
 	pikaur \
 	rtl8812au-dkms-git \

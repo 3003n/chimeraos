@@ -187,3 +187,6 @@
 [submodule "aur-pkgs/gamescope-session-steam-sk-git"]
 	path = aur-pkgs/gamescope-session-steam-sk-git
 	url = https://aur.archlinux.org/gamescope-session-steam-sk-git.git
+[submodule "aur-pkgs/networkd-dispatcher"]
+	path = aur-pkgs/networkd-dispatcher
+	url = https://aur.archlinux.org/networkd-dispatcher.git
