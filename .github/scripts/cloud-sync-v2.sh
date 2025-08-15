@@ -1,8 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC2155
-# mobile-cloud-sync-v2.sh - ChimeraOS移动云盘同步脚本 (模块化版本)
+# cloud-sync-v2.sh - ChimeraOS 139Yun 同步脚本 (模块化版本)
 #
-# 这是原 mobile-cloud-sync.sh 的重构版本，使用模块化设计：
+# 这是原 cloud-sync.sh 的重构版本，使用模块化设计：
 # 1. 本脚本负责 GitHub Release 获取和文件过滤
 # 2. Alist 相关功能委托给 alist-downloader.sh 模块
 #
@@ -19,7 +19,7 @@ USE_EMOJI="${USE_EMOJI:-true}"
 FORCE_SYNC="${FORCE_SYNC:-false}"
 
 # ChimeraOS 特定配置
-STORAGE_MOUNT_PATH="/移动云盘"
+STORAGE_MOUNT_PATH="/139Yun"
 TARGET_FOLDER="Public/img"
 FILE_FILTER_RULES="prefix:chimeraos-,exclude:contains:hyprland,exclude:contains:cosmic,exclude:contains:cinnamon"
 
@@ -254,7 +254,7 @@ main() {
     local github_token="$2"
     local mobile_authorization="$3"
     
-    echo "🚀 ChimeraOS移动云盘同步开始 (模块化版本)"
+    echo "🚀 ChimeraOS139Yun同步开始 (模块化版本)"
     echo "================================================"
     
     # 显示下载模式
@@ -323,7 +323,7 @@ EOF
     echo ""
     echo "================================================"
     log_success "ChimeraOS $release_tag 同步完成！"
-    log_success "📱 目标: 中国移动云盘"
+    log_success "📱 目标: 139Yun"
     log_success "📁 路径: $target_path"
     log_success "📊 成功文件数: $success_count"
     log_success "🎯 文件过滤: $FILE_FILTER_RULES"
@@ -332,7 +332,7 @@ EOF
     else
         log_success "📝 下载模式: 单文件下载"
     fi
-    echo "🇨🇳 国内用户现在可以通过移动云盘快速下载了！"
+    echo "用户现在可以通过139Yun快速下载了！"
 }
 
 # 检查必需参数
@@ -340,7 +340,7 @@ if [ $# -lt 3 ]; then
     echo "Usage: $0 <tag_name> <github_token> <mobile_authorization>"
     echo "  tag_name: Release标签 (留空使用最新)"
     echo "  github_token: GitHub Token"
-    echo "  mobile_authorization: 移动云盘认证"
+    echo "  mobile_authorization: 139Yun 认证"
     echo ""
     echo "Note: 配置通过环境变量传递"
     echo "  USE_BATCH_DOWNLOAD, BATCH_DOWNLOAD_THREADS, BATCH_TRANSFER_THREADS"

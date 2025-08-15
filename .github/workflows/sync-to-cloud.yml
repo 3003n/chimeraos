@@ -129,4 +129,4 @@ jobs:
           echo ""
           
           # 运行同步脚本
-          ./.github/scripts/mobile-cloud-sync.sh "$TAG_NAME" "$GITHUB_TOKEN" "$MOBILE_CLOUD_AUTHORIZATION"
+          ./.github/scripts/cloud-sync.sh "$TAG_NAME" "$GITHUB_TOKEN" "$MOBILE_CLOUD_AUTHORIZATION"

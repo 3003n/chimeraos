@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC2155
-# mobile-cloud-sync.sh - ChimeraOS移动云盘同步脚本
+# cloud-sync.sh - ChimeraOS 139Yun 同步脚本
 #
 # 支持两种下载模式:
 # 1. 多线程批量下载（默认）: USE_BATCH_DOWNLOAD=true
@@ -20,7 +20,7 @@ set -e
 
 # 配置变量
 ALIST_URL="http://localhost:5244"
-STORAGE_MOUNT_PATH="/移动云盘"
+STORAGE_MOUNT_PATH="/139Yun"
 TARGET_FOLDER="Public/img"  # 目标文件夹路径
 
 # 配置变量 - 优先使用环境变量，否则使用默认值
@@ -576,16 +576,16 @@ get_alist_token() {
     fi
 }
 
-# 挂载移动云盘
+# 挂载139Yun
 mount_mobile_cloud() {
     local alist_token="$1"
     local mobile_authorization="$2"
     
-    log_info "挂载移动云盘..."
+    log_info "挂载139Yun..."
     log_info "调试: 使用token: ${alist_token:0:20}..."
     
     if [ -z "$mobile_authorization" ]; then
-        log_error "未找到移动云盘认证信息"
+        log_error "未找到139Yun认证信息"
         exit 1
     fi
     
@@ -616,16 +616,16 @@ EOF
     fi
     
     # 检查响应是否为有效JSON
-    if ! check_api_response "$response_body" "挂载移动云盘"; then
+    if ! check_api_response "$response_body" "挂载139Yun"; then
         exit 1
     fi
     
     if echo "$response_body" | jq -e '.code == 200' > /dev/null; then
         local storage_id=$(echo "$response_body" | jq -r '.data.id')
-        log_success "移动云盘挂载成功 (ID: $storage_id)"
+        log_success "139Yun挂载成功 (ID: $storage_id)"
         echo "$storage_id"
     else
-        log_error "移动云盘挂载失败: $(echo "$response_body" | jq -r '.message // "未知错误"')"
+        log_error "139Yun挂载失败: $(echo "$response_body" | jq -r '.message // "未知错误"')"
         exit 1
     fi
 }
@@ -1017,13 +1017,13 @@ monitor_download_task() {
     return 1
 }
 
-# 上传文件到移动云盘
+# 上传文件到139Yun
 upload_files() {
     local alist_token="$1"
     local target_path="$2"
     local download_list_file="$3"
     
-    log_info "开始上传文件到移动云盘..."
+    log_info "开始上传文件到139Yun..."
     
     local file_index=0
     local success_count=0
@@ -1114,13 +1114,13 @@ upload_files() {
     echo "$success_count"
 }
 
-# 批量上传文件到移动云盘（多线程）
+# 批量上传文件到139Yun（多线程）
 upload_files_batch() {
     local alist_token="$1"
     local target_path="$2"
     local download_list_file="$3"
     
-    log_info "开始批量上传文件到移动云盘（多线程模式）..."
+    log_info "开始批量上传文件到139Yun（多线程模式）..."
     
     local total_files=$(cat "$download_list_file" | wc -l)
     if [ "$total_files" -eq 0 ]; then
@@ -1452,7 +1452,7 @@ cleanup() {
     # 恢复原始线程配置
     restore_alist_threads "$alist_token"
     
-    # 删除移动云盘存储
+    # 删除139Yun存储
     if [ -n "$storage_id" ]; then
         log_info "删除临时存储..."
         curl -s -X POST "$ALIST_URL/api/admin/storage/delete" \
@@ -1483,7 +1483,7 @@ main() {
     
     # force_sync现在通过环境变量传递，在文件开头已经处理
     
-    echo "🚀 ChimeraOS移动云盘同步开始"
+    echo "🚀 ChimeraOS139Yun同步开始"
     echo "================================================"
     
     # 显示下载模式
@@ -1509,7 +1509,7 @@ main() {
     # 获取token
     local alist_token=$(get_alist_token "$admin_password")
     
-    # 挂载移动云盘
+    # 挂载139Yun
     local storage_id=$(mount_mobile_cloud "$alist_token" "$mobile_authorization")
     
     # 配置线程数（仅在批量模式下）
@@ -1542,7 +1542,7 @@ main() {
     echo ""
     echo "================================================"
     log_success "ChimeraOS $release_tag 同步完成！"
-    log_success "📱 目标: 中国移动云盘"
+    log_success "📱 目标: 139Yun"
     log_success "📁 路径: $target_path"
     log_success "📊 成功文件数: $final_count"
     log_success "🎯 文件过滤: $FILE_FILTER_RULES"
@@ -1551,7 +1551,7 @@ main() {
     else
         log_success "📝 下载模式: 单文件下载"
     fi
-    echo "🇨🇳 国内用户现在可以通过移动云盘快速下载了！"
+    echo "用户现在可以通过139Yun快速下载了！"
 }
 
 # 检查必需参数
@@ -1559,7 +1559,7 @@ if [ $# -lt 3 ]; then
     echo "Usage: $0 <tag_name> <github_token> <mobile_authorization>"
     echo "  tag_name: Release标签 (留空使用最新)"
     echo "  github_token: GitHub Token"
-    echo "  mobile_authorization: 移动云盘认证"
+    echo "  mobile_authorization: 139Yun 认证"
     echo ""
     echo "Note: force_sync, batch_download等配置现在通过环境变量传递"
     exit 1
