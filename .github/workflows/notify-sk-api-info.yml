@@ -17,10 +17,18 @@ jobs:
         run: |
           echo "⏰ 等待所有文件上传完成..."
           release_id="${{ github.event.release.id }}"
-          max_wait=900         # 最多等待 15 分钟
+          max_wait=1200         # 最多等待 20 分钟
           wait_time=0
-          check_interval=20    # 每 20 秒检查一次
-          required_stable=2    # 需要连续稳定的次数
+          check_interval=30    # 每 30 秒检查一次
+          required_stable=3    # 需要连续稳定的次数
+          
+          # 附加等待时间
+          wait_time_extra=120
+
+          echo "⏳ 开始基本等待: $wait_time_extra s"
+          sleep $wait_time_extra
+          echo "⏳ 基本等待完成"
+          
           stable_count=0       # 当前连续稳定次数（计数器）
           last_asset_count=0
           
@@ -40,7 +48,7 @@ jobs:
             
             echo "📁 当前文件数: $current_asset_count, checksum 文件: $checksum_count, 总大小: $total_size bytes"
             
-            # 检查文件数量是否稳定（连续 3 次检查数量不变）
+            # 检查文件数量是否稳定
             if [ "$current_asset_count" -eq "$last_asset_count" ]; then
               stable_count=$((stable_count + 1))
               echo "📊 文件数量稳定 $stable_count 次"
