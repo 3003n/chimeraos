@@ -219,6 +219,9 @@ all_download() {
 	# xXJSONDeruloXx/decky-lossless-scaling-vk/releases
 	download_decky_plugin "xXJSONDeruloXx/decky-lossless-scaling-vk" $decky_plugin_path "Lossless.Scaling.zip"
 
+	# honjow/decky-wine-cellar
+	download_decky_plugin "honjow/decky-wine-cellar" $decky_plugin_path "wine-cellar.zip"
+
 	# pre download css themes
 
 	# pre download hhd css themes
