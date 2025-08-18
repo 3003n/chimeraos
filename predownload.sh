@@ -222,6 +222,9 @@ all_download() {
 	# honjow/decky-wine-cellar
 	download_decky_plugin "honjow/decky-wine-cellar" $decky_plugin_path "wine-cellar.zip"
 
+	# honjow/decky-natpierce
+	download_decky_plugin "honjow/decky-natpierce" $decky_plugin_path "natpierce.zip"
+
 	# pre download css themes
 
 	# pre download hhd css themes
