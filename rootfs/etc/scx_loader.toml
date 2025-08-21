@@ -2,13 +2,48 @@ default_sched = "scx_bpfland"
 default_mode = "Auto"
 
 [scheds.scx_lavd]
-auto_mode = ["--autopower"]
-gaming_mode = ["--performance"]
-lowlatency_mode = ["--performance"]
-powersave_mode = ["--powersave"]
+auto_mode = ["--autopower", "--slice-max-us", "4000"]
+gaming_mode = ["--performance", "--slice-max-us", "3000", "--slice-min-us", "250"]
+lowlatency_mode = ["--performance", "--slice-max-us", "2000", "--slice-min-us", "100", "--preempt-shift", "4"]
+powersave_mode = ["--powersave", "--slice-max-us", "6000"]
 
 [scheds.scx_bpfland]
 auto_mode = ["--primary-domain", "auto", "--slice-us", "20000", "--slice-us-lag", "20000", "--idle-resume-us", "10000", "--cpufreq"]
 gaming_mode = ["--primary-domain", "performance", "--slice-us", "10000", "--slice-us-min", "500", "--slice-us-lag", "30000", "--idle-resume-us", "5000", "--cpufreq", "--disable-numa"]
 lowlatency_mode = ["--primary-domain", "performance", "--slice-us", "5000", "--slice-us-min", "500", "--slice-us-lag", "40000", "--idle-resume-us", "1000", "--cpufreq", "--local-kthreads"]
 powersave_mode = ["--primary-domain", "powersave", "--slice-us", "30000", "--slice-us-min", "2000", "--slice-us-lag", "10000", "--idle-resume-us", "30000", "--cpufreq", "--no-preempt"]
+
+[scheds.scx_rustland]
+# 用户空间Rust调度器，专注交互式工作负载（游戏、视频会议、直播）
+auto_mode = ["--slice-us", "20000"]
+gaming_mode = ["--slice-us", "10000", "--percpu-local"]
+lowlatency_mode = ["--slice-us", "5000", "--slice-us-min", "500", "--percpu-local"]
+powersave_mode = ["--slice-us", "30000"]
+
+[scheds.scx_flash]
+# EDF调度器，专注公平性和性能可预测性，适合游戏和多媒体
+auto_mode = ["--slice-us", "4096", "--primary-domain", "auto", "--cpufreq"]
+gaming_mode = ["--slice-us", "2048", "--slice-us-min", "128", "--primary-domain", "performance", "--local-pcpu", "--cpufreq"]
+lowlatency_mode = ["--slice-us", "1024", "--slice-us-min", "64", "--slice-us-lag", "2048", "--primary-domain", "performance", "--local-pcpu", "--cpufreq"]
+powersave_mode = ["--slice-us", "8192", "--primary-domain", "powersave", "--throttle-us", "1000", "--cpufreq"]
+
+[scheds.scx_rusty]
+# 多域BPF/用户空间混合调度器，适合生产环境
+auto_mode = ["--slice-us-underutil", "20000", "--slice-us-overutil", "1000"]
+gaming_mode = ["--slice-us-underutil", "10000", "--slice-us-overutil", "500", "--greedy-threshold", "2", "--direct-greedy-under", "80.0"]
+lowlatency_mode = ["--slice-us-underutil", "5000", "--slice-us-overutil", "250", "--greedy-threshold", "1", "--direct-greedy-under", "90.0", "--kick-greedy-under", "95.0"]
+powersave_mode = ["--slice-us-underutil", "30000", "--slice-us-overutil", "2000", "--no-load-balance"]
+
+[scheds.scx_p2dq]
+# Pick2队列调度器，专注缓存局部性和负载均衡
+auto_mode = ["--autoslice", "--freq-control"]
+gaming_mode = ["--autoslice", "--interactive-sticky", "--interactive-fifo", "--freq-control", "--min-slice-us", "50"]
+lowlatency_mode = ["--autoslice", "--interactive-sticky", "--interactive-fifo", "--freq-control", "--min-slice-us", "25", "--interactive-ratio", "20"]
+powersave_mode = ["--min-slice-us", "200", "--lb-slack-factor", "10"]
+
+[scheds.scx_tickless]
+# 面向服务器的调度器，减少OS噪声，需要内核启用nohz_full参数
+auto_mode = ["--slice-us", "20000", "--frequency", "100"]
+gaming_mode = ["--slice-us", "10000", "--frequency", "250", "--prefer-same-cpu"]
+lowlatency_mode = ["--slice-us", "5000", "--frequency", "500", "--prefer-same-cpu"]
+powersave_mode = ["--slice-us", "50000", "--frequency", "50"]
