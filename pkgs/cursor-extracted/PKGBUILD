@@ -1,5 +1,5 @@
 pkgname=cursor-extracted
-pkgver=1.5.1
+pkgver=1.5.4
 pkgrel=1
 pkgdesc='Cursor - The AI Code Editor (extracted from Appimage)'
 arch=('x86_64')
