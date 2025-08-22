@@ -292,8 +292,9 @@ get_release_info() {
             exit 1
         fi
         
-        # 获取第一个release（最新的，包括prerelease）
-        local latest_tag=$(echo "$releases_response" | jq -r '.[0].tag_name')
+        # 获取最新的release（按发布时间排序后取第一个）
+        local latest_release=$(echo "$releases_response" | jq -r 'sort_by(.published_at) | reverse | .[0]')
+        local latest_tag=$(echo "$latest_release" | jq -r '.tag_name')
         
         if [ "$latest_tag" = "null" ] || [ -z "$latest_tag" ]; then
             log_error "未找到有效的release"
@@ -302,7 +303,7 @@ get_release_info() {
         fi
         
         # 检查是否为prerelease
-        local is_prerelease=$(echo "$releases_response" | jq -r '.[0].prerelease')
+        local is_prerelease=$(echo "$latest_release" | jq -r '.prerelease')
         if [ "$is_prerelease" = "true" ]; then
             log_info "检测到prerelease: $latest_tag"
         else
