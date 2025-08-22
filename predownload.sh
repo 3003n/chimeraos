@@ -181,7 +181,7 @@ all_download() {
 	download_decky_plugin "DeckThemes/SDH-CssLoader" $decky_plugin_path "SDH-CSSLoader-Decky.zip"
 
 	# HHD-Decky
-	download_decky_plugin "hhd-dev/hhd-decky" $decky_plugin_path
+	download_decky_plugin "honjow/hhd-decky" $decky_plugin_path
 
 	# PowerControl
 	download_decky_plugin "mengmeet/PowerControl" $decky_plugin_path
