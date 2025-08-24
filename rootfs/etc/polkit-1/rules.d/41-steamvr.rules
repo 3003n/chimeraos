@@ -2,7 +2,7 @@
  * without password authentication, similar to "sudo NOPASSWD:"
  */
 polkit.addRule(function(action, subject) {
-    if ((action.id == "org.chimeraos.steamvr.pkexec") &&
+    if ((action.id == "org.skorionos.steamvr.pkexec") &&
         subject.isInGroup("wheel"))
     {
         return polkit.Result.YES;

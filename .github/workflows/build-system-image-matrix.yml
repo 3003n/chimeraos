@@ -1,4 +1,4 @@
-name: Build ChimeraOS image matrix
+name: Build SkorionOS image matrix
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -134,7 +134,7 @@ jobs:
           prerelease: true
           fail_on_unmatched_files: true
           files: |
-            output/chimeraos*img*
+            output/skorionos*img*
             output/build_info*.txt
             output/sha256sum*.txt
             output/container*.txt

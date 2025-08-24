@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC2155
-# cloud-sync-v2.sh - ChimeraOS 139Yun 同步脚本 (模块化版本)
+# cloud-sync-v2.sh - SkorionOS 139Yun 同步脚本 (模块化版本)
 #
 # 这是原 cloud-sync.sh 的重构版本，使用模块化设计：
 # 1. 本脚本负责 GitHub Release 获取和文件过滤
@@ -18,10 +18,10 @@ TABLE_LANGUAGE="${TABLE_LANGUAGE:-zh}"
 USE_EMOJI="${USE_EMOJI:-true}"
 FORCE_SYNC="${FORCE_SYNC:-false}"
 
-# ChimeraOS 特定配置
+# SkorionOS 特定配置
 STORAGE_MOUNT_PATH="/139Yun"
 TARGET_FOLDER="Public/img"
-FILE_FILTER_RULES="prefix:chimeraos-,exclude:contains:hyprland,exclude:contains:cosmic,exclude:contains:cinnamon"
+FILE_FILTER_RULES="prefix:skorionos-,exclude:contains:hyprland,exclude:contains:cosmic,exclude:contains:cinnamon"
 
 # 导入工具函数
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -44,7 +44,7 @@ get_release_info() {
     # 检查GitHub仓库环境变量
     if [ -z "$GITHUB_REPOSITORY" ]; then
         log_warning "GITHUB_REPOSITORY环境变量未设置，使用默认值"
-        export GITHUB_REPOSITORY="ChimeraOS/chimeraos"
+        export GITHUB_REPOSITORY="3003n/skorionos"
     fi
     
     log_info "获取release信息..."
@@ -254,7 +254,7 @@ main() {
     local github_token="$2"
     local mobile_authorization="$3"
     
-    echo "🚀 ChimeraOS139Yun同步开始 (模块化版本)"
+    echo "🚀 SkorionOS139Yun同步开始 (模块化版本)"
     echo "================================================"
     
     # 显示下载模式
@@ -283,7 +283,7 @@ main() {
     "mount_path": "$STORAGE_MOUNT_PATH",
     "driver": "139Yun",
     "addition": "{\"authorization\":\"${mobile_authorization}\",\"root_folder_id\":\"/\",\"type\":\"personal_new\",\"cloud_id\":\"\",\"custom_upload_part_size\":0,\"report_real_size\":true,\"use_large_thumbnail\":false}",
-    "remark": "ChimeraOS Release同步"
+    "remark": "SkorionOS Release同步"
 }
 EOF
     )
@@ -322,7 +322,7 @@ EOF
     
     echo ""
     echo "================================================"
-    log_success "ChimeraOS $release_tag 同步完成！"
+    log_success "SkorionOS $release_tag 同步完成！"
     log_success "📱 目标: 139Yun"
     log_success "📁 路径: $target_path"
     log_success "📊 成功文件数: $success_count"

@@ -16,10 +16,10 @@ SK_CHOS_SESSION=${SK_CHOS_SESSION:-"wayland"}
 
 echo "SK_CHOS_SESSION=$SK_CHOS_SESSION" | sudo systemd-cat -t os-session-select
 
-SESSION_FILE="/etc/lightdm/lightdm.conf.d/10-chimeraos-session.conf"
+SESSION_FILE="/etc/lightdm/lightdm.conf.d/10-skorionos-session.conf"
 
 SENTINEL_FILE="steamos-session-select"
-RETURN_SESSION_FILE="chimeraos-session-return"
+RETURN_SESSION_FILE="skorionos-session-return"
 
 # If we proceed, execute this
 if [[ "$SK_CHOS_SESSION" == "wayland" ]]; then
@@ -90,7 +90,7 @@ function check_sentinel() {
 
 function delay_set_return_session() {
   local session="$1"
-  systemd-run --on-active=5s bash -c "sudo /usr/bin/chimera-session-only-update $session"
+  systemd-run --on-active=5s bash -c "sudo /usr/bin/skorion-session-only-update $session"
 }
 
 if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then
@@ -103,7 +103,7 @@ if CONFIGURED_CHAINED_SESSION=$(check_sentinel); then
   #   return_file="$HOME/.config/${RETURN_SESSION_FILE}"
   #   return_session=$(cat "$return_file")
   #   delay_set_return_session $return_session || true
-  #   sudo chimera-session-use-lightdm plasmax11
+  #   sudo skorion-session-use-lightdm plasmax11
   # fi
 
 else

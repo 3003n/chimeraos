@@ -4,10 +4,10 @@
  "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
 <policyconfig>
 
-  <vendor>ChimeraOS Chimera</vendor>
-  <vendor_url>http://chimeraos.org</vendor_url>
+  <vendor>SkorionOS Skorion</vendor>
+  <vendor_url>https://github.com/3003n/skorionos</vendor_url>
 
-  <action id="org.chimeraos.policykit.steamos.pkexec.run-set-hostname">
+  <action id="org.skorionos.policykit.steamos.pkexec.run-set-hostname">
     <description>Set the hostname</description>
     <icon_name>package-x-generic</icon_name>
     <defaults>
@@ -18,7 +18,7 @@
     <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/steamos-polkit-helpers/steamos-set-hostname</annotate>
   </action>
 
-  <action id="org.chimeraos.policykit.steamos.pkexec.run-set-timezone">
+  <action id="org.skorionos.policykit.steamos.pkexec.run-set-timezone">
     <description>Set the timezone</description>
     <icon_name>package-x-generic</icon_name>
     <defaults>

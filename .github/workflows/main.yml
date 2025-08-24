@@ -123,7 +123,7 @@ jobs:
      - build-docker-image
      - aur-pkgbuild
      - pkgbuild
-    name: Build ChimeraOS UNSTABLE image
+    name: Build SkorionOS UNSTABLE image
     uses: ./.github/workflows/build-system-image.yml
     with:
       postfix: "[UNSTABLE]"

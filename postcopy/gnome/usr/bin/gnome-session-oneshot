@@ -5,7 +5,7 @@ set -e
 die() { echo >&2 "!! $*"; exit 1; }
 
 SENTINEL_FILE="steamos-session-select"
-RETURN_SESSION_FILE="chimeraos-session-return"
+RETURN_SESSION_FILE="skorionos-session-return"
 
 # If we proceed, execute this
 CHAINED_SESSION="/usr/bin/gnome-session"

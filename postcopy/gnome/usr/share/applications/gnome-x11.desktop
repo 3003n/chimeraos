@@ -2,7 +2,7 @@
 Name=X11 Mode
 Name[zh_CN]=X11 模式
 Exec=/usr/bin/gnome-x11
-Icon=/usr/share/icons/chimeraos/scalable/actions/x11-mode.svg
+Icon=/usr/share/icons/skorionos/scalable/actions/x11-mode.svg
 Terminal=false
 Type=Application
 StartupNotify=false

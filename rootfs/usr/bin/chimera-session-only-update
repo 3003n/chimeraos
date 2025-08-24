@@ -1,3 +1,0 @@
-#! /bin/bash
-
-sed -i "/autologin-session/c\autologin-session=$1" /etc/lightdm/lightdm.conf.d/10-chimeraos-session.conf

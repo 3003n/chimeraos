@@ -270,7 +270,7 @@ all_download() {
 	sed -i 's/plugins=(git)/plugins=(git sudo z fast-syntax-highlighting)/g' $zsh_path/.zshrc
 	cat >>$zsh_path/.zshrc <<-'EOM'
 
-		######## sk-chimeraos functions ########
+		######## skorionos functions ########
 		# yazi
 		function y() {
 		    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
@@ -288,7 +288,7 @@ all_download() {
 		    fi
 		    rm -f -- "$tmp"
 		}
-		######## sk-chimeraos functions end ########
+		######## skorionos functions end ########
 
 	EOM
 

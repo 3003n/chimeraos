@@ -1,14 +1,14 @@
 #! /bin/bash
 
 export VERSION="51-4"
-export SYSTEM_DESC="ChimeraOS"
-export SYSTEM_NAME="chimeraos"
+export SYSTEM_DESC="SkorionOS"
+export SYSTEM_NAME="skorionos"
 export USERNAME="gamer"
 export SIZE="40000MB"
 export ARCHIVE_DATE="2025/08/21"
-export WEBSITE="https://chimeraos.org"
-export DOCUMENTATION_URL="https://chimeraos.org/about"
-export BUG_REPORT_URL="https://github.com/ChimeraOS/chimeraos/issues"
+export WEBSITE="https://github.com/3003n/skorionos"
+export DOCUMENTATION_URL="https://github.com/3003n/skorionos"
+export BUG_REPORT_URL="https://github.com/3003n/skorionos/issues"
 
 export KERNEL_PACKAGE="linux-skchos"
 export KERNEL_PACKAGE_ORIGIN="local"
@@ -271,7 +271,7 @@ postinstallhook() {
 	# Add sudo permissions
 	sed -i "s/Defaults secure_path=/# Defaults secure_path=/g" /etc/sudoers
 
-	# sk chimeraos
+	# skorionos
 	sed -i 's/set mouse=a/set mouse-=a/g' /usr/share/vim/vim*/defaults.vim
 	ln -s -f /usr/bin/vim /usr/bin/vi
 	sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config

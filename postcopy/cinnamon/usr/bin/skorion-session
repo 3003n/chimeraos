@@ -1,9 +1,9 @@
-#! /bin/bash
+#!/bin/bash
 
 DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
-SESSION_CONFIG="${CONFIG_HOME}/environment.d/01-chimera-session.conf"
-SESSION_LIGHTDM_CONFIG="/etc/lightdm/lightdm.conf.d/10-chimeraos-session.conf"
+SESSION_CONFIG="${CONFIG_HOME}/environment.d/01-skorion-session.conf"
+SESSION_LIGHTDM_CONFIG="/etc/lightdm/lightdm.conf.d/10-skorionos-session.conf"
 SESSION_LIST=('desktop' 'desktop-xorg' 'steam')
 SELECTED_SESSION="$1"
 
@@ -13,11 +13,11 @@ mkdir -p "${CONFIG_HOME}/environment.d"
 function print_session_list() {
 	# detect active session
 	CURRENT_SESSION="unknown"
-	if grep "gnome" ${SESSION_LIGHTDM_CONFIG} &> /dev/null; then
+	if grep "cosmic" ${SESSION_LIGHTDM_CONFIG} &> /dev/null; then
 		CURRENT_SESSION="desktop"
 	fi
 
-	if grep "gnome-xorg" ${SESSION_LIGHTDM_CONFIG} &> /dev/null; then
+	if grep "cosmic-xorg" ${SESSION_LIGHTDM_CONFIG} &> /dev/null; then
 		CURRENT_SESSION="desktop-xorg"
 	fi
 
@@ -45,20 +45,20 @@ function desktop() {
 	clean_steam_shortcuts
 
 	# switch to Desktop
-	sudo chimera-session-use-lightdm gnome-wayland
+	sudo skorion-session-use-lightdm cinnamon-wayland
 }
 
 function desktop_xorg() {
 	clean_steam_shortcuts
 
 	# switch to Desktop (Xorg)
-	sudo chimera-session-use-lightdm gnome-xorg
+	sudo skorion-session-use-lightdm cinnamon
 }
 
 function gamescope_steam() {
 	# switch to Steam Big Picture UI (Gamescope/Wayland)
 	echo '' > ${SESSION_CONFIG}
-	sudo chimera-session-use-lightdm gamescope-session-steam
+	sudo skorion-session-use-lightdm gamescope-session-steam
 	# sudo systemctl enable --now handycon
 }
 

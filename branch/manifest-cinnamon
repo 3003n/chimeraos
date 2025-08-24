@@ -64,5 +64,5 @@ sub_postinstallhook() {
 		echo "export XMODIFIERS=@im=ibus"
 	} >>/etc/environment
 
-	install -Dm755 -t /etc/skel/Desktop/ /usr/share/applications/{org.chimeraos.session-return,sk-chos-tool}.desktop
+	install -Dm755 -t /etc/skel/Desktop/ /usr/share/applications/{skorionos-session-return,sk-chos-tool}.desktop
 }
