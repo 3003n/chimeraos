@@ -105,6 +105,7 @@ export BASE_LOCAL_PACKAGES="\
 	mangohud-git \
 	powerstation-git \
 	rtl88x2bu-dkms \
+	skorionos-fastfetch-logo \
 	steam-launch-manager \
 	steam-removable-media-git \
 	steamos-manager \
