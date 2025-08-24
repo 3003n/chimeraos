@@ -1,0 +1,41 @@
+{
+    // SkorionOS Default Fastfetch Configuration - Use default modules with custom logo
+    "logo": {
+        "type": "file",
+        "source": "skorionos.txt",
+        "color": {
+            "1": "cyan",
+            "2": "blue"
+        }
+    },
+    "modules": [
+        "title",
+        "separator",
+        "os",
+        "host", 
+        "kernel",
+        "uptime",
+        "packages",
+        "shell",
+        "display",
+        "de",
+        "wm",
+        "wmtheme",
+        "theme",
+        "icons",
+        "font",
+        "cursor",
+        "terminal",
+        "cpu",
+        "gpu",
+        "memory",
+        "swap",
+        "disk",
+        "localip",
+        "battery",
+        "poweradapter",
+        "locale",
+        "break",
+        "colors"
+    ]
+}

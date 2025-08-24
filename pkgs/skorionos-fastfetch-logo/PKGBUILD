@@ -1,0 +1,21 @@
+# Maintainer: SkorionOS
+pkgname=skorionos-fastfetch-logo
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="SkorionOS custom logo for fastfetch with Arch Linux cyan theme"
+arch=('any')
+url="https://github.com/3003n/skorionos"
+license=('MIT')
+depends=('fastfetch')
+source=('skorionos-logo.txt'
+        'config.jsonc')
+sha256sums=('SKIP'
+            'SKIP')
+
+package() {
+    # Install logo file
+    install -Dm644 "$srcdir/skorionos-logo.txt" "$pkgdir/usr/share/fastfetch/logos/skorionos.txt"
+    
+    # Install system default config
+    install -Dm644 "$srcdir/config.jsonc" "$pkgdir/etc/xdg/fastfetch/config.jsonc"
+}
