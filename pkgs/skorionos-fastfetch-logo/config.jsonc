@@ -4,8 +4,8 @@
         "type": "file",
         "source": "skorionos.txt",
         "color": {
-            "1": "cyan",
-            "2": "blue"
+            "1": "blue",
+            "2": "cyan"
         }
     },
     "modules": [
