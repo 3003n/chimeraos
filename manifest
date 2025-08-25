@@ -325,4 +325,11 @@ postinstallhook() {
 		mv /usr/bin/wpctl /usr/libexec/wpctl
 		ln -sf /usr/bin/wpctl-wrapper /usr/bin/wpctl
 	fi
+
+	# skorionos-fastfetch-logo
+	if [ ! -L /usr/bin/fastfetch ]; then
+		cp /usr/bin/fastfetch /usr/bin/fastfetch.orig
+		cp /usr/bin/fastfetch /usr/libexec/fastfetch
+		ln -sf /usr/bin/fastfetch-skorionos-wrapper /usr/bin/fastfetch
+	fi
 }
