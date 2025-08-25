@@ -1,0 +1,80 @@
+#! /bin/bash
+
+for base in base-*; do
+	source $base
+done
+
+export POSTCOPY="\
+	hyprland \
+	skel \
+	wallpapers/wallpapers \
+"
+
+export SUB_PACKAGES="\
+	$BASE_PACKAGES \
+	brightnessctl \
+	cliphist \
+	dconf-editor \
+	fcitx5-im \
+	fcitx5-chinese-addons \
+	falkon \
+	gnome-calculator \
+	gnome-software \
+	grim \
+	hypridle \
+	hyprland \
+	hyprland-qt-support \
+	hyprlock \
+	hyprpaper \
+	hyprpicker \
+	hyprutils \
+	kitty \
+	kvantum \
+	kvantum-qt5 \
+	mako \
+	network-manager-applet \
+	noto-fonts-cjk \
+	nwg-look \
+	papirus-icon-theme \
+	pavucontrol \
+	polkit-gnome \
+	qt5ct \
+	qt6ct \
+	rofi-wayland \
+	thunar \
+	thunar-archive-plugin \
+	thunar-media-tags-plugin \
+	thunar-volman \
+	tumbler \
+	waybar \
+	xed \
+	xorg-xhost \
+	xdg-desktop-portal-gtk \
+	xdg-desktop-portal-hyprland \
+	wofi \
+	uwsm \
+	npm \
+"
+
+export SUB_AUR_PACKAGES="\
+	hyprshot \
+	tofi \
+	wlogout-git \
+	linuxqq \
+	microsoft-edge-stable-bin \
+	qqmusic-bin \
+"
+
+export SUB_LOCAL_PACKAGES="\
+	$BASE_LOCAL_PACKAGES \
+	cursor-extracted \
+"
+
+export SUB_PACKAGES_TO_DELETE="\
+	gnome-desktop \
+	mutter \
+"
+
+sub_postinstallhook() {
+	:
+}
