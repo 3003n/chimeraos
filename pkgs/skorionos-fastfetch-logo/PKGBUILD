@@ -1,6 +1,6 @@
 # Maintainer: SkorionOS
 pkgname=skorionos-fastfetch-logo
-pkgver=1.0.2
+pkgver=1.0.3
 pkgrel=1
 pkgdesc="SkorionOS custom logo for fastfetch with intelligent wrapper"
 arch=('any')
